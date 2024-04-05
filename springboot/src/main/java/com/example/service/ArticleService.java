@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,17 +67,18 @@ public class ArticleService {
          * 查询所有
          */
         public List<Article> selectAll(Article article) {
-            return articleMapper.selectAll(article);
+            return articleMapper.selectAll(null,null,article.getId(),article.getName(),article.getType());
         }
 
         /**
          * 分页查询
          */
-        public PageInfo<Article> selectPage(Article article, Integer pageNum, Integer pageSize) {
+        public PageInfo<Article> selectPage(Article article, Integer pageNum, Integer pageSize, Date startdate, Date enddate) {
             PageHelper.startPage(pageNum, pageSize);
             System.out.println(article);
-            List<Article> list = articleMapper.selectAll(article);
-            System.out.println(article);
+            System.out.println(startdate);
+            List<Article> list = articleMapper.selectAll(startdate,enddate,article.getId(),article.getName(),article.getType());
+
             return PageInfo.of(list);
         }
 

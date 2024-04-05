@@ -2,6 +2,7 @@ package com.example.mapper;
 
 import com.example.entity.Article;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,7 +40,7 @@ public interface ArticleMapper {
         /**
          * 查询所有
          */
-        List<Article> selectAll(Article article);
+        List<Article> selectAll( Date startdate,Date enddate,Integer id,String name,String type);
 
 
 }

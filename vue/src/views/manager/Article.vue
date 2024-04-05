@@ -3,10 +3,12 @@
       <div class="search">
         <el-input placeholder="请输入课程名称" style="width: 200px" v-model="name"></el-input>
         <el-input placeholder="请输入作者名称" style="width: 200px" v-model="author"></el-input>
-            <el-select v-model="type" placeholder="请选择类型" style="width: 200px">
-              <el-option label="中文" value="VIDEO"></el-option>
-              <el-option label="英文" value="TEXT"></el-option>
-              </el-select> 
+          <el-select v-model="type" placeholder="请选择类型" style="width: 200px">
+          <el-option label="中文" value="CHINESE"></el-option>
+          <el-option label="英文" value="ENGLISH"></el-option>
+          </el-select> 
+         <el-date-picker v-model="startDate" type="date" placeholder="选择日期时间"></el-date-picker>
+         <el-date-picker v-model="endDate" type="date" placeholder="选择日期时间"></el-date-picker>
         <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
         <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
       </div>
@@ -20,14 +22,14 @@
         <el-table :data="tableData" stripe  @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center"></el-table-column>
           <el-table-column prop="id" label="序号" width="80" align="center" sortable></el-table-column>
-          <!-- <el-table-column prop="img" label="课程封面" show-overflow-tooltip>
+          <el-table-column prop="img" label="文献封面" show-overflow-tooltip>
             <template v-slot="scope">
               <div style="display: flex; align-items: center">
                 <el-image style="width: 60px; height: 40px; border-radius: 10px" v-if="scope.row.img"
                           :src="scope.row.img" :preview-src-list="[scope.row.img]"></el-image>
               </div>
             </template>
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column prop="name" label="文献名称" show-overflow-tooltip></el-table-column>
           <el-table-column prop="author" label="文献作者" show-overflow-tooltip></el-table-column>
           <el-table-column prop="content" label="综述" show-overflow-tooltip></el-table-column>
@@ -66,7 +68,7 @@
   
       <el-dialog title="文献信息" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
         <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
-          <!-- <el-form-item label="课程封面">
+          <el-form-item label="文献封面">
             <el-upload
                 class="avatar-uploader"
                 :action="$baseUrl + '/files/upload'"
@@ -76,7 +78,7 @@
             >
               <el-button type="primary">上传图片</el-button>
             </el-upload>
-          </el-form-item> -->
+          </el-form-item>
           <el-form-item prop="name" label="文献名称">
             <el-input v-model="form.name" autocomplete="off" placeholder="请输入文献名称"></el-input>
           </el-form-item>
@@ -85,8 +87,8 @@
           </el-form-item>
           <el-form-item prop="type" label="文献类别">
             <el-select v-model="form.type" placeholder="请选择类型" style="width: 100%">
-              <el-option label="中文" value="VIDEO"></el-option>
-              <el-option label="英文" value="TEXT"></el-option>
+              <el-option label="中文" value="ChINESE"></el-option>
+              <el-option label="英文" value="ENGLiSH"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="recommend" label="是否推荐">
@@ -133,7 +135,7 @@
   
   <script>
   export default {
-    name: "Course",
+    name: "Article",
     data() {
       return {
         tableData: [],  // 所有的数据
@@ -141,6 +143,10 @@
         pageSize: 10,  // 每页显示的个数
         total: 0,
         name: null,
+        author:null,
+        type:null,
+        startDate:null,
+        endDate:null,
         fromVisible: false,
         form: {},
         user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
@@ -149,7 +155,7 @@
             {required: true, message: '请输入文献名称', trigger: 'blur'},
           ],
           type: [
-            {required: true, message: '请选择课程类型', trigger: 'blur'},
+            {required: true, message: '请选择文献类型', trigger: 'blur'},
           ],
           author: [
             {required:true,message:'请输入作者名字',trigger:'blur'},
@@ -233,13 +239,30 @@
         }).catch(() => {
         })
       },
-      load(pageNum) {  // 分页查询
-        if (pageNum) this.pageNum = pageNum
+      load(pageNum) { 
+        console.log(this.startDate);
+              if(this.startDate!=null){var dateTimeString = this.startDate;
+                var dateTime = new Date(dateTimeString);
+                 var year = dateTime.getFullYear();
+                 var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
+                var day = dateTime.getDate();
+               this.startDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;}// 分页查询
+               if(this.endDate!=null){var dateTimeString = this.endDate;
+                var dateTime = new Date(dateTimeString);
+                 var year = dateTime.getFullYear();
+                 var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
+                var day = dateTime.getDate();
+               this.endDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;}// 分页查询}
+        if (pageNum) this.pageNum = pageNum;
+        console.log(this.startDate);
         this.$request.get('/article/selectPage', {
           params: {
             pageNum: this.pageNum,
             pageSize: this.pageSize,
             name: this.name,
+            type:this.type,
+            startDate:this.startDate,
+            endDate:this.endDate
           }
         }).then(res => {
           console.log(res);

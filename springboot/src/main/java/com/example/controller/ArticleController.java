@@ -87,8 +87,15 @@ public class ArticleController {
         @GetMapping("/selectPage")
         public Result selectPage(Article article,
                                  @RequestParam(defaultValue = "1") Integer pageNum,
-                                 @RequestParam(defaultValue = "10") Integer pageSize) {
-            PageInfo<Article> page = articleService.selectPage(article, pageNum, pageSize);
+                                 @RequestParam(defaultValue = "10") Integer pageSize,
+                                 @RequestParam(defaultValue = "1945-3-7") String startDate,
+                                 @RequestParam (defaultValue = "2222-4-7")String endDate) {
+            System.out.println(article);
+            java.util.Date startdate1 = java.sql.Date.valueOf(startDate);
+            java.util.Date enddate1 = java.sql.Date.valueOf(endDate);
+            System.out.println(startDate);
+            System.out.println(endDate);
+            PageInfo<Article> page = articleService.selectPage(article, pageNum, pageSize,startdate1,enddate1);
             return Result.success(page);
         }
 

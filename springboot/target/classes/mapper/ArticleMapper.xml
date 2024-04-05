@@ -13,9 +13,11 @@
         *
         from Article
         <where>
-            <if test="id != null"> and id= #{article.id}</if>
-            <if test="name != null"> and name like concat('%', #{article.name}, '%')</if>
-            <if test="type != null"> and type =#{article.type}</if>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null"> and type =#{type}</if>
+            <if test="startdate!=null">  and time>= #{startdate}</if>
+            <if test="enddate!=null">    and #{enddate} >= time </if>
         </where>
         order by id desc
     </select>
