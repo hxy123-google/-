@@ -7,6 +7,7 @@ import com.example.common.enums.ResultCodeEnum;
 import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.service.AdminService;
+import com.example.service.ProfessorService;
 import com.example.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,8 @@ public class WebController {
     private AdminService adminService;
     @Resource
     private UserService userService;
+    @Resource
+    private ProfessorService professorService;
     @GetMapping("/")
     public Result hello() {
         return Result.success("访问成功");
@@ -42,6 +45,10 @@ public class WebController {
         if(RoleEnum.USER.name().equals(account.getRole())){
             account= userService.login(account);
         }
+        if(RoleEnum.PRO.name().equals(account.getRole())){
+            System.out.println("hipro");
+            account= professorService.login(account);
+        }
         return Result.success(account);
     }
 
@@ -60,6 +67,9 @@ public class WebController {
         if (RoleEnum.USER.name().equals(account.getRole())) {
             userService.register(account);
         }
+        if (RoleEnum.PRO.name().equals(account.getRole())) {
+            professorService.register(account);
+        }
         return Result.success();
     }
 
@@ -77,6 +87,9 @@ public class WebController {
         }
         if (RoleEnum.USER.name().equals(account.getRole())) {
             userService.updatePassword(account);
+        }
+        if (RoleEnum.PRO.name().equals(account.getRole())) {
+            professorService.updatePassword(account);
         }
         return Result.success();
     }

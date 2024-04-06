@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entity.Article;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +41,11 @@ public interface ArticleMapper {
         /**
          * 查询所有
          */
-        List<Article> selectAll( Date startdate,Date enddate,Integer id,String name,String type);
+        List<Article> selectAll(Date startdate, Date enddate, Integer id, String name, String type,String recommend);
 
 
+        @Select("select * from article where recommend = '是'")
+        Article getRecommend();
+        @Select("select * from article where recommend = '否' order by id desc limit 8")
+        List<Article> selectTop8();
 }

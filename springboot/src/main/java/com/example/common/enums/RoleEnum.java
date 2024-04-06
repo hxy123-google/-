@@ -4,4 +4,5 @@ public enum RoleEnum {
     // 管理员
     USER,
     ADMIN,
+    PRO,
 }

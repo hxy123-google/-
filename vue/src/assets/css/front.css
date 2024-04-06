@@ -72,3 +72,8 @@
     background-color: #378e5f !important;
     font-weight: 550;
 }
+.overflowShow{
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis
+}

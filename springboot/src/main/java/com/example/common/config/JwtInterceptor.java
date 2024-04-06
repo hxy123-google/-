@@ -11,6 +11,7 @@ import com.example.common.enums.RoleEnum;
 import com.example.entity.Account;
 import com.example.exception.CustomException;
 import com.example.service.AdminService;
+import com.example.service.ProfessorService;
 import com.example.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,6 +34,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     private AdminService adminService;
     @Resource
     private UserService userService;
+    @Resource
+    private ProfessorService professorService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 1. 从http请求的header中获取token
@@ -57,6 +60,9 @@ public class JwtInterceptor implements HandlerInterceptor {
             }
             if (RoleEnum.USER.name().equals(role)) {
                 account = userService.selectById(Integer.valueOf(userId));
+            }
+            if (RoleEnum.PRO.name().equals(role)) {
+                account = professorService.selectById(Integer.valueOf(userId));
             }
         } catch (Exception e) {
             throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);

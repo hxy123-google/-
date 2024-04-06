@@ -24,6 +24,7 @@ const routes = [
       { path: 'password', name: 'Password', meta: { name: '修改密码' }, component: () => import('../views/manager/Password') },
       { path: 'notice', name: 'Notice', meta: { name: '公告信息' }, component: () => import('../views/manager/Notice') },
       { path: 'article', name: 'Article', meta: { name: '文献信息' }, component: () => import('../views/manager/Article') },
+      { path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/manager/Professor') }
     ]
   },
   {
@@ -33,6 +34,7 @@ const routes = [
     children: [
       { path: 'home', name: 'Home', meta: { name: '系统首页' }, component: () => import('../views/front/Home') },
       { path: 'person', name: 'Person', meta: { name: '个人信息' }, component: () => import('../views/front/Person') },
+      { path: 'article', name: 'Article', meta: { name: '文献搜索' }, component: () => import('../views/front/Article') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },

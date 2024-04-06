@@ -6,7 +6,11 @@
           <el-select v-model="type" placeholder="请选择类型" style="width: 200px">
           <el-option label="中文" value="CHINESE"></el-option>
           <el-option label="英文" value="ENGLISH"></el-option>
-          </el-select> 
+          </el-select>
+        <el-select v-model="recommend" placeholder="查找推荐" style="width: 200px">
+          <el-option label="是" value="是"></el-option>
+          <el-option label="否" value="否"></el-option>
+        </el-select>
          <el-date-picker v-model="startDate" type="date" placeholder="选择日期时间"></el-date-picker>
          <el-date-picker v-model="endDate" type="date" placeholder="选择日期时间"></el-date-picker>
         <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
@@ -145,6 +149,7 @@
         name: null,
         author:null,
         type:null,
+        recommend:null,
         startDate:null,
         endDate:null,
         fromVisible: false,
@@ -262,7 +267,8 @@
             name: this.name,
             type:this.type,
             startDate:this.startDate,
-            endDate:this.endDate
+            endDate:this.endDate,
+            recommend:this.recommend
           }
         }).then(res => {
           console.log(res);

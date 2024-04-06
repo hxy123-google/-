@@ -63,7 +63,6 @@ public class UserService {
         }
         user.setMember(MemberEnum.NO.info);
         user.setRole(RoleEnum.USER.name());
-
         userMapper.insert(user);
     }
 

@@ -92,12 +92,15 @@ export default {
     }
   },
   created() {
-
+      console.log(this.user);
   },
   methods: {
     update() {
       // 保存当前的用户信息到数据库
-      this.$request.put('/user/update', this.user).then(res => {
+        this.$request.put(
+        this.user.role==='USER'?'/user/update':'/professor/update', 
+        this.user
+         ).then(res => {
         if (res.code === '200') {
           // 成功更新
           this.$message.success('保存成功')
@@ -122,7 +125,8 @@ export default {
     save() {
       this.$refs.formRef.validate((valid) => {
         if (valid) {
-          this.$request.put('/updatePassword', this.user).then(res => {
+          this.$request.put(
+            '/updatePassword', this.user).then(res => {
             if (res.code === '200') {
               // 成功更新
               this.$message.success('修改密码成功')

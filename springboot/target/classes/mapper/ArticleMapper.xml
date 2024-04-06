@@ -18,6 +18,7 @@
             <if test="type != null"> and type =#{type}</if>
             <if test="startdate!=null">  and time>= #{startdate}</if>
             <if test="enddate!=null">    and #{enddate} >= time </if>
+            <if test="recommend!=null">    and #{recommend} = recommend </if>
         </where>
         order by id desc
     </select>
