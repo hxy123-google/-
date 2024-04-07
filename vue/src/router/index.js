@@ -24,7 +24,8 @@ const routes = [
       { path: 'password', name: 'Password', meta: { name: '修改密码' }, component: () => import('../views/manager/Password') },
       { path: 'notice', name: 'Notice', meta: { name: '公告信息' }, component: () => import('../views/manager/Notice') },
       { path: 'article', name: 'Article', meta: { name: '文献信息' }, component: () => import('../views/manager/Article') },
-      { path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/manager/Professor') }
+      { path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/manager/Professor') },
+      { path: 'score', name: 'Score', meta: { name: '积分专区' }, component: () => import('../views/manager/Score') },
     ]
   },
   {

@@ -86,7 +86,7 @@ public class ArticleService {
      */
     public List<Article> selectAll(Article article) {
         return articleMapper.selectAll(null, null, article.getId(), article.getName(), article.getType(),
-                article.getRecommend());
+                article.getRecommend(),article.getCategory());
     }
 
     /**
@@ -97,7 +97,7 @@ public class ArticleService {
         System.out.println(article);
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAll(startdate, enddate, article.getId(), article.getName(),
-                article.getType(),article.getRecommend());
+                article.getType(),article.getRecommend(),article.getCategory());
 
         return PageInfo.of(list);
     }

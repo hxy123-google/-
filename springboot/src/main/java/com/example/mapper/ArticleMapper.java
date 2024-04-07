@@ -41,7 +41,8 @@ public interface ArticleMapper {
         /**
          * 查询所有
          */
-        List<Article> selectAll(Date startdate, Date enddate, Integer id, String name, String type,String recommend);
+        List<Article> selectAll(Date startdate, Date enddate, Integer id, String name, String type,String recommend,
+                                String category);
 
 
         @Select("select * from article where recommend = '是'")
