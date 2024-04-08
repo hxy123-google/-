@@ -43,8 +43,8 @@
               <el-button type="warning" size="mini" @click="down(scope.row.file)" >点击下载</el-button>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="file" label="文献资料" show-overflow-tooltip></el-table-column> -->
-          <!-- <el-table-column prop="discount" label="文献折扣"></el-table-column> -->
+          <el-table-column prop="price" label="文献价格" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="discount" label="文献折扣"></el-table-column>
           <el-table-column prop="recommend" label="是否推荐"></el-table-column>
           <el-table-column prop="reference" label="文献引用量"></el-table-column>
           <el-table-column prop="time" label="发表时间"></el-table-column>
@@ -91,14 +91,24 @@
           </el-form-item>
           <el-form-item prop="type" label="文献类别">
             <el-select v-model="form.type" placeholder="请选择类型" style="width: 100%">
-              <el-option label="中文" value="ChINESE"></el-option>
-              <el-option label="英文" value="ENGLiSH"></el-option>
+              <el-option label="中文" value="CHINESE"></el-option>
+              <el-option label="英文" value="ENGLISH"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="recommend" label="是否推荐">
             <el-select v-model="form.recommend" placeholder="请选择" style="width: 100%">
               <el-option label="是" value="是"></el-option>
               <el-option label="否" value="否"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item prop="category" label="文献种类">
+            <el-select v-model="form.category" placeholder="请选择" style="width: 100%">
+              <el-option label="复合材料" value="复合材料"></el-option>
+              <el-option label="石墨烯" value="石墨烯"></el-option>
+              <el-option label="冶金学" value="冶金学"></el-option>
+              <el-option label="碳纳米管" value="碳纳米管"></el-option>
+              <el-option label="TiO_2" value="TiO_2"></el-option>
+              <el-option label="建筑材料" value="建筑材料"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="文献链接">
@@ -111,12 +121,15 @@
               <el-button type="primary">上传文献</el-button>
             </el-upload>
           </el-form-item>
-          <!-- <el-form-item prop="file" label="资料链接">
+          <!-- <el-form-item prop="file" label="">
             <el-input v-model="form.file" autocomplete="off" placeholder="请输入资料链接"></el-input>
           </el-form-item> -->
-          <!-- <el-form-item prop="discount" label="课程折扣">
-            <el-input v-model="form.discount" autocomplete="off" placeholder="请输入课程折扣"></el-input>
-          </el-form-item> -->
+          <el-form-item prop="price" label="文献价格">
+            <el-input v-model="form.price" autocomplete="off" placeholder="请输入文献折扣"></el-input>
+          </el-form-item>
+          <el-form-item prop="discount" label="文献折扣">
+            <el-input v-model="form.discount" autocomplete="off" placeholder="请输入文献折扣"></el-input>
+          </el-form-item>
           <el-form-item prop="content" label="文献综述">
             <el-input type="textarea" :rows="4" v-model="form.content" autocomplete="off" placeholder="请输入文献综述"></el-input>
           </el-form-item>
@@ -152,6 +165,9 @@
         recommend:null,
         startDate:null,
         endDate:null,
+        category:null,
+        discount:null,
+        price:null,
         fromVisible: false,
         form: {},
         user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
@@ -167,13 +183,16 @@
           ],
           time:[
           {required:true,message:'请输入发表时间',trigger:'blur'},
-          ]
-        //   recommend: [
-        //     {required: true, message: '请选择是否推荐', trigger: 'blur'},
-        //   ],
-        //   price: [
-        //     {required: true, message: '请输入课程价格', trigger: 'blur'},
-        //   ],
+          ],
+           recommend: [
+             {required: true, message: '请选择是否推荐', trigger: 'blur'},
+           ],
+           price: [
+             {required: true, message: '请输入文献价格', trigger: 'blur'},
+           ],
+           discount: [
+             {required: true, message: '请输入文献折扣', trigger: 'blur'},
+           ],
 
         },
         ids: []
@@ -259,7 +278,10 @@
                 var day = dateTime.getDate();
                this.endDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;}// 分页查询}
         if (pageNum) this.pageNum = pageNum;
-        console.log(this.startDate);
+        console.log("type");
+        console.log(this.recommend);
+        console.log("category");
+        console.log(this.category);
         this.$request.get('/article/selectPage', {
           params: {
             pageNum: this.pageNum,
@@ -268,7 +290,10 @@
             type:this.type,
             startDate:this.startDate,
             endDate:this.endDate,
-            recommend:this.recommend
+            recommend:this.recommend,
+            category:this.category,
+            price:this.price,
+            discount:this.discount
           }
         }).then(res => {
           console.log(res);

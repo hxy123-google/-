@@ -42,7 +42,17 @@ public class ScoreController {
         scoreService.deleteById(id);
         return Result.success();
     }
+    @GetMapping("/getRecommend")
+    public Result getRecommend() {
+        Score score = scoreService.getRecommend();
+        return Result.success(score);
+    }
 
+    @GetMapping("/getTop8")
+    public Result getTop8() {
+        List<Score> list = scoreService.getTop8();
+        return Result.success(list);
+    }
     /**
      * 批量删除
      */

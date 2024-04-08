@@ -10,15 +10,17 @@
             </div>
             <div style="flex:1" class="card">
                 <div class="search">
-                    <el-input placeholder="请输入课程名称" style="width: 100px" v-model="name"></el-input>
+                    <el-input placeholder="请输入文献名称" style="width: 100px" v-model="name"></el-input>
                     <el-input placeholder="请输入作者名称" style="width: 100px" v-model="author"></el-input>
                     <el-select v-model="type" placeholder="请选择类型" style="width: 100px">
                         <el-option label="中文" value="CHINESE"></el-option>
                         <el-option label="英文" value="ENGLISH"></el-option>
+                        <el-option label="全部" value:null></el-option>
                     </el-select>
                     <el-select v-model="recommend" placeholder="查找推荐" style="width: 100px">
                         <el-option label="是" value="是"></el-option>
                         <el-option label="否" value="否"></el-option>
+                        <el-option label="全部" value:null></el-option>
                     </el-select>
                     <el-date-picker v-model="startDate" type="date" placeholder="选择日期时间"></el-date-picker>
                     <el-date-picker v-model="endDate" type="date" placeholder="选择日期时间"></el-date-picker>
@@ -37,12 +39,17 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="name" label="文献名称" show-overflow-tooltip width="300"></el-table-column>
+                        <el-table-column prop="name" label="文献名称" show-overflow-tooltip width="300">
+                            <template v-slot="scope">
+                                <a :href="'/front/articleDetail?id=' + scope.row.id">{{ scope.row.name }}</a>
+                            </template>
+                        </el-table-column>
+        
                         <el-table-column prop="author" label="文献作者" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="content" label="综述" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="type" label="文献类别">
                             <template v-slot="scope">
-                                <span v-if="scope.row.type === 'ChINESE'" style="color: #b67259">中文 </span>
+                                <span v-if="scope.row.type === 'CHINESE'" style="color: #b67259">中文 </span>
                                 <span v-else style="color: #448231">英文</span>
                             </template>
                         </el-table-column>
@@ -52,11 +59,11 @@
                                 <span v-else style="color: green">免费</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="file" label="文献链接" show-overflow-tooltip>
+                        <!-- <el-table-column prop="file" label="文献链接" show-overflow-tooltip>
                             <template v-slot="scope">
                                 <el-button type="warning" size="mini" @click="down(scope.row.file)">点击下载</el-button>
-                            </template>
-                        </el-table-column>
+                            </template> -->
+                        <!-- </el-table-column> -->
                         <el-table-column prop="discount" label="课程折扣">
                             <template v-slot="scope">
                                 <span style="color: #448231" v-if="scope.row.discount < 1">{{ scope.row.discount * 10 }}
@@ -155,6 +162,7 @@ export default {
                     endDate: this.endDate,
                     recommend: this.recommend,
                     category:this.current==='全部文献'? null:this.current,
+                    author:this.author
                 }
             }).then(res => {
                 console.log(res);

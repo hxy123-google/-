@@ -9,7 +9,7 @@
         <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
         <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
       </div>
-  
+      
       <div class="operation">
         <el-button type="primary" plain @click="handleAdd">新增</el-button>
         <el-button type="danger" plain @click="delBatch">批量删除</el-button>
@@ -19,7 +19,7 @@
         <el-table :data="tableData" stripe  @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center"></el-table-column>
           <el-table-column prop="id" label="序号" width="80" align="center" sortable></el-table-column>
-          <el-table-column prop="img" label="课程封面" show-overflow-tooltip>
+          <el-table-column prop="img" label="资料封面" show-overflow-tooltip>
             <template v-slot="scope">
               <div style="display: flex; align-items: center">
                 <el-image style="width: 60px; height: 40px; border-radius: 10px" v-if="scope.row.img"
@@ -27,20 +27,20 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="课程名称" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="name" label="资料名称" show-overflow-tooltip></el-table-column>
           <el-table-column prop="content" label="内容" show-overflow-tooltip>
             <!-- <template v-slot="scope">
               <el-button type="success" size="mini" @click="viewDataInit(scope.row.content)">点击查看</el-button>
             </template> -->
           </el-table-column>
-          <el-table-column prop="type" label="课程类型"></el-table-column>
+          <el-table-column prop="type" label="资料类型"></el-table-column>
           <el-table-column prop="price" label="所需积分"></el-table-column>
-          <el-table-column prop="video" label="课程视频" show-overflow-tooltip>
+          <el-table-column prop="file" label="资料链接" show-overflow-tooltip>
             <template v-slot="scope">
-              <el-button type="warning" size="mini" @click="down(scope.row.video)" v-if="scope.row.type === 'VIDEO'">点击下载</el-button>
+              <el-button type="warning" size="mini" @click="down(scope.row.video)" >点击下载</el-button>
             </template>
           </el-table-column>
-          <el-table-column prop="file" label="课程资料" show-overflow-tooltip></el-table-column>
+          <!-- <el-table-column prop="file" label="课程资料" show-overflow-tooltip></el-table-column> -->
           <el-table-column prop="recommend" label="是否推荐"></el-table-column>
   
           <el-table-column label="操作" width="180" align="center">
@@ -78,13 +78,13 @@
               <el-button type="primary">上传图片</el-button>
             </el-upload>
           </el-form-item>
-          <el-form-item prop="name" label="课程名称">
-            <el-input v-model="form.name" autocomplete="off" placeholder="请输入课程名称"></el-input>
+          <el-form-item prop="name" label="资料名称">
+            <el-input v-model="form.name" autocomplete="off" placeholder="请输入资料名称"></el-input>
           </el-form-item>
-          <el-form-item prop="type" label="课程类型">
+          <el-form-item prop="type" label="资料类型">
             <el-select v-model="form.type" placeholder="请选择类型" style="width: 100%">
-              <el-option label="视频课程" value="VIDEO"></el-option>
-              <el-option label="图文课程" value="TEXT"></el-option>
+              <el-option label="中文" value="CHINESE"></el-option>
+              <el-option label="英文" value="ENGLISH"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item prop="recommend" label="是否推荐">
@@ -96,20 +96,20 @@
           <el-form-item prop="price" label="所需积分">
             <el-input v-model="form.price" autocomplete="off" placeholder="请输入积分（0表示公开分享）"></el-input>
           </el-form-item>
-          <el-form-item label="课程视频">
+          <el-form-item label="资料链接">
             <el-upload
                 class="avatar-uploader"
                 :action="$baseUrl + '/files/upload'"
                 :headers="{ token: user.token }"
                 :on-success="handleVideoSuccess"
             >
-              <el-button type="primary">上传视频(视频课程需要传)</el-button>
+              <el-button type="primary">上传资料(也可以是视频)</el-button>
             </el-upload>
           </el-form-item>
-          <el-form-item prop="file" label="资料链接">
+          <!-- <el-form-item prop="file" label="资料链接">
             <el-input v-model="form.file" autocomplete="off" placeholder="请输入资料链接"></el-input>
-          </el-form-item>
-          <el-form-item prop="content" label="课程介绍">
+          </el-form-item> -->
+          <el-form-item prop="content" label="资料介绍">
             <div id="editor"></div>
           </el-form-item>
         </el-form>
@@ -119,7 +119,7 @@
         </div>
       </el-dialog>
   
-      <el-dialog title="课程内容" :visible.sync="editorVisible" width="50%" :close-on-click-modal="false" destroy-on-close>
+      <el-dialog title="资料内容" :visible.sync="editorVisible" width="50%" :close-on-click-modal="false" destroy-on-close>
         <div v-html="viewData" class="w-e-text w-e-text-container"></div>
       </el-dialog>
   
@@ -127,7 +127,7 @@
   </template>
   
   <script>
-  //import E from 'wangeditor'
+  import E from 'wangeditor'
   export default {
     name: "Score",
     data() {
@@ -145,10 +145,10 @@
         user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         rules: {
           name: [
-            {required: true, message: '请输入课程名称', trigger: 'blur'},
+            {required: true, message: '请输入资源名称', trigger: 'blur'},
           ],
           type: [
-            {required: true, message: '请选择课程类型', trigger: 'blur'},
+            {required: true, message: '请选择资源类型', trigger: 'blur'},
           ],
           recommend: [
             {required: true, message: '请选择是否推荐', trigger: 'blur'},

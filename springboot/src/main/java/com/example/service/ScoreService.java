@@ -94,5 +94,12 @@ public class ScoreService {
         List<Score> list = scoreMapper.selectAll(score);
         return PageInfo.of(list);
     }
+    public Score getRecommend() {
+        return scoreMapper.selectRecommend();
+    }
+
+    public List<Score> getTop8() {
+        return scoreMapper.selectTop8();
+    }
 
 }

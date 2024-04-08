@@ -67,7 +67,9 @@ public class ArticleController {
      */
     @GetMapping("/selectById/{id}")
     public Result selectById(@PathVariable Integer id) {
+        System.out.println(id);
         Article article = articleService.selectById(id);
+        System.out.println(article);
         return Result.success(article);
     }
 
@@ -81,13 +83,14 @@ public class ArticleController {
     }
 
     @GetMapping("/getRecommend")
-    public Result getRecommend() {
-        Article article = articleService.getRecommend();
+    public Result getRecommend(@RequestParam String type) {
+        System.out.println(type);
+        Article article = articleService.getRecommend(type);
         return Result.success(article);
     }
     @GetMapping("/selectTop8")
-    public Result selectTop8() {
-        List<Article> list = articleService.selectTop8();
+    public Result selectTop8(@RequestParam String type) {
+        List<Article> list = articleService.selectTop8(type);
         return Result.success(list);
     }
 

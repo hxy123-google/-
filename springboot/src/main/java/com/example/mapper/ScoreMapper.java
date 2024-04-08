@@ -42,4 +42,8 @@ public interface ScoreMapper {
 
     @Select("select * from score where recommend = '是'")
     Score selectRecommend();
+
+
+    @Select("select * from score where recommend = '否' order by id desc limit 8")
+    List<Score> selectTop8();
 }

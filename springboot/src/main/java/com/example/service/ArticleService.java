@@ -36,11 +36,12 @@ public class ArticleService {
         System.out.println(article);
         if (ObjectUtil.isNotEmpty(article.getRecommend()) && RecommendEnum.YES.status.equals(article.getRecommend())) {
             // 做一下校验
-            Article recommend = articleMapper.getRecommend();
+            Article recommend = articleMapper.getRecommend(article.getType());
             if (ObjectUtil.isNotEmpty(recommend)) {
                 throw new CustomException(ResultCodeEnum.RECOMMEND_ALREADY_ERROR);
             }
         }
+        System.out.println(article);
         articleMapper.insert(article);
     }
 
@@ -66,7 +67,7 @@ public class ArticleService {
     public void updateById(Article article) {
         if (ObjectUtil.isNotEmpty(article.getRecommend()) && RecommendEnum.YES.status.equals(article.getRecommend())) {
             // 做一下校验
-            Article recommend = articleMapper.getRecommend();
+            Article recommend = articleMapper.getRecommend(article.getType());
             if (ObjectUtil.isNotEmpty(recommend) && !recommend.getId().equals(article.getId())) {
                 throw new CustomException(ResultCodeEnum.RECOMMEND_ALREADY_ERROR);
             }
@@ -86,7 +87,7 @@ public class ArticleService {
      */
     public List<Article> selectAll(Article article) {
         return articleMapper.selectAll(null, null, article.getId(), article.getName(), article.getType(),
-                article.getRecommend(),article.getCategory());
+                article.getRecommend(),article.getCategory(),article.getAuthor());
     }
 
     /**
@@ -97,16 +98,16 @@ public class ArticleService {
         System.out.println(article);
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAll(startdate, enddate, article.getId(), article.getName(),
-                article.getType(),article.getRecommend(),article.getCategory());
+                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor());
 
         return PageInfo.of(list);
     }
 
-    public Article getRecommend() {
-        return articleMapper.getRecommend();
+    public Article getRecommend(String type) {
+        return articleMapper.getRecommend(type);
     }
 
-    public List<Article> selectTop8() {
-        return articleMapper.selectTop8();
+    public List<Article> selectTop8(String type) {
+        return articleMapper.selectTop8(type);
     }
 }

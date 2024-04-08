@@ -14,6 +14,7 @@
 						<el-menu-item index="/front/person">个人中心</el-menu-item>
             <el-menu-item >我的收藏</el-menu-item>
             <el-menu-item index="/front/article">文献搜索</el-menu-item>
+            <el-menu-item index="/front/score">积分专区</el-menu-item>
             <el-menu-item >会员专区</el-menu-item>
             <el-menu-item >文献上传</el-menu-item>
             <el-menu-item >教授查询</el-menu-item>

@@ -15,9 +15,9 @@
       <div style="display: flex">
         <div style="flex: 1">
           <span style="font-size: 24px; color: #333333; margin-right: 50px">文献选择</span>
-          <el-button type="primary">中文文献</el-button>
-          <el-button type="success">英文文献</el-button>
-          <!-- <el-button type="warning"></el-button> -->
+          <el-button type="primary" @click="initValue('CHINESE')">中文文献</el-button>
+          <el-button type="success" @click="initValue('SCORE')">积分专区</el-button>
+          <el-button type="warning" @click="initValue('ENGLiSH')">英文文献</el-button>
         </div>
         <div style="width: 300px">
           <el-button type="info">签到</el-button>
@@ -75,16 +75,47 @@ export default {
         require('@/assets/imgs/lun3.jpg'),
         require('@/assets/imgs/lun4.jpg'),
       ],
+    type:'CHINESE',
     recommend: {},
     rightData: [],
     }
   },
   mounted() {
-  this.loadRecommend()
-  this.loadRightData()
+  // this.loadRecommend()
+  // this.loadRightData()
+  this.getData();
 },
 
  methods:{
+  initValue(type) {
+    this.type = type,
+    console.log(this.type);
+    this.getData();
+  },
+  getData() {
+    // 积分专区这边的数据
+    if ('SCORE' === this.type) {
+      // 1. 获取推荐的那个积分课程
+      this.getRecommend('/score/getRecommend')
+      // 2. 获取推荐之外的最新的8个课程
+      this.getRightData('/score/getTop8')
+    } else {
+      // 1. 获取推荐的那个视频课程
+      this.getRecommend('/article/getRecommend?type=' + this.type)
+      // 2. 获取推荐之外的最新的8个视频课程
+      this.getRightData('/article/selectTop8?type=' + this.type)
+    }
+  },
+  getRecommend(url) {
+    this.$request.get(url).then(res => {
+      if (res.code === '200') {
+        this.recommend = res.data
+      } else {
+        this.$message.error(res.msg)
+      }
+    })
+  },
+  
   loadRecommend() {
   this.$request.get('/article/getRecommend').then(res => {
     if (res.code === '200') {
@@ -95,6 +126,15 @@ export default {
     }
   })
 },
+getRightData(url) {
+    this.$request.get(url).then(res => {
+      if (res.code === '200') {
+        this.rightData = res.data
+      } else {
+        this.$message.error(res.msg)
+      }
+    })
+  },
 loadRightData() {
   this.$request.get('/article/selectTop8').then(res => {
     if (res.code === '200') {

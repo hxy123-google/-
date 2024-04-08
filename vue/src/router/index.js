@@ -36,6 +36,8 @@ const routes = [
       { path: 'home', name: 'Home', meta: { name: '系统首页' }, component: () => import('../views/front/Home') },
       { path: 'person', name: 'Person', meta: { name: '个人信息' }, component: () => import('../views/front/Person') },
       { path: 'article', name: 'Article', meta: { name: '文献搜索' }, component: () => import('../views/front/Article') },
+      { path: 'score', name: 'Score', meta: { name: '积分专区' }, component: () => import('../views/front/Score') },
+      { path: 'articleDetail', name: 'ArticleDetail', meta: { name: '文献详情' }, component: () => import('../views/front/ArticleDetail') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },

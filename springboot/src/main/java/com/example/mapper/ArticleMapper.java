@@ -42,11 +42,11 @@ public interface ArticleMapper {
          * 查询所有
          */
         List<Article> selectAll(Date startdate, Date enddate, Integer id, String name, String type,String recommend,
-                                String category);
+                                String category,String author);
 
 
-        @Select("select * from article where recommend = '是'")
-        Article getRecommend();
-        @Select("select * from article where recommend = '否' order by id desc limit 8")
-        List<Article> selectTop8();
+        @Select("select * from article where recommend = '是'and type = #{type}")
+        Article getRecommend(String type);
+        @Select("select * from article where recommend = '否' and type=#{type} order by id desc limit 8")
+        List<Article> selectTop8(String type);
 }

@@ -20,6 +20,7 @@
             <if test="enddate!=null">    and #{enddate} >= time </if>
             <if test="recommend!=null">    and #{recommend} = recommend </if>
             <if test="category!=null">    and #{category} = category </if>
+            <if test="author != null"> and author like concat('%', #{author}, '%')</if>
         </where>
         order by id desc
     </select>
@@ -51,6 +52,7 @@
             <if test="recommend != null">recommend,</if>
             <if test="author != null">author,</if>
             <if test="time != null">time</if>
+            <if test="category != null">category</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -65,6 +67,7 @@
             <if test="recommend != null">#{recommend},</if>
             <if test="author != null">#{author},</if>
             <if test="time != null">#{time},</if>
+            <if test="category != null">#{category}</if>
         </trim>
     </insert>
 
@@ -97,6 +100,9 @@
             </if>
             <if test="recommend != null">
                 recommend = #{recommend},
+            </if>
+            <if test="category != null">
+                category = #{category},
             </if>
         </set>
         where id = #{id}
