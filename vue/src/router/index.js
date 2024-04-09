@@ -26,6 +26,7 @@ const routes = [
       { path: 'article', name: 'Article', meta: { name: '文献信息' }, component: () => import('../views/manager/Article') },
       { path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/manager/Professor') },
       { path: 'score', name: 'Score', meta: { name: '积分专区' }, component: () => import('../views/manager/Score') },
+      { path: 'comment', name: 'Comment', meta: { name: '评论信息' }, component: () => import('../views/manager/Comment') },
     ]
   },
   {
