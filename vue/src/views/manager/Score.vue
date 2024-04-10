@@ -34,6 +34,7 @@
             </template> -->
           </el-table-column>
           <el-table-column prop="type" label="资料类型"></el-table-column>
+          <el-table-column prop="aId" label="资料所属文献"></el-table-column>
           <el-table-column prop="price" label="所需积分"></el-table-column>
           <el-table-column prop="file" label="资料链接" show-overflow-tooltip>
             <template v-slot="scope">
@@ -96,6 +97,9 @@
           <el-form-item prop="price" label="所需积分">
             <el-input v-model="form.price" autocomplete="off" placeholder="请输入积分（0表示公开分享）"></el-input>
           </el-form-item>
+          <el-form-item prop="aId" label="资料所属文献">
+            <el-input v-model="form.aId" autocomplete="off" placeholder="请输入文献id"></el-input>
+          </el-form-item>
           <el-form-item label="资料链接">
             <el-upload
                 class="avatar-uploader"
@@ -137,6 +141,7 @@
         pageNum: 1,   // 当前的页码
         pageSize: 5,  // 每页显示的个数
         total: 0,
+        aId:null,
         name: null,
         recommend: null,
         fromVisible: false,
@@ -194,7 +199,7 @@
       save() {   // 保存按钮触发的逻辑  它会触发新增或者更新
         this.$refs.formRef.validate((valid) => {
           if (valid) {
-            this.form.content = this.editor.txt.html()
+            this.form.content = this.editor.txt.html();
             this.$request({
               url: this.form.id ? '/score/update' : '/score/add',
               method: this.form.id ? 'PUT' : 'POST',

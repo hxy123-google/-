@@ -5,7 +5,7 @@
 <mapper namespace="com.example.mapper.ScoreMapper">
 
     <sql id="Base_Column_List">
-        id,img,name,content,type,price,video,file,recommend,time
+        id,img,name,content,type,price,video,file,recommend,time,a_id
     </sql>
 
     <select id="selectAll" resultType="com.example.entity.Score">
@@ -45,6 +45,7 @@
             <if test="file != null">file,</if>
             <if test="recommend != null">recommend,</if>
             <if test="time != null">time,</if>
+            <if test="aId!=null">a_id</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -57,6 +58,7 @@
             <if test="file != null">#{file},</if>
             <if test="recommend != null">#{recommend},</if>
             <if test="time != null">#{time},</if>
+            <if test="aId!=null">#{aId}</if>
         </trim>
     </insert>
 
@@ -89,6 +91,9 @@
             </if>
             <if test="time != null">
                 time = #{time},
+            </if>
+            <if test="aId != null">
+                a_id = #{aId},
             </if>
         </set>
         where id = #{id}

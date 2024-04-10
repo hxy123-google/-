@@ -44,10 +44,11 @@ public class WebController {
         }
         if(RoleEnum.USER.name().equals(account.getRole())){
             account= userService.login(account);
+            System.out.println("hi");
         }
         if(RoleEnum.PRO.name().equals(account.getRole())){
-            System.out.println("hipro");
-            account= professorService.login(account);
+            account=userService.login(account);
+            //account= professorService.login(account);
         }
         return Result.success(account);
     }
@@ -68,7 +69,8 @@ public class WebController {
             userService.register(account);
         }
         if (RoleEnum.PRO.name().equals(account.getRole())) {
-            professorService.register(account);
+            //account=userService.login(account);
+            userService.register(account);
         }
         return Result.success();
     }
@@ -89,7 +91,8 @@ public class WebController {
             userService.updatePassword(account);
         }
         if (RoleEnum.PRO.name().equals(account.getRole())) {
-            professorService.updatePassword(account);
+            userService.updatePassword(account);
+            //professorService.updatePassword(account);
         }
         return Result.success();
     }

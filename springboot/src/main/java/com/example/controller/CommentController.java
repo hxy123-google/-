@@ -97,6 +97,11 @@ public class CommentController {
         PageInfo<Comment> page = commentService.selectPage(comment, pageNum, pageSize);
         return Result.success(page);
     }
+    @GetMapping("/selectCount")
+    public Result selectCount(@RequestParam Integer fid, @RequestParam String module) {
+        Integer count = commentService.selectCount(fid, module);
+        return Result.success(count);
+    }
 
 
 }

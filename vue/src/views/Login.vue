@@ -57,6 +57,7 @@ export default {
           // 验证通过
           this.$request.post('/login', this.form).then(res => {
             if (res.code === '200') {
+              //alert("nimenhao");
               localStorage.setItem("xm-user", JSON.stringify(res.data))  // 存储用户数据
               if(res.data.role==='ADMIN'){
                 location.href='/home';
@@ -64,8 +65,7 @@ export default {
               }else{
                 location.href='/front/home';
               }
-
-              this.$message.success('登录成功')
+              this.$message.success('登录成功');
             } else {
               this.$message.error(res.msg)
             }

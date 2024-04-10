@@ -41,8 +41,13 @@ public class UserService {
         if (!account.getPassword().equals(dbUser.getPassword())) {
             throw new CustomException(ResultCodeEnum.USER_ACCOUNT_ERROR);
         }
+        if(!account.getRole().equals(dbUser.getRole())){
+            throw new CustomException(ResultCodeEnum.USER_ACCOUNT_ERROR);
+        }
         // 生成token
-        String tokenData = dbUser.getId() + "-" + RoleEnum.USER.name();
+        String tokenData;
+        if(dbUser.getRole()=="USER")  tokenData = dbUser.getId() + "-" + RoleEnum.USER.name();
+        else tokenData=dbUser.getId()+"-"+RoleEnum.PRO.name();
         String token = TokenUtils.createToken(tokenData, dbUser.getPassword());
         dbUser.setToken(token);
         return dbUser;
@@ -62,7 +67,7 @@ public class UserService {
             user.setName(user.getUsername());
         }
         user.setMember(MemberEnum.NO.info);
-        user.setRole(RoleEnum.USER.name());
+        //user.setRole();
         userMapper.insert(user);
     }
 
@@ -86,6 +91,7 @@ public class UserService {
      * 修改
      */
     public void updateById(User user) {
+
         userMapper.updateById(user);
     }
 
@@ -93,7 +99,14 @@ public class UserService {
      * 根据ID查询
      */
     public User selectById(Integer id) {
-        return userMapper.selectById(id);
+
+        User user= userMapper.selectById(id);
+        String tokenData;
+        if(user.getRole()=="USER")  tokenData = user.getId() + "-" + RoleEnum.USER.name();
+        else tokenData=user.getId()+"-"+RoleEnum.PRO.name();
+        String token = TokenUtils.createToken(tokenData, user.getPassword());
+        user.setToken(token);
+        return user;
     }
 
     /**
@@ -128,5 +141,23 @@ public class UserService {
         }
         dbUser.setPassword(account.getNewPassword());
         userMapper.updateById(dbUser);
+    }
+
+    public PageInfo<User> selectPro(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<User> list = userMapper.selectPro();
+        return PageInfo.of(list);
+    }
+    public void recharge(Double account) {
+        Account currentUser = TokenUtils.getCurrentUser();
+        User user = userMapper.selectById(currentUser.getId());
+
+        user.setAccount(user.getAccount() + account);
+        // 是否充值一次性满500
+        if (account >= 500) {
+            user.setMember(MemberEnum.YES.info);
+        }
+
+        userMapper.updateById(user);
     }
 }

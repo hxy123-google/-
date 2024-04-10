@@ -1,6 +1,7 @@
 package com.example.mapper;
 
 import com.example.entity.User;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * @Version 1.0
  */
 public interface UserMapper {
-    @Select("select * from user where username = #{username}")
+    @Select("select * from user where username = #{username} ")
     User selectByUserName(String username);
 
     void insert(User user);
@@ -39,4 +40,7 @@ public interface UserMapper {
      * 查询所有
      */
     List<User> selectAll(User user);
+
+    @Select("select * from user where role='PRO'")
+    List<User> selectPro();
 }

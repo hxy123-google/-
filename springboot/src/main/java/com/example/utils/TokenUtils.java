@@ -68,12 +68,12 @@ public class TokenUtils {
                 if (RoleEnum.ADMIN.name().equals(role)) {
                     return staticAdminService.selectById(Integer.valueOf(userId));
                 }
-                if (RoleEnum.USER.name().equals(role)) {
+                if (RoleEnum.USER.name().equals(role)||RoleEnum.PRO.name().equals(role)) {
                     return staticUserService.selectById(Integer.valueOf(userId));
                 }
-                if (RoleEnum.PRO.name().equals(role)) {
-                    return staticProfessorService.selectById(Integer.valueOf(userId));
-                }
+//                if (RoleEnum.PRO.name().equals(role)) {
+//                    return staticProfessorService.selectById(Integer.valueOf(userId));
+//                }
             }
         } catch (Exception e) {
             log.error("获取当前用户信息出错", e);

@@ -100,5 +100,9 @@ public class ScoreController {
         PageInfo<Score> page = scoreService.selectPage(score, pageNum, pageSize);
         return Result.success(page);
     }
-
+    @GetMapping("/withArticle/{id}")
+    public Result selectWithArticle(@PathVariable Integer id) {
+        List<Score> list = scoreService.selectWithArticle(id);
+        return Result.success(list);
+    }
 }

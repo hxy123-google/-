@@ -24,7 +24,7 @@ const routes = [
       { path: 'password', name: 'Password', meta: { name: '修改密码' }, component: () => import('../views/manager/Password') },
       { path: 'notice', name: 'Notice', meta: { name: '公告信息' }, component: () => import('../views/manager/Notice') },
       { path: 'article', name: 'Article', meta: { name: '文献信息' }, component: () => import('../views/manager/Article') },
-      { path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/manager/Professor') },
+      //{ path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/manager/Professor') },
       { path: 'score', name: 'Score', meta: { name: '积分专区' }, component: () => import('../views/manager/Score') },
       { path: 'comment', name: 'Comment', meta: { name: '评论信息' }, component: () => import('../views/manager/Comment') },
     ]
@@ -39,6 +39,7 @@ const routes = [
       { path: 'article', name: 'Article', meta: { name: '文献搜索' }, component: () => import('../views/front/Article') },
       { path: 'score', name: 'Score', meta: { name: '积分专区' }, component: () => import('../views/front/Score') },
       { path: 'articleDetail', name: 'ArticleDetail', meta: { name: '文献详情' }, component: () => import('../views/front/ArticleDetail') },
+      { path: 'scoreDetail', name: 'ScoreDetail', meta: { name: '积分详情' }, component: () => import('../views/front/ScoreDetail') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },

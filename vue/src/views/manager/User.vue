@@ -3,6 +3,7 @@
     <div class="search">
       <el-input placeholder="请输入账号查询" style="width: 200px" v-model="username"></el-input>
       <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
+      <el-button type="info" plain style="margin-left: 10px" @click="loadPro(1)">查询教授</el-button>
       <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
     </div>
 
@@ -77,6 +78,19 @@
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" placeholder="邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="积分" prop="score">
+          <el-input v-model="form.score" placeholder="用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="余额" prop="account">
+          <el-input v-model="form.account" placeholder="用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="角色" prop="role">
+          <el-select v-model="form.role" placeholder="请选择角色" style="width: 100%">
+            <!-- <el-option label="管理员" value="ADMIN"></el-option> -->
+            <el-option label="用户" value="USER"></el-option>
+            <el-option label="教授" value="PRO"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
 
@@ -184,6 +198,14 @@ export default {
           username: this.username,
         }
       }).then(res => {
+        this.tableData = res.data?.list
+        this.total = res.data?.total
+      })
+    },
+    loadPro(pageNum) {  // 分页查询
+      if (pageNum) this.pageNum = pageNum
+      this.$request.get('/user/selectPro').then(res => {
+        //console.log(res);
         this.tableData = res.data?.list
         this.total = res.data?.total
       })

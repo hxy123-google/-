@@ -62,7 +62,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                 account = userService.selectById(Integer.valueOf(userId));
             }
             if (RoleEnum.PRO.name().equals(role)) {
-                account = professorService.selectById(Integer.valueOf(userId));
+                account = userService.selectById(Integer.valueOf(userId));
             }
         } catch (Exception e) {
             throw new CustomException(ResultCodeEnum.TOKEN_CHECK_ERROR);

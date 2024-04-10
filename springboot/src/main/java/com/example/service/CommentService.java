@@ -31,8 +31,11 @@ public class CommentService {
     public void add(Comment comment) {
         comment.setTime(DateUtil.now());
         commentMapper.insert(comment);
-        comment.setRootId(comment.getId());
-        commentMapper.updateById(comment);
+        if(comment.getRootId()==null){
+            comment.setRootId(comment.getId());
+            commentMapper.updateById(comment);
+        }
+
     }
 
     /**
@@ -92,4 +95,8 @@ public class CommentService {
         return PageInfo.of(list);
     }
 
+    public Integer selectCount(Integer fid, String module) {
+
+        return commentMapper.selectCount(fid,module);
+    }
 }

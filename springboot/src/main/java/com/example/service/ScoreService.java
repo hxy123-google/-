@@ -1,5 +1,6 @@
 package com.example.service;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.RecommendEnum;
 import com.example.common.enums.ResultCodeEnum;
@@ -39,6 +40,7 @@ public class ScoreService {
                 throw new CustomException(ResultCodeEnum.RECOMMEND_ALREADY_ERROR);
             }
         }
+        score.setTime(DateUtil.now());
         scoreMapper.insert(score);
     }
 
@@ -69,6 +71,7 @@ public class ScoreService {
                 throw new CustomException(ResultCodeEnum.RECOMMEND_ALREADY_ERROR);
             }
         }
+        score.setTime(DateUtil.now());
         scoreMapper.updateById(score);
     }
 
@@ -76,6 +79,7 @@ public class ScoreService {
      * 根据ID查询
      */
     public Score selectById(Integer id) {
+
         return scoreMapper.selectById(id);
     }
 
@@ -102,4 +106,8 @@ public class ScoreService {
         return scoreMapper.selectTop8();
     }
 
+    public List<Score> selectWithArticle(Integer id) {
+        List<Score> list=  scoreMapper.selectWithArticle(id);
+        return list;
+    }
 }

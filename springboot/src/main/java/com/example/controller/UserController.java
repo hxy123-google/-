@@ -86,4 +86,16 @@ public class UserController {
         PageInfo<User> page = userService.selectPage(user, pageNum, pageSize);
         return Result.success(page);
     }
+    @GetMapping("/selectPro")
+    public Result selectPro(@RequestParam(defaultValue = "1") Integer pageNum,
+                            @RequestParam(defaultValue = "10") Integer pageSize){
+        PageInfo<User> page = userService.selectPro( pageNum, pageSize);
+        return Result.success(page);
+
+    }
+    @GetMapping("/recharge")
+    public Result recharge(@RequestParam Double account) {
+        userService.recharge(account);
+        return Result.success();
+    }
 }
