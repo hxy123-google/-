@@ -11,7 +11,6 @@
         <div class="front-header-nav">
           <el-menu :default-active="$route.path" mode="horizontal" router>
 						<el-menu-item index="/front/home">首页</el-menu-item>
-						<el-menu-item index="/front/person">个人中心</el-menu-item>
             <el-menu-item >我的收藏</el-menu-item>
             <el-menu-item index="/front/article">文献搜索</el-menu-item>
             <el-menu-item index="/front/score">积分专区</el-menu-item>
@@ -40,6 +39,9 @@
               </el-dropdown-item>
               <el-dropdown-item>
                 <div style="text-decoration: none" @click="navto('/front/person')">个人中心</div>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <div style="text-decoration: none" @click="navto('/front/scoreOrder')">我的资料</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

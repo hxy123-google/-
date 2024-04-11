@@ -4,9 +4,13 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.RecommendEnum;
 import com.example.common.enums.ResultCodeEnum;
+import com.example.entity.Account;
 import com.example.entity.Score;
+import com.example.entity.Scoreorder;
 import com.example.exception.CustomException;
 import com.example.mapper.ScoreMapper;
+import com.example.mapper.ScoreorderMapper;
+import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -28,7 +32,8 @@ public class ScoreService {
 
     @Resource
     private ScoreMapper scoreMapper;
-
+    @Resource
+    private ScoreorderMapper scoreorderMapper;
     /**
      * 新增
      */
@@ -79,8 +84,16 @@ public class ScoreService {
      * 根据ID查询
      */
     public Score selectById(Integer id) {
-
-        return scoreMapper.selectById(id);
+        Score score=scoreMapper.selectById(id);
+        Account currentUser= TokenUtils.getCurrentUser();
+        Scoreorder scoreorder=new Scoreorder();
+        scoreorder.setScoreId(score.getId());
+        scoreorder.setUserId(currentUser.getId());
+        List<Scoreorder> scoreorders=scoreorderMapper.selectAll(scoreorder);
+        if(ObjectUtil.isEmpty(scoreorders)){
+            score.setFile("");
+        }
+        return score;
     }
 
     /**

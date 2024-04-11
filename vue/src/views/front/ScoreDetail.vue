@@ -13,13 +13,13 @@
         <!--   课程保密区域   -->
         <div>
           <div style="font-size: 18px; margin: 10px 0">资料</div>
-          <div v-if="courseData.price === 0">
+          <div v-if="courseData.price === 0||flag||user.role==='PRO'">
             <video :src="courseData.video" v-if="courseData.type === 'VIDEO'" controls style="width: 65%; height: 400px"></video>
             <div style="margin-top: 10px">资料链接：<a :href="courseData.file" target="_blank">{{ courseData.file }}</a></div>
           </div>
           <div v-else>
             <span style="color: red; margin-right: 20px">该课程属于付费课程，购买后可解锁</span>
-            <el-button type="warning" size="mini">购买资料</el-button>
+            <el-button type="warning" size="mini" @click="exchange">购买资料</el-button>
           </div>
         </div>
         <!--   课程介绍区域   -->
@@ -39,11 +39,13 @@
       return {
         user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         scoreId: scoreId,
-        courseData: {}
+        courseData: {},
+        flag:false
       }
     },
     mounted() {
-      this.loadCourse()
+      this.loadCourse();
+      this.checkOrder();
     },
     // methods：本页面所有的点击事件或者其他函数定义区
     methods: {
@@ -56,7 +58,40 @@
             this.$message.error(res.msg)
           }
         })
+      },
+      checkOrder() {
+    this.$request.get('/scoreorder/selectAll', {
+      params: {
+        userId: this.user.id,
+        scoreId: this.scoreId
       }
+    }).then(res => {
+      if (res.code === '200') {
+        console.log(res);
+        if (res.data?.length > 0) {
+          this.flag = true
+        }
+      } else {
+        this.$message.error(res.msg)
+      }
+    })
+  },
+  exchange() {
+    let data = {
+      scoreId: this.scoreId,
+      score: this.courseData.price,
+      userId: this.user.id,
+    }
+    this.$request.post('/scoreorder/add', data).then(res => {
+      if (res.code === '200') {
+        this.$message.success('兑换成功')
+        this.loadCourse()
+        this.checkOrder()
+      } else {
+        this.$message.error(res.msg)
+      }
+    })
+  },
     }
   }
   </script>
