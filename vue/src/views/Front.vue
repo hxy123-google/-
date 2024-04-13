@@ -16,7 +16,6 @@
             <el-menu-item index="/front/score">积分专区</el-menu-item>
             <el-menu-item >会员专区</el-menu-item>
             <el-menu-item >文献上传</el-menu-item>
-            <el-menu-item >教授查询</el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -42,6 +41,9 @@
               </el-dropdown-item>
               <el-dropdown-item>
                 <div style="text-decoration: none" @click="navto('/front/scoreOrder')">我的资料</div>
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <div style="text-decoration: none" @click="navto('/front/ImSingle')">私信</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

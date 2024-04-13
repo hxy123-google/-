@@ -44,7 +44,7 @@
                                 <a :href="'/front/articleDetail?id=' + scope.row.id">{{ scope.row.name }}</a>
                             </template>
                         </el-table-column>
-        
+
                         <el-table-column prop="author" label="文献作者" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="content" label="综述" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="type" label="文献类别">
@@ -53,10 +53,11 @@
                                 <span v-else style="color: #448231">英文</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="price" label="文献价格">
+                        <el-table-column prop="price" label="所属积分">
                             <template v-slot="scope">
-                                <span style="color: red" v-if="scope.row.price > 0">￥ {{ scope.row.price }} / 元</span>
-                                <span v-else style="color: green">免费</span>
+                                <span style="color: #12b127; font-size: 15px" v-if="scope.row.price > 0">{{
+                                    scope.row.price }} 积分</span>
+                                <span v-else style="color: green">公开资料</span>
                             </template>
                         </el-table-column>
                         <!-- <el-table-column prop="file" label="文献链接" show-overflow-tooltip>
@@ -161,8 +162,8 @@ export default {
                     startDate: this.startDate,
                     endDate: this.endDate,
                     recommend: this.recommend,
-                    category:this.current==='全部文献'? null:this.current,
-                    author:this.author
+                    category: this.current === '全部文献' ? null : this.current,
+                    author: this.author
                 }
             }).then(res => {
                 console.log(res);
