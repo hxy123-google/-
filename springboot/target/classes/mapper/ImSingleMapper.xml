@@ -29,6 +29,15 @@
             <if test="readed != null">#{readed}</if>
         </trim>
     </insert>
+    <update id="updateByPrimaryKey" parameterType="com.example.entity.ImSingle">
+        update imsingle
+        <set>
+            <if test="readed != null">
+                readed = #{readed},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
 
 

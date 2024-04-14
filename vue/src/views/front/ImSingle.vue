@@ -203,7 +203,8 @@
       loadUnReadNums() {
         // 查询未读数量
         request.get('/imsingle/unReadNums?toUsername=' + this.fromUser).then(res => {
-          this.unRead = res.data
+          this.unRead = res.data;
+          console.log(this.unRead);
         })
       },
       send() {
@@ -221,7 +222,7 @@
         this.toUser = item.username;
         this.toAvatar = item.avatar;
         //查询聊天记录
-        this.load()
+        this.load();
       },
       download(file) {
         window.open(file)

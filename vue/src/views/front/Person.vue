@@ -4,6 +4,7 @@
       <div style="text-align: right; margin-bottom: 20px">
         <el-button type="primary" @click="updatePassword">修改密码</el-button>
         <el-button type="warning" @click="initRecharge">充值</el-button>
+        <el-button type="warning" @click="initIntroduce">编辑个人介绍</el-button>
       </div>
       <el-form :model="user" label-width="80px" style="padding-right: 20px">
         <div style="margin: 15px; text-align: center">
@@ -74,10 +75,23 @@
         <el-button type="primary" @click="recharge">确 定</el-button>
       </div>
     </el-dialog>
+    <el-dialog title="编辑个人介绍" :visible.sync="editVisible" width="30%" :close-on-click-modal="false" destroy-on-close>
+      <el-form :model="user" label-width="80px" style="padding-right: 20px" >
+        <el-form-item prop="introduce" v-model="user.introduce" label="资料介绍">
+            <div id="editor"></div>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="fromVisible = false">取 消</el-button>
+        <el-button type="primary" @click="updateIntroduce">确 定</el-button>
+      </div>
+    </el-dialog>
+  
   </div>
 </template>
 
 <script>
+ import E from 'wangeditor'
 export default {
   data() {
     const validatePassword = (rule, value, callback) => {
@@ -90,9 +104,11 @@ export default {
       }
     }
     return {
+      editor: null,
       user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
       dialogVisible: false,
       rechargeVisible: false,
+      editVisible:false,
       account: null,
       type: '支付宝',
       rules: {
@@ -112,10 +128,43 @@ export default {
     console.log(this.user);
   },
   methods: {
+    initWangEditor(content) {
+        this.$nextTick(() => {
+          this.editor = new E('#editor')
+          this.editor.config.placeholder = '请输入内容'
+          this.editor.config.uploadFileName = 'file'
+          this.editor.config.uploadImgServer = 'http://localhost:9090/files/wang/upload'
+          this.editor.create()
+          setTimeout(() => {
+            this.editor.txt.html(content)
+          })
+        })
+      },
     update() {
+      //this.user.introduce = this.editor.txt.html();
+      console.log(this.user);
       // 保存当前的用户信息到数据库
-      this.$request.put(
-        this.user.role === 'USER' ? '/user/update' : '/professor/update',
+      this.$request.put('/user/update',
+        this.user
+      ).then(res => {
+        if (res.code === '200') {
+          // 成功更新
+          this.$message.success('保存成功')
+          // 更新浏览器缓存里的用户信息
+          localStorage.setItem('xm-user', JSON.stringify(this.user))
+
+          // 触发父级的数据更新
+          this.$emit('update:user')
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    updateIntroduce() {
+      this.user.introduce = this.editor.txt.html();
+      console.log(this.user);
+      // 保存当前的用户信息到数据库
+      this.$request.put('/user/update',
         this.user
       ).then(res => {
         if (res.code === '200') {
@@ -143,9 +192,15 @@ export default {
       this.account = 100
       this.rechargeVisible = true
     },
+    initIntroduce(){
+      this.editVisible=true;
+      this.initWangEditor('');
+    },
+    
     save() {
       this.$refs.formRef.validate((valid) => {
         if (valid) {
+          
           this.$request.put(
             '/updatePassword', this.user).then(res => {
               if (res.code === '200') {
@@ -160,27 +215,27 @@ export default {
       })
     },
     recharge() {
-    this.$request.get('/user/recharge?account=' + this.account).then(res => {
-      if (res.code === '200') {
-        this.$message.success('充值成功')
-        this.loadPerson()
-        this.rechargeVisible = false
-      } else {
-        this.$message.error(res.msg)
-      }
-    })
-  },
-  loadPerson() {
-    this.$request.get('/user/selectById/' + this.user.id).then(res => {
-      if (res.code === '200') {
-        this.user = res.data
-        // 更新浏览器缓存里的用户信息
-        localStorage.setItem('xm-user', JSON.stringify(this.user))
-      } else {
-        this.$message.error(res.msg)
-      }
-    })
-  },
+      this.$request.get('/user/recharge?account=' + this.account).then(res => {
+        if (res.code === '200') {
+          this.$message.success('充值成功')
+          this.loadPerson()
+          this.rechargeVisible = false
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
+    loadPerson() {
+      this.$request.get('/user/selectById/' + this.user.id).then(res => {
+        if (res.code === '200') {
+          this.user = res.data
+          // 更新浏览器缓存里的用户信息
+          localStorage.setItem('xm-user', JSON.stringify(this.user))
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
+    },
   }
 }
 </script>

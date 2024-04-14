@@ -24,4 +24,6 @@ public interface ImSingleMapper  {
     List<ImSingle> findByToUsername(String toUser);
 
     void insertSelective(ImSingle imSingle);
+
+    void updateByPrimaryKey(ImSingle x);
 }

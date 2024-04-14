@@ -29,9 +29,9 @@
           </el-table-column>
           <el-table-column prop="name" label="资料名称" show-overflow-tooltip></el-table-column>
           <el-table-column prop="content" label="内容" show-overflow-tooltip>
-            <!-- <template v-slot="scope">
+            <template v-slot="scope">
               <el-button type="success" size="mini" @click="viewDataInit(scope.row.content)">点击查看</el-button>
-            </template> -->
+            </template>
           </el-table-column>
           <el-table-column prop="type" label="资料类型"></el-table-column>
           <el-table-column prop="aId" label="资料所属文献"></el-table-column>
@@ -66,9 +66,9 @@
       </div>
   
   
-      <el-dialog title="课程信息" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
+      <el-dialog title="资料信息" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
         <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
-          <el-form-item label="课程封面">
+          <el-form-item label="资料封面">
             <el-upload
                 class="avatar-uploader"
                 :action="$baseUrl + '/files/upload'"

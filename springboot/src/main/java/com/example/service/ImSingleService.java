@@ -22,12 +22,12 @@ public class ImSingleService {
     }
     public List<ImSingle> findByUsername(String fromUser, String toUser) {
         List<ImSingle> list = imSingleMapper.findByUsername(fromUser, toUser);
-//        list.forEach(x -> {
-//            if (x.getTouser().equals(fromUser) && x.getFromuser().equals(toUser)) {
-//                x.setReaded(1);
-//                //imSingleMapper.updateByPrimaryKey(x);
-//            }
-//        });
+        list.forEach(x -> {
+            if (x.getTouser().equals(fromUser) && x.getFromuser().equals(toUser)) {
+                x.setReaded(1);
+                imSingleMapper.updateByPrimaryKey(x);
+            }
+        });
         return list;
     }
 

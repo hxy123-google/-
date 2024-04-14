@@ -29,6 +29,24 @@ public class User extends Account implements Serializable {
     private String member;
     private Integer score;
     private Double account;
+    private String introduce;
+    private Integer reference;
+
+    public Integer getReference() {
+        return reference;
+    }
+
+    public void setReference(Integer reference) {
+        this.reference = reference;
+    }
+
+    public String getIntroduce() {
+        return introduce;
+    }
+
+    public void setIntroduce(String introduce) {
+        this.introduce = introduce;
+    }
 
     @Override
     public Integer getId() {

@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.entity.Article;
 import com.example.entity.User;
 import com.example.service.UserService;
 import com.github.pagehelper.PageInfo;
@@ -97,5 +98,10 @@ public class UserController {
     public Result recharge(@RequestParam Double account) {
         userService.recharge(account);
         return Result.success();
+    }
+    @GetMapping("/selectTop8")
+    public Result selectTop8(@RequestParam String role) {
+        List<User> list = userService.selectTop8(role);
+        return Result.success(list);
     }
 }

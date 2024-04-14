@@ -160,4 +160,9 @@ public class UserService {
 
         userMapper.updateById(user);
     }
+
+    public List<User> selectTop8(String role) {
+        List<User> list=userMapper.selectTop8(role);
+        return list;
+    }
 }

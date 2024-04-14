@@ -42,7 +42,8 @@ const routes = [
       { path: 'articleDetail', name: 'ArticleDetail', meta: { name: '文献详情' }, component: () => import('../views/front/ArticleDetail') },
       { path: 'scoreDetail', name: 'ScoreDetail', meta: { name: '积分详情' }, component: () => import('../views/front/ScoreDetail') },
       { path: 'scoreOrder', name: 'ScoreOrder', meta: { name: '积分详情' }, component: () => import('../views/front/ScoreOrder') },
-      { path: 'imSingle', name:'ImSingle', meta:{name :'私信教授'} ,component:()=>import('../views/front/ImSingle.vue')}
+      { path: 'imSingle', name:'ImSingle', meta:{name :'私信教授'} ,component:()=>import('../views/front/ImSingle.vue')},
+      { path: 'userDetail', name:'UserDetail', meta:{name :'用户详情'} ,component:()=>import('../views/front/UserDetail.vue')}
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },
