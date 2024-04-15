@@ -30,7 +30,7 @@ public interface UserMapper {
      * 修改
      */
     int updateById(User user);
-
+    int updateByUsername(User user);
     /**
      * 根据ID查询
      */

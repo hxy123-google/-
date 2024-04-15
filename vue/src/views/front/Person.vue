@@ -60,7 +60,7 @@
     <el-dialog title="个人充值" :visible.sync="rechargeVisible" width="40%" :close-on-click-modal="false" destroy-on-close>
       <el-form label-width="80px" style="padding-right: 20px">
         <el-form-item label="充值说明">
-          <span style="color: red">充值一次性满300，可成为会员</span>
+          <span style="color: red">充值一次性满50，可成为会员</span>
         </el-form-item>
         <el-form-item label="充值金额">
           <el-input v-model="account" placeholder="请输入充值金额"></el-input>

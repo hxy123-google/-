@@ -53,6 +53,11 @@ public class UserController {
     /**
      * 修改
      */
+    @GetMapping("/updateByUsername")
+    public Result updateByUsername( User user) {
+        userService.updateByUsername(user);
+        return Result.success();
+    }
     @PutMapping("/update")
     public Result updateById(@RequestBody User user) {
         userService.updateById(user);

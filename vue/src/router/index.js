@@ -28,6 +28,7 @@ const routes = [
       { path: 'score', name: 'Score', meta: { name: '积分专区' }, component: () => import('../views/manager/Score') },
       { path: 'comment', name: 'Comment', meta: { name: '评论信息' }, component: () => import('../views/manager/Comment') },
       { path: 'scoreOrder', name: 'ScoreOrder', meta: { name: '积分兑课' }, component: () => import('../views/manager/ScoreOrder') },
+      { path: 'information', name: 'Information', meta: { name: '审核区域' }, component: () => import('../views/manager/Information') },
     ]
   },
   {
@@ -43,7 +44,8 @@ const routes = [
       { path: 'scoreDetail', name: 'ScoreDetail', meta: { name: '积分详情' }, component: () => import('../views/front/ScoreDetail') },
       { path: 'scoreOrder', name: 'ScoreOrder', meta: { name: '积分详情' }, component: () => import('../views/front/ScoreOrder') },
       { path: 'imSingle', name:'ImSingle', meta:{name :'私信教授'} ,component:()=>import('../views/front/ImSingle.vue')},
-      { path: 'userDetail', name:'UserDetail', meta:{name :'用户详情'} ,component:()=>import('../views/front/UserDetail.vue')}
+      { path: 'userDetail', name:'UserDetail', meta:{name :'用户详情'} ,component:()=>import('../views/front/UserDetail.vue')},
+      { path: 'uploadScore', name:'UploadScore', meta:{name :'上传积分'} ,component:()=>import('../views/front/UploadScore.vue')},
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },

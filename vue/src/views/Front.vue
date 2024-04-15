@@ -10,12 +10,12 @@
       <div class="front-header-center">
         <div class="front-header-nav">
           <el-menu :default-active="$route.path" mode="horizontal" router>
-						<el-menu-item index="/front/home">首页</el-menu-item>
-            <el-menu-item >我的收藏</el-menu-item>
+            <el-menu-item index="/front/home">首页</el-menu-item>
+            <el-menu-item>我的收藏</el-menu-item>
             <el-menu-item index="/front/article">文献搜索</el-menu-item>
             <el-menu-item index="/front/score">积分专区</el-menu-item>
-            <el-menu-item >会员专区</el-menu-item>
-            <el-menu-item >文献上传</el-menu-item>
+            <el-menu-item>会员专区</el-menu-item>
+            <el-menu-item>文献上传</el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -45,6 +45,9 @@
               <el-dropdown-item>
                 <div style="text-decoration: none" @click="navto('/front/ImSingle')">私信</div>
               </el-dropdown-item>
+              <el-dropdown-item>
+                <div style="text-decoration: none" @click="navto('/front/UploadScore')">我的资料</div>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -59,15 +62,17 @@
 </template>
 
 <script>
-
+import E from 'wangeditor'
 export default {
   name: "FrontLayout",
 
-  data () {
+  data() {
     return {
+      editor: null,
       top: '',
       notice: [],
       user: JSON.parse(localStorage.getItem("xm-user") || '{}'),
+      form: {},
     }
   },
 
@@ -75,6 +80,18 @@ export default {
     this.loadNotice()
   },
   methods: {
+    initWangEditor(content) {
+      this.$nextTick(() => {
+        this.editor = new E('#editor')
+        this.editor.config.placeholder = '请输入内容'
+        this.editor.config.uploadFileName = 'file'
+        this.editor.config.uploadImgServer = 'http://localhost:9090/files/wang/upload'
+        this.editor.create()
+        setTimeout(() => {
+          this.editor.txt.html(content)
+        })
+      })
+    },
     loadNotice() {
       this.$request.get('/notice/selectAll').then(res => {
         this.notice = res.data
@@ -99,14 +116,15 @@ export default {
       localStorage.removeItem("xm-user");
       this.$router.push("/login");
     },
-    navto(url){
-      location.href=url ;
-    }
+    navto(url) {
+      location.href = url;
+    },
+
   }
 
 }
 </script>
 
 <style scoped>
-  @import "@/assets/css/front.css";
+@import "@/assets/css/front.css";
 </style>

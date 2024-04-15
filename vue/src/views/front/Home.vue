@@ -27,7 +27,7 @@
       </div>
       <div style="display:flex;margin-top: 20px;height:300px">
         <div style="flex:1;margin-right:10px;height:300px">
-          <img :src="recommend.img" alt="" style="width:100%;height:270px; border-radius:10px">
+          <img :src="recommend.img" alt="" style="width:100%;height:270px; border-radius:10px"   @click="navto(recommend.id)">
           <div style="font-size: 15px; margin-top: 5px" class="overflowShow">{{ recommend.name }}</div>
         </div>
         <div style="flex:2;margin-left:10px;height:500px">

@@ -153,16 +153,23 @@ public class UserService {
         User user = userMapper.selectById(currentUser.getId());
 
         user.setAccount(user.getAccount() + account);
+
+        user.setScore(user.getScore()+(int) (account*10));
         // 是否充值一次性满500
-        if (account >= 500) {
+        if (account >= 50) {
             user.setMember(MemberEnum.YES.info);
         }
-
         userMapper.updateById(user);
     }
 
     public List<User> selectTop8(String role) {
         List<User> list=userMapper.selectTop8(role);
         return list;
+    }
+
+    public void updateByUsername(User user) {
+        User user1=userMapper.selectByUserName(user.getUsername());
+        user1.setScore(user1.getScore()+10);
+        userMapper.updateByUsername(user1);
     }
 }

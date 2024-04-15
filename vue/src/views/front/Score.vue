@@ -72,6 +72,7 @@ export default {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           name: this.name,
+          status:'审核通过'
         }
       }).then(res => {
         this.tableData = res.data?.list

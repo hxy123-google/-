@@ -26,6 +26,53 @@ public class Score implements Serializable {
     private String recommend;
     private String time;
     private String aId;
+    private String author;
+    private String status;
+    private String descr;
+
+    public String getDescr() {
+        return descr;
+    }
+
+    public void setDescr(String descr) {
+        this.descr = descr;
+    }
+
+    @Override
+    public String toString() {
+        return "Score{" +
+                "id=" + id +
+                ", img='" + img + '\'' +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                ", video='" + video + '\'' +
+                ", file='" + file + '\'' +
+                ", recommend='" + recommend + '\'' +
+                ", time='" + time + '\'' +
+                ", aId='" + aId + '\'' +
+                ", author='" + author + '\'' +
+                ", status='" + status + '\'' +
+                ", descr='" + descr + '\'' +
+                '}';
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     public Integer getId() {
         return id;
@@ -58,7 +105,6 @@ public class Score implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-
     public String getContent() {
         return content;
     }
@@ -115,24 +161,7 @@ public class Score implements Serializable {
         this.time = time;
     }
 
-    @Override
-    public String toString() {
-        return "Score{" +
-                "id=" + id +
-                ", img='" + img + '\'' +
-                ", name='" + name + '\'' +
-                ", content='" + content + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                ", video='" + video + '\'' +
-                ", file='" + file + '\'' +
-                ", recommend='" + recommend + '\'' +
-                ", time='" + time + '\'' +
-                ", aId='" + aId + '\'' +
-                '}';
-    }
-
-    public Score(Integer id, String img, String name, String content, String type, Integer price, String video, String file, String recommend, String time) {
+    public Score(Integer id, String img, String name, String content, String type, Integer price, String video, String file, String recommend, String time, String aId, String author, String status, String descr) {
         this.id = id;
         this.img = img;
         this.name = name;
@@ -143,6 +172,9 @@ public class Score implements Serializable {
         this.file = file;
         this.recommend = recommend;
         this.time = time;
-        this.aId=aId;
+        this.aId = aId;
+        this.author = author;
+        this.status = status;
+        this.descr = descr;
     }
 }
