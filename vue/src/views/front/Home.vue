@@ -20,20 +20,22 @@
           <el-button type="warning" @click="initValue('ENGLISH')">英文文献</el-button>
         </div>
         <div style="width: 300px">
-          <el-button type="info">签到</el-button>
+          <el-button type="info" @click="signin">签到</el-button>
           <span style="margin-left: 30px; color: #12b127; font-weight: 550">上次签到：</span>
-          <span style="color: #666666">2024-01-02 08:52:49</span>
+          <span style="color: #666666">{{ signInData?.time }}</span>
         </div>
       </div>
       <div style="display:flex;margin-top: 20px;height:300px">
         <div style="flex:1;margin-right:10px;height:300px">
-          <img :src="recommend.img" alt="" style="width:100%;height:270px; border-radius:10px"   @click="navto(recommend.id)">
+          <img :src="recommend.img" alt="" style="width:100%;height:270px; border-radius:10px"
+            @click="navto(recommend.id)">
           <div style="font-size: 15px; margin-top: 5px" class="overflowShow">{{ recommend.name }}</div>
         </div>
         <div style="flex:2;margin-left:10px;height:500px">
           <el-row :gutter="20">
             <el-col :span="6" style="margin-bottom: 35px" v-for="item in rightData" :key="item">
-              <img :src="item.img" alt="" style="width: 100%; height: 100px; border-radius: 5px" @click="navto(item.id)">
+              <img :src="item.img" alt="" style="width: 100%; height: 100px; border-radius: 5px"
+                @click="navto(item.id)">
               <div style="color: #333333; margin-top: 10px" class="overflowShow">{{ item.name }}</div>
             </el-col>
           </el-row>
@@ -83,6 +85,8 @@ export default {
       recommend: {},
       rightData: [],
       leftData: [],
+      signInData:null,
+      user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
     }
   },
   mounted() {
@@ -174,7 +178,30 @@ export default {
         // 往课程详情页跳
         location.href = '/front/articleDetail?id=' + id
       }
+    },
+    getSign() {
+  this.$request.get('/signin/selectByUserId?id=' + this.user.id).then(res => {
+    if (res.code === '200') {
+      // 渲染数据到页面
+      this.signInData = res.data
+    } else {
+      this.$message.error(res.msg)
     }
+  })
+},
+signin() {
+  let data = {
+    userId: this.user.id
+  }
+  this.$request.post('/signin/add', data).then(res => {
+    if (res.code === '200') {
+      this.$message.success('签到成功，恭喜你获得10个积分')
+      this.getSign()
+    } else {
+      this.$message.error(res.msg)
+    }
+  })
+},
   }
 }
 </script>

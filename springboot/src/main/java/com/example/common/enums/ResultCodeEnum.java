@@ -17,6 +17,7 @@ public enum ResultCodeEnum {
     RECOMMEND_ALREADY_ERROR("5006","已经有推荐的功能了，请先下架一个"),
     SCORE_LOWER_ERROR("5007","积分不够"),
     ACCOUNT_LOWER_ERROR("5008","文章积分不够"),
+    SIGNIN_ALREADY_ERROR("5009","已经签过了"),
     ;
 
     public String code;
