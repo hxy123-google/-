@@ -172,4 +172,10 @@ public class UserService {
         user1.setScore(user1.getScore()+10);
         userMapper.updateByUsername(user1);
     }
+
+    public PageInfo<User> getAccPro(User user, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<User> list = userMapper.getAccPro(user);
+        return PageInfo.of(list);
+    }
 }

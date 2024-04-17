@@ -35,6 +35,24 @@ public class Article {
     private Date time;
     private String author;
     private String category;
+    private String  journal;
+    private String keywords;
+
+    public String getKeywords() {
+        return keywords;
+    }
+
+    public void setKeywords(String keywords) {
+        this.keywords = keywords;
+    }
+
+    public String getJournal() {
+        return journal;
+    }
+
+    public void setJournal(String journal) {
+        this.journal = journal;
+    }
 
     public String getCategory() {
         return category;
@@ -148,7 +166,7 @@ public class Article {
         this.author = author;
     }
 
-    public Article(Integer id, String img, String name, String content, String type, Double price, String video, String file, Double discount, String recommend, Integer reference, Date time, String author) {
+    public Article(Integer id, String img, String name, String content, String type, Double price, String video, String file, Double discount, String recommend, Integer reference, Date time, String author, String category, String journal, String keywords) {
         this.id = id;
         this.img = img;
         this.name = name;
@@ -162,8 +180,13 @@ public class Article {
         this.reference = reference;
         this.time = time;
         this.author = author;
+        this.category = category;
+        this.journal = journal;
+        this.keywords = keywords;
     }
+    public Article(){
 
+    }
     @Override
     public String toString() {
         return "Article{" +
@@ -180,6 +203,9 @@ public class Article {
                 ", reference=" + reference +
                 ", time=" + time +
                 ", author='" + author + '\'' +
+                ", category='" + category + '\'' +
+                ", journal='" + journal + '\'' +
+                ", keywords='" + keywords + '\'' +
                 '}';
     }
 }

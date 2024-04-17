@@ -15,7 +15,8 @@ public enum ResultCodeEnum {
     USER_NOT_EXIST_ERROR("5004", "用户不存在"),
     PARAM_PASSWORD_ERROR("5005", "原密码输入错误"),
     RECOMMEND_ALREADY_ERROR("5006","已经有推荐的功能了，请先下架一个"),
-    SCORE_LOWER_ERROR("5007","积分不够")
+    SCORE_LOWER_ERROR("5007","积分不够"),
+    ACCOUNT_LOWER_ERROR("5008","文章积分不够"),
     ;
 
     public String code;

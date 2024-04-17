@@ -49,4 +49,8 @@ public interface ArticleMapper {
         Article getRecommend(String type);
         @Select("select * from article where recommend = '否' and type=#{type} order by id desc limit 8")
         List<Article> selectTop8(String type);
+
+        List<Article> selectAcc(Date startdate, Date enddate, Integer id,String name,String author, String journal,String category);
+
+        List<Article> selectAllr(Date startdate, Date enddate, Integer id, String name, String type, String recommend, String category, String author);
 }

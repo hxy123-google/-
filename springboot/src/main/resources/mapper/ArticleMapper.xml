@@ -53,6 +53,8 @@
             <if test="author != null">author,</if>
             <if test="time != null">time</if>
             <if test="category != null">category</if>
+            <if test="journal != null">journal</if>
+            <if test="reference != null and reference !=''">reference</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -68,6 +70,7 @@
             <if test="author != null">#{author},</if>
             <if test="time != null">#{time},</if>
             <if test="category != null">#{category}</if>
+            <if test="reference != null and reference !=''">#{reference}</if>
         </trim>
     </insert>
 
@@ -104,8 +107,44 @@
             <if test="category != null">
                 category = #{category},
             </if>
+            <if test="journal != null">
+                journal = #{journal},
+            </if>
+            <if test="reference != null and reference!=''">
+                reference = #{reference},
+            </if>
         </set>
         where id = #{id}
     </update>
-
+    <select id="selectAcc" resultType="com.example.entity.Article">
+        select
+        *
+        from Article
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="name != null"> and name = #{name}</if>
+            <if test="startdate!=null">  and time>= #{startdate}</if>
+            <if test="enddate!=null">    and #{enddate} >= time </if>
+            <if test="author != null"> and author = #{author}</if>
+            <if test="journal != null"> and journal = #{journal}</if>
+            <if test="category != null"> and category = #{category}</if>
+        </where>
+        order by id desc
+    </select>
+    <select id="selectAllr" resultType="com.example.entity.Article">
+        select
+        *
+        from Article
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null"> and type =#{type}</if>
+            <if test="startdate!=null">  and time>= #{startdate}</if>
+            <if test="enddate!=null">    and #{enddate} >= time </if>
+            <if test="recommend!=null">    and #{recommend} = recommend </if>
+            <if test="category!=null">    and #{category} = category </if>
+            <if test="author != null"> and author like concat('%', #{author}, '%')</if>
+        </where>
+        order by reference desc
+    </select>
 </mapper>

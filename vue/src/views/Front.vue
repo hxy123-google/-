@@ -12,10 +12,10 @@
           <el-menu :default-active="$route.path" mode="horizontal" router>
             <el-menu-item index="/front/home">首页</el-menu-item>
             <el-menu-item>我的收藏</el-menu-item>
-            <el-menu-item index="/front/article">文献搜索</el-menu-item>
+            <el-menu-item index="/front/article">模糊搜索</el-menu-item>
             <el-menu-item index="/front/score">积分专区</el-menu-item>
-            <el-menu-item>会员专区</el-menu-item>
-            <el-menu-item>文献上传</el-menu-item>
+            <el-menu-item index="/front/ReferenceSearch">精准查询</el-menu-item>
+            <el-menu-item index="/front/Statics">数据统计</el-menu-item>
           </el-menu>
         </div>
       </div>
@@ -40,14 +40,18 @@
                 <div style="text-decoration: none" @click="navto('/front/person')">个人中心</div>
               </el-dropdown-item>
               <el-dropdown-item>
-                <div style="text-decoration: none" @click="navto('/front/scoreOrder')">我的资料</div>
+                <div style="text-decoration: none" @click="navto('/front/scoreOrder')">我的购买资料</div>
               </el-dropdown-item>
               <el-dropdown-item>
                 <div style="text-decoration: none" @click="navto('/front/ImSingle')">私信</div>
               </el-dropdown-item>
               <el-dropdown-item>
-                <div style="text-decoration: none" @click="navto('/front/UploadScore')">我的资料</div>
+                <div style="text-decoration: none" @click="navto('/front/UploadScore')">我的上传资料</div>
               </el-dropdown-item>
+              <el-dropdown-item>
+                <div style="text-decoration: none" @click="navto('/front/orders')">我的文献</div>
+              </el-dropdown-item>
+              
             </el-dropdown-menu>
           </el-dropdown>
         </div>

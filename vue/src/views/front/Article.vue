@@ -17,10 +17,10 @@
                         <el-option label="英文" value="ENGLISH"></el-option>
                         <el-option label="全部" value:null></el-option>
                     </el-select>
-                    <el-select v-model="recommend" placeholder="查找推荐" style="width: 100px">
+                    <el-select v-model="sr" placeholder="是否按引用排序" style="width: 100px">
                         <el-option label="是" value="是"></el-option>
                         <el-option label="否" value="否"></el-option>
-                        <el-option label="全部" value:null></el-option>
+                        <!-- <el-option label="全部" value:null></el-option> -->
                     </el-select>
                     <el-date-picker v-model="startDate" type="date" placeholder="选择日期时间"></el-date-picker>
                     <el-date-picker v-model="endDate" type="date" placeholder="选择日期时间"></el-date-picker>
@@ -113,6 +113,7 @@ export default {
             endDate: null,
             current: '全部文献',
             categoryList: [],
+            sr:null,
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         }
     },
@@ -153,7 +154,36 @@ export default {
             }// 分页查询}
             if (pageNum) this.pageNum = pageNum;
             console.log(this.startDate);
-            this.$request.get('/article/selectPage', {
+            if(this.sr==='是'){
+            
+            this.$request.get('/article/selectPager', {
+                params: {
+                    pageNum: this.pageNum,
+                    pageSize: this.pageSize,
+                    name: this.name,
+                    type: this.type,
+                    startDate: this.startDate,
+                    endDate: this.endDate,
+                    recommend: this.recommend,
+                    category: this.current === '全部文献' ? null : this.current,
+                    author: this.author
+                }
+            }).then(res => {
+                console.log(res);
+                for (var i = 0; i < res.data.list.length; i++) {
+
+                    var dateTimeString = res.data.list[i].time;
+                    var dateTime = new Date(dateTimeString);
+                    var year = dateTime.getFullYear();
+                    var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
+                    var day = dateTime.getDate();
+                    res.data.list[i].time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+                }
+                this.tableData = res.data?.list
+                this.total = res.data?.total
+            })}
+            else{
+                this.$request.get('/article/selectPage', {
                 params: {
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
@@ -179,6 +209,8 @@ export default {
                 this.tableData = res.data?.list
                 this.total = res.data?.total
             })
+
+            }
         },
         reset() {
             this.name = null

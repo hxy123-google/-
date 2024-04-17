@@ -6,10 +6,10 @@
                     <el-button type="success">{{ articleData.type === 'CHINESE' ? '中文文献' : '英文文献' }}</el-button>
                     <span style="font-size: 20px; font-weight: 550; color: #333333; margin-left: 20px">{{
                         articleData.name
-                        }}</span>
+                    }}</span>
                 </div>
                 <div style="text-align: center; margin-top: 15px">
-                    <span style="color: red" v-if="articleData.price > 0">￥ {{ articleData.price }} / 元</span>
+                    <span style="color: red" v-if="articleData.price > 0">{{ articleData.price }} 积分</span>
                     <span style="color: red" v-else>免费</span>
                     <span style="color: #509a4d; margin-left: 20px" v-if="articleData.discount < 1">{{
                         articleData.discount
@@ -19,14 +19,14 @@
                 <!--   课程保密区域   -->
                 <div>
                     <div style="font-size: 18px; margin: 10px 0">文献资料</div>
-                    <div v-if="articleData.price === 0">
+                    <div v-if="articleData.price === 0||flag||user.role==='PRO'">
                         <div style="margin-top: 10px">文献链接：<a :href="articleData.file" target="_blank">{{
                             articleData.file
                                 }}</a></div>
                     </div>
                     <div v-else>
                         <span style="color: red; margin-right: 20px">该文献属于付费文献，购买后可解锁</span>
-                        <el-button type="warning" size="mini">购买文献</el-button>
+                        <el-button type="warning" size="mini" @click="buy">购买文献</el-button>
                     </div>
                 </div>
                 <!--   课程介绍区域   -->
@@ -119,7 +119,8 @@
                             <span style="color: dodgerblue" v-else-if="item.index === 3">{{ item.index }}</span>
                             <span style="color: #666" v-else>{{ item.index }}</span>
                         </span>
-                        <span style="color: #666;"> <a :href="'/front/scoreDetail?id=' +item.id">{{ item.name }}</a></span>
+                        <span style="color: #666;"> <a :href="'/front/scoreDetail?id=' + item.id">{{ item.name
+                                }}</a></span>
                     </div>
                 </div>
             </div>
@@ -140,12 +141,14 @@ export default {
             commentContent: '',
             commentList: [],
             showList: [],
+            flag:false,
         }
     },
     mounted() {
         this.loadArticle();
         this.loadComment();
         this.loadScore();
+        this.checkArticle();
 
     },
     // methods：本页面所有的点击事件或者其他函数定义区
@@ -217,14 +220,46 @@ export default {
                 }
             })
         },
-        loadScore(){
-            this.$request.get('/score/withArticle/'+this.articleId).then(res=>{
-                if(res.code==='200'){
+        loadScore() {
+            this.$request.get('/score/withArticle/' + this.articleId).then(res => {
+                if (res.code === '200') {
                     console.log(res);
-                    this.showList=res.data||[];
+                    this.showList = res.data || [];
+                }
+            })
+        },
+        checkArticle() {
+            this.$request.get('/orders/selectAll', {
+                params: {
+                    userId: this.user.id,
+                    articleId: this.articleId
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    if (res.data.length > 0) {
+                        this.flag = true
+                    }
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+        },
+        buy() {
+            let data = {
+                articleId: this.articleId,
+                userId: this.user.id
+            }
+            this.$request.post('/orders/add', data).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('购买成功，已解锁课程')
+                    this.loadArticle()
+                    this.checkArticle()
+                } else {
+                    this.$message.error(res.msg)
                 }
             })
         }
+
     }
 }
 </script>

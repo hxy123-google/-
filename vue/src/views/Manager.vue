@@ -48,6 +48,7 @@
             <el-menu-item index="/comment">评论信息</el-menu-item>
             <el-menu-item index="/scoreOrder">积分兑课</el-menu-item>
             <el-menu-item index="/Information">审核区域</el-menu-item>
+            <el-menu-item index="/orders">课程订单</el-menu-item>
           </el-submenu>
 
           <el-submenu index="user">

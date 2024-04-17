@@ -29,6 +29,8 @@ const routes = [
       { path: 'comment', name: 'Comment', meta: { name: '评论信息' }, component: () => import('../views/manager/Comment') },
       { path: 'scoreOrder', name: 'ScoreOrder', meta: { name: '积分兑课' }, component: () => import('../views/manager/ScoreOrder') },
       { path: 'information', name: 'Information', meta: { name: '审核区域' }, component: () => import('../views/manager/Information') },
+      { path: 'orders', name: 'Orders', meta: { name: '课程订单' }, component: () => import('../views/manager/Orders') },
+
     ]
   },
   {
@@ -45,7 +47,10 @@ const routes = [
       { path: 'scoreOrder', name: 'ScoreOrder', meta: { name: '积分详情' }, component: () => import('../views/front/ScoreOrder') },
       { path: 'imSingle', name:'ImSingle', meta:{name :'私信教授'} ,component:()=>import('../views/front/ImSingle.vue')},
       { path: 'userDetail', name:'UserDetail', meta:{name :'用户详情'} ,component:()=>import('../views/front/UserDetail.vue')},
+      { path: 'referenceSearch', name:'ReferenceSearch', meta:{name :'引用查询'} , component:()=>import('../views/front/ReferenceSearch.vue')},
       { path: 'uploadScore', name:'UploadScore', meta:{name :'上传积分'} ,component:()=>import('../views/front/UploadScore.vue')},
+      { path: 'orders', name: 'Orders', meta: { name: '已购课程' }, component: () => import('../views/front/Orders') },
+      { path: 'statics', name: 'STatics', meta: { name: '数据统计' }, component: () => import('../views/front/Statics') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },

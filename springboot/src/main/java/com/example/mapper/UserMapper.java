@@ -45,4 +45,6 @@ public interface UserMapper {
     List<User> selectPro();
     @Select("select * from user where role=#{role} order by id desc limit 8 ")
     List<User> selectTop8(String role);
+    @Select("select * from user where role=#{role} and name=#{name} ")
+    List<User> getAccPro(User user);
 }

@@ -3,9 +3,13 @@ package com.example.service;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.common.enums.RecommendEnum;
 import com.example.common.enums.ResultCodeEnum;
+import com.example.entity.Account;
 import com.example.entity.Article;
+import com.example.entity.Orders;
 import com.example.exception.CustomException;
 import com.example.mapper.ArticleMapper;
+import com.example.mapper.OrdersMapper;
+import com.example.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
@@ -28,7 +32,8 @@ public class ArticleService {
 
     @Resource
     private ArticleMapper articleMapper;
-
+    @Resource
+    private OrdersMapper ordersMapper;
     /**
      * 新增
      */
@@ -79,7 +84,19 @@ public class ArticleService {
      * 根据ID查询
      */
     public Article selectById(Integer id) {
-        return articleMapper.selectById(id);
+        Article course = articleMapper.selectById(id);
+        // 把敏感数据干掉
+        Account currentUser = TokenUtils.getCurrentUser();
+        Orders orders = new Orders();
+        orders.setUserId(currentUser.getId());
+        orders.setArticleId(id);
+        List<Orders> ordersList = ordersMapper.selectAll(orders);
+        if (ObjectUtil.isEmpty(ordersList)) {
+            course.setFile("");
+            course.setVideo("");
+        }
+        return course;
+
     }
 
     /**
@@ -102,6 +119,15 @@ public class ArticleService {
 
         return PageInfo.of(list);
     }
+    public PageInfo<Article> selectPager(Article article, Integer pageNum, Integer pageSize, Date startdate, Date enddate) {
+        PageHelper.startPage(pageNum, pageSize);
+        System.out.println(article);
+        System.out.println(startdate);
+        List<Article> list = articleMapper.selectAllr(startdate, enddate, article.getId(), article.getName(),
+                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor());
+
+        return PageInfo.of(list);
+    }
 
     public Article getRecommend(String type) {
         return articleMapper.getRecommend(type);
@@ -109,5 +135,13 @@ public class ArticleService {
 
     public List<Article> selectTop8(String type) {
         return articleMapper.selectTop8(type);
+    }
+
+    public PageInfo<Article> selectAccPage(Article article, Integer pageNum, Integer pageSize, Date startdate, Date enddate) {
+        PageHelper.startPage(pageNum, pageSize);
+        System.out.println(article);
+        System.out.println(startdate);
+        List<Article> list = articleMapper.selectAcc(startdate, enddate,article.getId(),article.getName(),article.getAuthor(),article.getJournal(),article.getCategory());
+        return PageInfo.of(list);
     }
 }
