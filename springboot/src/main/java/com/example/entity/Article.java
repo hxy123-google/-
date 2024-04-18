@@ -37,6 +37,38 @@ public class Article {
     private String category;
     private String  journal;
     private String keywords;
+    private Integer authorId;
+
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", img='" + img + '\'' +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                ", video='" + video + '\'' +
+                ", file='" + file + '\'' +
+                ", discount=" + discount +
+                ", recommend='" + recommend + '\'' +
+                ", reference=" + reference +
+                ", time=" + time +
+                ", author='" + author + '\'' +
+                ", category='" + category + '\'' +
+                ", journal='" + journal + '\'' +
+                ", keywords='" + keywords + '\'' +
+                ", authorId=" + authorId +
+                '}';
+    }
+
+    public Integer getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
+    }
 
     public String getKeywords() {
         return keywords;
@@ -183,29 +215,9 @@ public class Article {
         this.category = category;
         this.journal = journal;
         this.keywords = keywords;
+        this.authorId=authorId;
     }
     public Article(){
 
-    }
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", img='" + img + '\'' +
-                ", name='" + name + '\'' +
-                ", content='" + content + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                ", video='" + video + '\'' +
-                ", file='" + file + '\'' +
-                ", discount=" + discount +
-                ", recommend='" + recommend + '\'' +
-                ", reference=" + reference +
-                ", time=" + time +
-                ", author='" + author + '\'' +
-                ", category='" + category + '\'' +
-                ", journal='" + journal + '\'' +
-                ", keywords='" + keywords + '\'' +
-                '}';
     }
 }

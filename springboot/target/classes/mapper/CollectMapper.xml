@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.CollectMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Collect">
+        select
+        *
+        from collection
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="articleId != null"> and article_id=#{articleId}</if>
+            <if test="cId != null"> and c_id=#{cId}</if>
+        </where>
+        order by id desc
+    </select>
+
+
+    <insert id="insert" parameterType="com.example.entity.Collect" useGeneratedKeys="true">
+        insert into collection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test=" articleId!= null">article_id,</if>
+            <if test="cId != null">c_id,</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test=" articleId!= null">#{articleId},</if>
+            <if test="cId != null">#{cId}</if>
+        </trim>
+    </insert>
+    <select id="findById" resultType="com.example.entity.Article">
+        select
+            article.*
+        from collection
+                 left join article on article.id=collection.article_id
+        where collection.c_id=#{cId}
+    </select>
+    <delete id="deleteById">
+        delete from collection
+        where  collection.article_id = #{articleId} and collection.c_id=#{cId}
+    </delete>
+</mapper>

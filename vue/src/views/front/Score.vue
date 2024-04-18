@@ -17,7 +17,7 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="课程名称" show-overflow-tooltip width="400">
+          <el-table-column prop="name" label="资料名称" show-overflow-tooltip width="400">
             <template v-slot="scope">
               <a :href="'/front/scoreDetail?id=' + scope.row.id">{{ scope.row.name }}</a>
             </template>

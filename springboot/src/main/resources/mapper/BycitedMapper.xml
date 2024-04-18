@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.BycitedMapper">
+
+    <select id="selectAll" resultType="com.example.entity.Bycited">
+        select
+        *
+        from bycited
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="citeId != null"> and cite_id=#{citeId}</if>
+            <if test="byId != null"> and by_id=#{byId}</if>
+            <if test="time != null"> and time=#{time}</if>
+            <if test="year != null"> and year=#{year}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.Article">
+        select
+            *
+        from bycited
+        where id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.example.entity.Bycited" useGeneratedKeys="true">
+        insert into bycited
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test=" citeId!= null">cite_id,</if>
+            <if test="byId != null">by_id,</if>
+            <if test="time != null"> time,</if>
+            <if test="year != null"> year</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test=" citeId!= null">#{citeId},</if>
+            <if test="byId != null">#{byId},</if>
+            <if test="time != null"> #{time},</if>
+            <if test="year != null"> #{year}</if>
+        </trim>
+    </insert>
+    <select id="findById" resultType="com.example.entity.Article">
+        select
+            article.*
+        from bycited
+        left join article on article.id=bycited.cite_id
+        where bycited.by_id=#{byId}
+    </select>
+
+</mapper>

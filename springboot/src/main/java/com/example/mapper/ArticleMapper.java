@@ -43,7 +43,8 @@ public interface ArticleMapper {
          */
         List<Article> selectAll(Date startdate, Date enddate, Integer id, String name, String type,String recommend,
                                 String category,String author);
-
+        @Select("select * from article where author_id=#{authorId}")
+        List<Article> selectByAuthorId(Integer authorId);
 
         @Select("select * from article where recommend = '是'and type = #{type}")
         Article getRecommend(String type);
@@ -52,5 +53,6 @@ public interface ArticleMapper {
 
         List<Article> selectAcc(Date startdate, Date enddate, Integer id,String name,String author, String journal,String category);
 
-        List<Article> selectAllr(Date startdate, Date enddate, Integer id, String name, String type, String recommend, String category, String author);
+        List<Article> selectAllr( Date startdate, Date enddate, Integer id, String name, String type,String recommend,
+                                 String category,String author,Integer authorId);
 }

@@ -18,6 +18,11 @@ public enum ResultCodeEnum {
     SCORE_LOWER_ERROR("5007","积分不够"),
     ACCOUNT_LOWER_ERROR("5008","文章积分不够"),
     SIGNIN_ALREADY_ERROR("5009","已经签过了"),
+    CITE_ALREADY_EXIST("5010","这文章应经引过了"),
+    CITE_NOT_EXIST("5011","引用文章不存在"),
+    ARTICLE_NOT_EXIST("5012","你的文章未上传本系统"),
+    YOU_NOT_AUTHOR("5013","你不是作者"),
+    Collection_ALREADT_EXIST("5014","你已收藏过了"),
     ;
 
     public String code;

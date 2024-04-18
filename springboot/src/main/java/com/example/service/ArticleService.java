@@ -6,6 +6,7 @@ import com.example.common.enums.ResultCodeEnum;
 import com.example.entity.Account;
 import com.example.entity.Article;
 import com.example.entity.Orders;
+import com.example.entity.User;
 import com.example.exception.CustomException;
 import com.example.mapper.ArticleMapper;
 import com.example.mapper.OrdersMapper;
@@ -124,7 +125,7 @@ public class ArticleService {
         System.out.println(article);
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAllr(startdate, enddate, article.getId(), article.getName(),
-                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor());
+                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getAuthorId());
 
         return PageInfo.of(list);
     }
@@ -143,5 +144,9 @@ public class ArticleService {
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAcc(startdate, enddate,article.getId(),article.getName(),article.getAuthor(),article.getJournal(),article.getCategory());
         return PageInfo.of(list);
+    }
+    public List<Article>getByAuthorId(User user){
+        return articleMapper.selectByAuthorId(user.getId());
+
     }
 }

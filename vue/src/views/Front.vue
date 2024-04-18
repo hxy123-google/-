@@ -11,10 +11,13 @@
         <div class="front-header-nav">
           <el-menu :default-active="$route.path" mode="horizontal" router>
             <el-menu-item index="/front/home">首页</el-menu-item>
-            <el-menu-item>我的收藏</el-menu-item>
-            <el-menu-item index="/front/article">模糊搜索</el-menu-item>
-            <el-menu-item index="/front/score">积分专区</el-menu-item>
-            <el-menu-item index="/front/ReferenceSearch">精准查询</el-menu-item>
+            <el-submenu index="2">
+              <template slot="title">文献搜索</template>
+              <el-menu-item index="/front/article">模糊搜索</el-menu-item>
+              <el-menu-item index="/front/ReferenceSearch">精准查询</el-menu-item>
+            </el-submenu>
+            <el-menu-item index="/front/ProfessorPage">教授查询</el-menu-item>
+            <el-menu-item index="/front/score">评论专区</el-menu-item>
             <el-menu-item index="/front/Statics">数据统计</el-menu-item>
           </el-menu>
         </div>
@@ -40,18 +43,22 @@
                 <div style="text-decoration: none" @click="navto('/front/person')">个人中心</div>
               </el-dropdown-item>
               <el-dropdown-item>
-                <div style="text-decoration: none" @click="navto('/front/scoreOrder')">我的购买资料</div>
+                <div style="text-decoration: none" @click="navto('/front/scoreOrder')">购买资料</div>
               </el-dropdown-item>
               <el-dropdown-item>
                 <div style="text-decoration: none" @click="navto('/front/ImSingle')">私信</div>
               </el-dropdown-item>
               <el-dropdown-item>
-                <div style="text-decoration: none" @click="navto('/front/UploadScore')">我的上传资料</div>
+                <div style="text-decoration: none" @click="navto('/front/UploadScore')">我的上传</div>
               </el-dropdown-item>
               <el-dropdown-item>
-                <div style="text-decoration: none" @click="navto('/front/orders')">我的文献</div>
+                <div style="text-decoration: none" @click="navto('/front/orders')">购买文献</div>
               </el-dropdown-item>
-              
+              <el-dropdown-item>
+                <div style="text-decoration: none" @click="navto('/front/Collect')">我的收藏</div>
+              </el-dropdown-item>
+
+
             </el-dropdown-menu>
           </el-dropdown>
         </div>

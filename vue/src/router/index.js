@@ -51,6 +51,10 @@ const routes = [
       { path: 'uploadScore', name:'UploadScore', meta:{name :'上传积分'} ,component:()=>import('../views/front/UploadScore.vue')},
       { path: 'orders', name: 'Orders', meta: { name: '已购课程' }, component: () => import('../views/front/Orders') },
       { path: 'statics', name: 'STatics', meta: { name: '数据统计' }, component: () => import('../views/front/Statics') },
+      { path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/front/Professor') },
+      { path: 'refarticle', name: 'refarticle', meta: { name: '文献' }, component: () => import('../views/front/refarticle') },
+      { path: 'Collect', name: 'Collect', meta: { name: '我的收藏' }, component: () => import('../views/front/Collect.vue') },
+      { path: 'ProfessorPage', name: 'ProfessorPage', meta: { name: '教授' }, component: () => import('../views/front/ProfessorPage.vue') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },
@@ -66,21 +70,21 @@ const router = new VueRouter({
 
 // 注：不需要前台的项目，可以注释掉该路由守卫
 // 路由守卫
-// router.beforeEach((to ,from, next) => {
-//   let user = JSON.parse(localStorage.getItem("xm-user") || '{}');
-//   if (to.path === '/') {
-//     if (user.role) {
-//       if (user.role === 'USER') {
-//         next('/front/home')
-//       } else {
-//         next('/home')
-//       }
-//     } else {
-//       next('/login')
-//     }
-//   } else {
-//     next()
-//   }
-// })
+router.beforeEach((to ,from, next) => {
+  let user = JSON.parse(localStorage.getItem("xm-user") || '{}');
+  if (to.path === '/') {
+    if (user.role) {
+      if (user.role === 'USER'||user.rolr==='PRO') {
+        next('/front/home')
+      } else {
+        next('/home')
+      }
+    } else {
+      next('/login')
+    }
+  } else {
+    next()
+  }
+})
 
 export default router

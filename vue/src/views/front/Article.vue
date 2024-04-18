@@ -46,7 +46,6 @@
                         </el-table-column>
 
                         <el-table-column prop="author" label="文献作者" show-overflow-tooltip></el-table-column>
-                        <el-table-column prop="content" label="综述" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="type" label="文献类别">
                             <template v-slot="scope">
                                 <span v-if="scope.row.type === 'CHINESE'" style="color: #b67259">中文 </span>
@@ -60,11 +59,6 @@
                                 <span v-else style="color: green">公开资料</span>
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column prop="file" label="文献链接" show-overflow-tooltip>
-                            <template v-slot="scope">
-                                <el-button type="warning" size="mini" @click="down(scope.row.file)">点击下载</el-button>
-                            </template> -->
-                        <!-- </el-table-column> -->
                         <el-table-column prop="discount" label="课程折扣">
                             <template v-slot="scope">
                                 <span style="color: #448231" v-if="scope.row.discount < 1">{{ scope.row.discount * 10 }}
@@ -72,10 +66,18 @@
                                 <span style="color: #448231" v-else>——</span>
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column prop="file" label="文献资料" show-overflow-tooltip></el-table-column> -->
-                        <!-- <el-table-column prop="discount" label="文献折扣"></el-table-column> -->
-                        <el-table-column prop="reference" label="文献引用量"></el-table-column>
+                        <el-table-column prop="reference" label="文献引用量">
+                            <template v-slot="scope">
+                                <a :href="'/front/refarticle?id=' + scope.row.id">{{ scope.row.reference }}</a>
+                            </template>
+                        </el-table-column>
                         <el-table-column prop="time" label="发表时间"></el-table-column>
+                        <el-table-column label="引用" width="180" align="center">
+                            <template v-slot="scope">
+                                <el-button plain type="primary" @click="handleRef(scope.row.id)" size="mini">引用</el-button>
+                                <el-button plain type="danger" size="mini" @click=col(scope.row.id)>收藏</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
 
                     <div class="pagination">
@@ -87,6 +89,21 @@
                 </div>
             </div>
             <div style="width:260px" class="card"></div>
+            <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
+                    <el-form-item prop="name" label="引用文献id">
+                        <el-input v-model="form.citeId" autocomplete="off" placeholder="请输入引用文献id"></el-input>
+                    </el-form-item>
+                    <el-form-item label="被引用文献id" prop="byId">
+                        <el-input v-model="form.byId"  disabled></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addReference">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
 
     </div>
@@ -101,6 +118,7 @@ export default {
     name: "Article",
     data() {
         return {
+            fromVisible:false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
@@ -113,7 +131,8 @@ export default {
             endDate: null,
             current: '全部文献',
             categoryList: [],
-            sr:null,
+            sr: null,
+            form: {},
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         }
     },
@@ -154,61 +173,62 @@ export default {
             }// 分页查询}
             if (pageNum) this.pageNum = pageNum;
             console.log(this.startDate);
-            if(this.sr==='是'){
-            
-            this.$request.get('/article/selectPager', {
-                params: {
-                    pageNum: this.pageNum,
-                    pageSize: this.pageSize,
-                    name: this.name,
-                    type: this.type,
-                    startDate: this.startDate,
-                    endDate: this.endDate,
-                    recommend: this.recommend,
-                    category: this.current === '全部文献' ? null : this.current,
-                    author: this.author
-                }
-            }).then(res => {
-                console.log(res);
-                for (var i = 0; i < res.data.list.length; i++) {
+            if (this.sr === '是') {
 
-                    var dateTimeString = res.data.list[i].time;
-                    var dateTime = new Date(dateTimeString);
-                    var year = dateTime.getFullYear();
-                    var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
-                    var day = dateTime.getDate();
-                    res.data.list[i].time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-                }
-                this.tableData = res.data?.list
-                this.total = res.data?.total
-            })}
-            else{
+                this.$request.get('/article/selectPager', {
+                    params: {
+                        pageNum: this.pageNum,
+                        pageSize: this.pageSize,
+                        name: this.name,
+                        type: this.type,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        recommend: this.recommend,
+                        category: this.current === '全部文献' ? null : this.current,
+                        author: this.author
+                    }
+                }).then(res => {
+                    console.log(res);
+                    for (var i = 0; i < res.data.list.length; i++) {
+
+                        var dateTimeString = res.data.list[i].time;
+                        var dateTime = new Date(dateTimeString);
+                        var year = dateTime.getFullYear();
+                        var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
+                        var day = dateTime.getDate();
+                        res.data.list[i].time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+                    }
+                    this.tableData = res.data?.list
+                    this.total = res.data?.total
+                })
+            }
+            else {
                 this.$request.get('/article/selectPage', {
-                params: {
-                    pageNum: this.pageNum,
-                    pageSize: this.pageSize,
-                    name: this.name,
-                    type: this.type,
-                    startDate: this.startDate,
-                    endDate: this.endDate,
-                    recommend: this.recommend,
-                    category: this.current === '全部文献' ? null : this.current,
-                    author: this.author
-                }
-            }).then(res => {
-                console.log(res);
-                for (var i = 0; i < res.data.list.length; i++) {
+                    params: {
+                        pageNum: this.pageNum,
+                        pageSize: this.pageSize,
+                        name: this.name,
+                        type: this.type,
+                        startDate: this.startDate,
+                        endDate: this.endDate,
+                        recommend: this.recommend,
+                        category: this.current === '全部文献' ? null : this.current,
+                        author: this.author
+                    }
+                }).then(res => {
+                    console.log(res);
+                    for (var i = 0; i < res.data.list.length; i++) {
 
-                    var dateTimeString = res.data.list[i].time;
-                    var dateTime = new Date(dateTimeString);
-                    var year = dateTime.getFullYear();
-                    var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
-                    var day = dateTime.getDate();
-                    res.data.list[i].time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-                }
-                this.tableData = res.data?.list
-                this.total = res.data?.total
-            })
+                        var dateTimeString = res.data.list[i].time;
+                        var dateTime = new Date(dateTimeString);
+                        var year = dateTime.getFullYear();
+                        var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
+                        var day = dateTime.getDate();
+                        res.data.list[i].time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+                    }
+                    this.tableData = res.data?.list
+                    this.total = res.data?.total
+                })
 
             }
         },
@@ -216,11 +236,47 @@ export default {
             this.name = null
             this.load(1)
         },
+        handleRef(id){
+            this.form.byId=id;
+            this.fromVisible=true;
+            //this.addReference();
+        },
+        addReference(){
+            this.$request.get('/bycited/add',{
+                params:{
+                    byId:this.form.byId,
+                    citeId:this.form.citeId,
+                    userId:this.user.id
+                }
+            }).then(res=>{
+                if(res.code==='200'){
+                    this.$message.success('添加成功')
+                }else{
+                    this.$message.error(res.msg) 
+                }
+            })
+            this.fromVisible=false;
+            this.reset();
+        },
         handleCurrentChange(pageNum) {
             this.load(pageNum)
         },
         down(url) {
             location.href = url
+        },
+        col(id){
+            this.$request.get('/collection/add/',{
+                params:{
+                    articleId:id,
+                    cId:this.user.id
+                }
+            }).then(res=>{
+                if(res.code==='200'){
+                    this.$message.success('添加成功')
+                }else{
+                    this.$message.error(res.msg) 
+                }
+            })
         }
     }
 }
