@@ -55,4 +55,6 @@ public interface ArticleMapper {
 
         List<Article> selectAllr( Date startdate, Date enddate, Integer id, String name, String type,String recommend,
                                  String category,String author,Integer authorId,String journal);
+
+        List<Article> selectArticle(Article article);
 }

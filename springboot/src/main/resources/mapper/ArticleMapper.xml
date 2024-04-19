@@ -129,7 +129,7 @@
             <if test="author != null"> and author = #{author}</if>
             <if test="journal != null"> and journal = #{journal}</if>
             <if test="category != null"> and category = #{category}</if>
-            <if test="authorId!= null and authorId!=''"> and authorId = #{authorId}</if>
+
         </where>
         order by id desc
     </select>
@@ -147,6 +147,22 @@
             <if test="category!=null">    and #{category} = category </if>
             <if test="author != null"> and author like concat('%', #{author}, '%')</if>
             <if test="journal!= null and journal !='' "> and journal = #{journal}</if>
+        </where>
+        order by reference desc
+    </select>
+    <select id="selectArticle" resultType="com.example.entity.Article">
+        select
+        *
+        from Article
+        <where>
+            <if test="id != null and id!=''"> and id= #{id}</if>
+            <if test="name != null"> and name like concat('%', #{name}, '%')</if>
+            <if test="type != null"> and type =#{type}</if>
+            <if test="recommend!=null">    and #{recommend} = recommend </if>
+            <if test="category!=null">    and #{category} = category </if>
+            <if test="author != null"> and author like concat('%', #{author}, '%')</if>
+            <if test="journal!= null and journal !='' "> and journal = #{journal}</if>
+            <if test="authorId!= null and authorId !='' "> and author_id = #{authorId}</if>
         </where>
         order by reference desc
     </select>

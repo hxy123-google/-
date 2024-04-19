@@ -107,7 +107,11 @@ public class ArticleService {
         return articleMapper.selectAll(null, null, article.getId(), article.getName(), article.getType(),
                 article.getRecommend(),article.getCategory(),article.getAuthor(), article.getJournal());
     }
-
+    public  PageInfo<Article> selectArticle(Article article,Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<Article> list= articleMapper.selectArticle(article);
+        return PageInfo.of(list);
+    }
     /**
      * 分页查询
      */

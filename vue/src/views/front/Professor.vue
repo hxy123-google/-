@@ -153,7 +153,7 @@ export default {
         load(pageNum) {
             if (pageNum) this.pageNum = pageNum;
             console.log(this.startDate);
-            this.$request.get('/article/selectPager', {
+            this.$request.get('/article/selectArticle', {
                 params: {
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,

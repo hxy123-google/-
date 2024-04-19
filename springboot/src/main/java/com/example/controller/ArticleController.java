@@ -144,6 +144,13 @@ public class ArticleController {
         PageInfo<Article> page = articleService.selectPager(article, pageNum, pageSize, startdate1, enddate1);
         return Result.success(page);
     }
+    @GetMapping("/selectArticle")
+    public Result selectArticle(Article article,
+                                @RequestParam(defaultValue = "1") Integer pageNum,
+                                @RequestParam(defaultValue = "10") Integer pageSize){
+        PageInfo<Article> page=articleService.selectArticle(article,pageNum,pageSize);
+        return Result.success(page);
+    }
     @GetMapping("/getPie")
     public Result getPie() {
         Map<String, Object> resultMap = new HashMap<>();
