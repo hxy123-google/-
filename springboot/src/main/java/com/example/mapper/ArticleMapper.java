@@ -42,7 +42,7 @@ public interface ArticleMapper {
          * 查询所有
          */
         List<Article> selectAll(Date startdate, Date enddate, Integer id, String name, String type,String recommend,
-                                String category,String author);
+                                String category,String author,String journal);
         @Select("select * from article where author_id=#{authorId}")
         List<Article> selectByAuthorId(Integer authorId);
 
@@ -54,5 +54,5 @@ public interface ArticleMapper {
         List<Article> selectAcc(Date startdate, Date enddate, Integer id,String name,String author, String journal,String category);
 
         List<Article> selectAllr( Date startdate, Date enddate, Integer id, String name, String type,String recommend,
-                                 String category,String author,Integer authorId);
+                                 String category,String author,Integer authorId,String journal);
 }

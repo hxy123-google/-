@@ -13,8 +13,8 @@ import java.io.Serializable;
  */
 public class ArticleScore implements Serializable {
     private Integer id;
-    private Integer articleOId;
-    private Integer scoreOId;
+    private Integer articleId;
+    private Integer scoreId;
 
     public Integer getId() {
         return id;
@@ -24,19 +24,19 @@ public class ArticleScore implements Serializable {
         this.id = id;
     }
 
-    public Integer getArticleOId() {
-        return articleOId;
+    public Integer getArticleId() {
+        return articleId;
     }
 
-    public void setArticleOId(Integer articleOId) {
-        this.articleOId = articleOId;
+    public void setArticleId(Integer articleId) {
+        this.articleId = articleId;
     }
 
-    public Integer getScoreOId() {
-        return scoreOId;
+    public Integer getScoreId() {
+        return scoreId;
     }
 
-    public void setScoreOId(Integer scoreOId) {
-        this.scoreOId = scoreOId;
+    public void setScoreId(Integer scoreId) {
+        this.scoreId = scoreId;
     }
 }

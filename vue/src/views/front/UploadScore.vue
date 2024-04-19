@@ -52,6 +52,7 @@
                 <el-table-column prop="descr" label="审核说明"></el-table-column>
                 <el-table-column label="操作" width="180" align="center">
                     <template v-slot="scope">
+                        <el-button plain type="primary" @click="handleScore(scope.row.id)" size="mini">添加相关文献</el-button>
                         <el-button plain type="primary" @click="handleEdit(scope.row)" size="mini">编辑</el-button>
                         <el-button plain type="danger" size="mini" @click=del(scope.row.id)>删除</el-button>
                     </template>
@@ -114,6 +115,23 @@
             </div>
 
         </el-dialog>
+        <el-dialog title="编辑所属文献" :visible.sync="scoreVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
+            <el-form label-width="100px" style="padding-right: 50px" :model="formScore" >
+                <el-form-item prop="scoreId" label="资料所属文献">
+                    <el-input v-model="formScore.scoreId" autocomplete="off" placeholder="请输入文献id"></el-input>
+                </el-form-item>
+                <el-form-item prop="aId1" label="资料所属文献">
+                    <el-input v-model="formScore.aId1" autocomplete="off" placeholder="请输入文献id"></el-input>
+                    <el-button type="primary" plain @click="addas(formScore.aId1)">确定</el-button>
+                </el-form-item>
+                
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="scoreVisible = false">取 消</el-button>
+                <!-- <el-button type="primary" @click="addas">确 定</el-button> -->
+            </div>
+
+        </el-dialog>
 
         <el-dialog title="资料内容" :visible.sync="editorVisible" width="50%" :close-on-click-modal="false"
             destroy-on-close>
@@ -129,18 +147,20 @@ export default {
     name: "Score",
     data() {
         return {
+            scoreVisible:false,
             editor: null,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 5,  // 每页显示的个数
             total: 0,
-            aId: null,
+            aId1: null,
             name: null,
             recommend: null,
             status:null,
             fromVisible: false,
             editorVisible: false,
             form: {},
+            formScore:{},
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
             rules: {
                 name: [
@@ -276,6 +296,26 @@ export default {
         },
         down(url) {
             location.href = url
+        },
+        handleScore(id){
+            this.formScore.scoreId=id
+            this.scoreVisible=true;
+        },
+        addas(id){
+            let scoreId=this.formScore.scoreId;
+           this.$request.get('/articlescore/',{
+            params:{
+                articleId:id,
+                scoreId: scoreId,
+            }
+           }).then(res=>{
+             if(res.code==='200'){
+                this.$message.success('操作成功')
+             }else{
+                this.$message.error(res.msg) 
+             }
+           })
+            
         }
     }
 }

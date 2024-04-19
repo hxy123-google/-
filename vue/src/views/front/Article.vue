@@ -10,6 +10,14 @@
             </div>
             <div style="flex:1" class="card">
                 <div class="search">
+                    <el-select v-model="journal" placeholder="请选择期刊" style="width: 100px">
+                        <el-option label="Advanced Materials" value="Advanced Materials"></el-option>
+                        <el-option label="Materials Science and Engineering: R: Reports"
+                            value="Materials Science and Engineering: R: Reports"></el-option>
+                        <el-option label="Nature Materials" value="Nature Materials"></el-option>
+                        <el-option label="硅酸盐学报" value="硅酸盐学报"></el-option>
+                        <el-option label="全部" value:null></el-option>
+                    </el-select>
                     <el-input placeholder="请输入文献名称" style="width: 100px" v-model="name"></el-input>
                     <el-input placeholder="请输入作者名称" style="width: 100px" v-model="author"></el-input>
                     <el-select v-model="type" placeholder="请选择类型" style="width: 100px">
@@ -74,7 +82,8 @@
                         <el-table-column prop="time" label="发表时间"></el-table-column>
                         <el-table-column label="引用" width="180" align="center">
                             <template v-slot="scope">
-                                <el-button plain type="primary" @click="handleRef(scope.row.id)" size="mini">引用</el-button>
+                                <el-button plain type="primary" @click="handleRef(scope.row.id)"
+                                    size="mini">引用</el-button>
                                 <el-button plain type="danger" size="mini" @click=col(scope.row.id)>收藏</el-button>
                             </template>
                         </el-table-column>
@@ -88,7 +97,7 @@
                     </div>
                 </div>
             </div>
-            <div style="width:260px" class="card"></div>
+
             <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
                 destroy-on-close>
                 <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
@@ -96,7 +105,7 @@
                         <el-input v-model="form.citeId" autocomplete="off" placeholder="请输入引用文献id"></el-input>
                     </el-form-item>
                     <el-form-item label="被引用文献id" prop="byId">
-                        <el-input v-model="form.byId"  disabled></el-input>
+                        <el-input v-model="form.byId" disabled></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -104,6 +113,7 @@
                     <el-button type="primary" @click="addReference">确 定</el-button>
                 </div>
             </el-dialog>
+
         </div>
 
     </div>
@@ -118,12 +128,13 @@ export default {
     name: "Article",
     data() {
         return {
-            fromVisible:false,
+            fromVisible: false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
             total: 0,
             name: null,
+            journal: null,
             author: null,
             type: null,
             recommend: null,
@@ -134,6 +145,7 @@ export default {
             sr: null,
             form: {},
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
+
         }
     },
     mounted() {
@@ -151,9 +163,11 @@ export default {
         },
         selectCategory(categoryName) {
             this.current = categoryName;
-            this.load(1);
+            this.author = null,
+                this.load(1);
         },
         load(pageNum) {
+
             console.log(this.startDate);
             if (this.startDate != null) {
                 var dateTimeString = this.startDate;
@@ -185,7 +199,8 @@ export default {
                         endDate: this.endDate,
                         recommend: this.recommend,
                         category: this.current === '全部文献' ? null : this.current,
-                        author: this.author
+                        author: this.author,
+                        journal: this.journal
                     }
                 }).then(res => {
                     console.log(res);
@@ -213,6 +228,7 @@ export default {
                         endDate: this.endDate,
                         recommend: this.recommend,
                         category: this.current === '全部文献' ? null : this.current,
+                        journal:this.journal,
                         author: this.author
                     }
                 }).then(res => {
@@ -233,29 +249,30 @@ export default {
             }
         },
         reset() {
-            this.name = null
+            this.author = null,
+                this.name = null
             this.load(1)
         },
-        handleRef(id){
-            this.form.byId=id;
-            this.fromVisible=true;
+        handleRef(id) {
+            this.form.byId = id;
+            this.fromVisible = true;
             //this.addReference();
         },
-        addReference(){
-            this.$request.get('/bycited/add',{
-                params:{
-                    byId:this.form.byId,
-                    citeId:this.form.citeId,
-                    userId:this.user.id
+        addReference() {
+            this.$request.get('/bycited/add', {
+                params: {
+                    byId: this.form.byId,
+                    citeId: this.form.citeId,
+                    userId: this.user.id
                 }
-            }).then(res=>{
-                if(res.code==='200'){
+            }).then(res => {
+                if (res.code === '200') {
                     this.$message.success('添加成功')
-                }else{
-                    this.$message.error(res.msg) 
+                } else {
+                    this.$message.error(res.msg)
                 }
             })
-            this.fromVisible=false;
+            this.fromVisible = false;
             this.reset();
         },
         handleCurrentChange(pageNum) {
@@ -264,20 +281,21 @@ export default {
         down(url) {
             location.href = url
         },
-        col(id){
-            this.$request.get('/collection/add/',{
-                params:{
-                    articleId:id,
-                    cId:this.user.id
+        col(id) {
+            this.$request.get('/collection/add/', {
+                params: {
+                    articleId: id,
+                    cId: this.user.id
                 }
-            }).then(res=>{
-                if(res.code==='200'){
+            }).then(res => {
+                if (res.code === '200') {
                     this.$message.success('添加成功')
-                }else{
-                    this.$message.error(res.msg) 
+                } else {
+                    this.$message.error(res.msg)
                 }
             })
-        }
+        },
+
     }
 }
 </script>

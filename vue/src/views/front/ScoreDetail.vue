@@ -33,22 +33,28 @@
         </div>
       </div>
       <div style="width:260px" class="card">
-        <div style="display: flex; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ddd">
-          <div style="font-size: 20px; flex: 1">文章榜单</div>
-        </div>
-        <div>
-          <div v-for="item in showList" :key="item.id" style="margin: 15px 0" class="line1">
-            <span style="width: 18px; display: inline-block; text-align: right; margin-right: 10px">
-              <span style="color: orangered" v-if="item.index === 1">{{ item.index }}</span>
-              <span style="color: goldenrod" v-else-if="item.index === 2">{{ item.index }}</span>
-              <span style="color: dodgerblue" v-else-if="item.index === 3">{{ item.index }}</span>
-              <span style="color: #666" v-else>{{ item.index }}</span>
-            </span>
-            <span style="color: #666;"> <a :href="'/front/scoreDetail?id=' + item.id">{{ item.name
-                }}</a></span>
-          </div>
-        </div>
-      </div>
+                <div style="display: flex; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ddd">
+                    <div style="font-size: 20px; flex: 1">文章榜单</div>
+                </div>
+                <div>
+                    <div v-for="item in showList" :key="item.id" style="margin: 15px 0" class="line1">
+                        <span style="width: 18px; display: inline-block; text-align: right; margin-right: 10px">
+                            <span style="color: orangered" v-if="item.index === 1">{{ item.index }}</span>
+                            <span style="color: goldenrod" v-else-if="item.index === 2">{{ item.index }}</span>
+                            <span style="color: dodgerblue" v-else-if="item.index === 3">{{ item.index }}</span>
+                            <span style="color: #666" v-else>{{ item.index }}</span>
+                        </span>
+                        <span style="color: #666;"> <a :href="'/front/ArticleDetail?id=' + item.id">{{ item.name
+                                }}</a></span>
+                    </div>
+                </div>
+                <div class="pagination">
+                    <el-pagination background @current-change="handleCurrentChange" :current-page="pageNum"
+                        :page-sizes="[5, 10, 20]" :page-size="pageSize" layout="total, prev, pager, next"
+                        :total="total">
+                    </el-pagination>
+                </div>
+            </div>
     </div>
   </div>
 </template>
@@ -62,12 +68,17 @@ export default {
       user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
       scoreId: scoreId,
       courseData: {},
+      showList:[],
+      pageNum:1,
+      pageSize:5,
+      total:0,
       flag: false
     }
   },
   mounted() {
     this.loadCourse();
     this.checkOrder();
+    this.loadArticle(1);
   },
   // methods：本页面所有的点击事件或者其他函数定义区
   methods: {
@@ -114,6 +125,25 @@ export default {
         }
       })
     },
+    loadArticle(pageNum) {
+            this.pageNum=pageNum;
+            this.$request.get('/articlescore/selectArticle/', {
+                params: {
+                    pageNum: this.pageNum,
+                    pageSize: this.pageSize,
+                    scoreId: this.scoreId
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    console.log(res);
+                    this.showList = res.data?.list
+                    this.total = res.data?.total
+                }
+            })
+        },
+        handleCurrentChange(pageNum) {
+            this.loadScore(pageNum);
+        },
   }
 }
 </script>

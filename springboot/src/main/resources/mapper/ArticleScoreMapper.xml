@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ArticleScoreMapper">
+
+    <select id="selectAll" resultType="com.example.entity.ArticleScore">
+        select
+        *
+        from articlescore
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="articleId != null"> and article_id=#{articleId}</if>
+            <if test="scoreId != null"> and score_id=#{scoreId}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectById" resultType="com.example.entity.ArticleScore">
+        select
+            *
+        from articlescore
+        where id = #{id}
+    </select>
+    <insert id="insert" parameterType="com.example.entity.ArticleScore" useGeneratedKeys="true">
+        insert into articlescore
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test=" articleId!= null">article_id,</if>
+            <if test="scoreId != null">score_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test=" articleId!= null">#{articleId},</if>
+            <if test="scoreId != null">#{scoreId},</if>
+        </trim>
+    </insert>
+    <select id="selectScore" resultType="com.example.entity.Score">
+        select
+            score.*
+        from articlescore
+                 left join score on score.id=articlescore.score_id
+        where articlescore.article_id=#{articleId}
+    </select>
+    <select id="selectArticle" resultType="com.example.entity.Article">
+        select
+            article.*
+        from articlescore
+                 left join article on article.id=articlescore.article_id
+            where articlescore.score_id=#{scoreId}
+    </select>
+</mapper>

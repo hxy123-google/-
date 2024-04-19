@@ -105,7 +105,7 @@ public class ArticleService {
      */
     public List<Article> selectAll(Article article) {
         return articleMapper.selectAll(null, null, article.getId(), article.getName(), article.getType(),
-                article.getRecommend(),article.getCategory(),article.getAuthor());
+                article.getRecommend(),article.getCategory(),article.getAuthor(), article.getJournal());
     }
 
     /**
@@ -116,7 +116,7 @@ public class ArticleService {
         System.out.println(article);
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAll(startdate, enddate, article.getId(), article.getName(),
-                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor());
+                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getJournal());
 
         return PageInfo.of(list);
     }
@@ -125,7 +125,7 @@ public class ArticleService {
         System.out.println(article);
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAllr(startdate, enddate, article.getId(), article.getName(),
-                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getAuthorId());
+                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getAuthorId(),article.getJournal());
 
         return PageInfo.of(list);
     }

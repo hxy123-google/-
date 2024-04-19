@@ -5,7 +5,7 @@
                 <div style="height:200px" class="search">
                     <div class="left">
                         <div style="margin: 15px; text-align: center">
-                            <el-image :src="pro.avatar" style="width: 100px; height: auto;"></el-image>
+                            <el-image :src="pro.avatar" style="width: 150px; height: auto;"></el-image>
                         </div>
 
                     </div>
@@ -138,11 +138,15 @@ export default {
             total1: 0,
         }
     },
-    mounted() {
-        
+    created(){
         this.loadPro();
         this.load(1);
-        this.loadBar();
+    },
+    mounted() {
+        
+        //this.loadPro();
+       // this.load(1);
+        //this.loadBar();
     },
 
     methods: {
@@ -169,6 +173,7 @@ export default {
                 this.tableData = res.data?.list
                 this.total = res.data?.total
             })
+            this.loadBar();
         },
         loadPro() {
             this.$request.get('/user/selectById/' + this.authorId).then(res => {

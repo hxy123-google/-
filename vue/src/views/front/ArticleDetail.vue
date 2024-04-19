@@ -6,7 +6,7 @@
                     <el-button type="success">{{ articleData.type === 'CHINESE' ? '中文文献' : '英文文献' }}</el-button>
                     <span style="font-size: 20px; font-weight: 550; color: #333333; margin-left: 20px">{{
                         articleData.name
-                    }}</span>
+                        }}</span>
                 </div>
                 <div style="text-align: center; margin-top: 15px">
                     <span style="color: red" v-if="articleData.price > 0">{{ articleData.price }} 积分</span>
@@ -19,7 +19,7 @@
                 <!--   课程保密区域   -->
                 <div>
                     <div style="font-size: 18px; margin: 10px 0">文献资料</div>
-                    <div v-if="articleData.price === 0||flag||user.role==='PRO'">
+                    <div v-if="articleData.price === 0 || flag || user.role === 'PRO'">
                         <div style="margin-top: 10px">文献链接：<a :href="articleData.file" target="_blank">{{
                             articleData.file
                                 }}</a></div>
@@ -123,6 +123,12 @@
                                 }}</a></span>
                     </div>
                 </div>
+                <div class="pagination">
+                    <el-pagination background @current-change="handleCurrentChange" :current-page="pageNum"
+                        :page-sizes="[5, 10, 20]" :page-size="pageSize" layout="total, prev, pager, next"
+                        :total="total">
+                    </el-pagination>
+                </div>
             </div>
         </div>
     </div>
@@ -141,13 +147,16 @@ export default {
             commentContent: '',
             commentList: [],
             showList: [],
-            flag:false,
+            pageNum: 1,
+            pageSize: 5,
+            total: 0,
+            flag: false,
         }
     },
     mounted() {
         this.loadArticle();
         this.loadComment();
-        this.loadScore();
+        this.loadScore(1);
         this.checkArticle();
 
     },
@@ -220,13 +229,24 @@ export default {
                 }
             })
         },
-        loadScore() {
-            this.$request.get('/score/withArticle/' + this.articleId).then(res => {
+        loadScore(pageNum) {
+            this.pageNum=pageNum;
+            this.$request.get('/articlescore/selectScore/', {
+                params: {
+                    pageNum: this.pageNum,
+                    pageSize: this.pageSize,
+                    articleId: this.articleId
+                }
+            }).then(res => {
                 if (res.code === '200') {
                     console.log(res);
-                    this.showList = res.data || [];
+                    this.showList = res.data?.list
+                    this.total = res.data?.total
                 }
             })
+        },
+        handleCurrentChange(pageNum) {
+            this.loadScore(pageNum);
         },
         checkArticle() {
             this.$request.get('/orders/selectAll', {

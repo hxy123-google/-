@@ -21,6 +21,7 @@
             <if test="recommend!=null">    and #{recommend} = recommend </if>
             <if test="category!=null">    and #{category} = category </if>
             <if test="author != null"> and author like concat('%', #{author}, '%')</if>
+            <if test="journal!= null and journal!=''"> and journal = #{journal}</if>
         </where>
         order by id desc
     </select>
@@ -145,7 +146,7 @@
             <if test="recommend!=null">    and #{recommend} = recommend </if>
             <if test="category!=null">    and #{category} = category </if>
             <if test="author != null"> and author like concat('%', #{author}, '%')</if>
-            <if test="authorId!= null and authorId!=''"> and author_id = #{authorId}</if>
+            <if test="journal!= null and journal !='' "> and journal = #{journal}</if>
         </where>
         order by reference desc
     </select>
