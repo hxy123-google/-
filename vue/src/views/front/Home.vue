@@ -94,6 +94,7 @@ export default {
     // this.loadRightData()
     this.loadLeftData();
     this.getData();
+    this.getSign()
   },
 
   methods: {
@@ -198,6 +199,7 @@ signin() {
       this.$message.success('签到成功，恭喜你获得10个积分')
       this.getSign()
     } else {
+
       this.$message.error(res.msg)
     }
   })
