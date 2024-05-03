@@ -23,12 +23,13 @@
             <if test="id != null">id,</if>
             <if test=" articleId!= null">article_id,</if>
             <if test="cId != null">c_id,</if>
-
+            <if test="name != null">name,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
+            <if test="id != null">#{id},</if>
             <if test=" articleId!= null">#{articleId},</if>
-            <if test="cId != null">#{cId}</if>
+            <if test="cId != null">#{cId},</if>
+            <if test="name != null">#{name},</if>
         </trim>
     </insert>
     <select id="findById" resultType="com.example.entity.Article">
@@ -36,7 +37,10 @@
             article.*
         from collection
                  left join article on article.id=collection.article_id
-        where collection.c_id=#{cId}
+        <where>
+            <if test="cId != null">collection.c_id=#{cId} </if>
+            <if test="category!=null and category!=''"> and collection.name=#{category}</if>
+        </where>
     </select>
     <delete id="deleteById">
         delete from collection

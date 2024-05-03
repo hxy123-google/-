@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="search">
-            <el-input placeholder="请输入账号查询" style="width: 200px" v-model="username"></el-input>
+            <el-input placeholder="请输入教授名称" style="width: 200px" v-model="name"></el-input>
             <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
-            <el-button type="info" plain style="margin-left: 10px" @click="loadPro(1)">查询教授</el-button>
+            <!-- <el-button type="info" plain style="margin-left: 10px" @click="loadPro(1)">查询教授</el-button> -->
             <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
         </div>
         <div class="table">
@@ -51,7 +51,7 @@ export default {
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
             total: 0,
-            username: null,
+            name: null,
             fromVisible: false,
             form: {},
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
@@ -69,23 +69,15 @@ export default {
     methods: {
         load(pageNum) {  // 分页查询
             if (pageNum) this.pageNum = pageNum
-            this.$request.get('/user/selectPage', {
+            this.$request.get('/user/selectPro', {
                 params: {
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
-                    username: this.username,
+                    name: this.name,
                     role: 'PRO'
                 }
             }).then(res => {
                 console.log(this.tableData);
-                this.tableData = res.data?.list
-                this.total = res.data?.total
-            })
-        },
-        loadPro(pageNum) {  // 分页查询
-            if (pageNum) this.pageNum = pageNum
-            this.$request.get('/user/selectPro').then(res => {
-                //console.log(res);
                 this.tableData = res.data?.list
                 this.total = res.data?.total
             })

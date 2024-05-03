@@ -1,6 +1,18 @@
 <template>
     <div class="main-content">
         <div style="display: flex; grid-gap:10px">
+            <div style="width:150px" class="card">
+                <el-button plain type="danger" size="mini" @click="openAdd">添加</el-button>
+                <el-button plain type="danger" size="mini" @click="openMinus">删除</el-button>
+                <el-select v-model="value" placeholder="请选择">
+                    <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                    </el-option>
+                </el-select>
+                <!-- <div class="category-item"  v-for="item in categoryList" :key="item.id">{{ item.category }}</div> -->
+                <div class="category-item" :class="{ 'category-item-active': item.name === current }"
+                    v-for="item in categoryList" :key="item.id" @click="selectCategory(item.name)">{{ item.name
+                    }}</div>
+            </div>
             <div style="flex:1" class="card">
                 <div class="table">
                     <el-table :data="tableData">
@@ -79,6 +91,17 @@
                 <el-button type="primary" @click="addReference">确 定</el-button>
             </div>
         </el-dialog>
+        <el-dialog title="添加分类" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
+            <el-form label-width="100px" style="padding-right: 50px" :model="menu">
+                <el-form-item prop="name" label="添加目录名">
+                    <el-input v-model="menu.name" autocomplete="off" placeholder="请输入目录名称"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="fromVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addMenu">确 定</el-button>
+            </div>
+        </el-dialog>
     </div>
 
 
@@ -89,19 +112,44 @@ export default {
     name: "Collect",
     data() {
         return {
+            options: [],
+            categoryList: [],
+            current: null,
             fromVisible: false,
+            menuVisible: false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
             total: 0,
             form: {},
+            menu: {},
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         }
     },
     mounted() {
+        this.loadleft();
         this.load(1);
     },
     methods: {
+        openAdd() {
+            this.menuVisible = true;
+        },
+        addMenu() {
+            this.$request.get("/menu/Addmenu", {
+                params: {
+                    userId: this.user.id,
+                    name: this.menu.name
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('添加成功')
+                }
+                else {
+                    this.$message.error(res.msg)
+                }
+            })
+        },
+        
         load(pageNum) {
             if (pageNum) this.pageNum = pageNum;
             console.log(this.startDate);
@@ -110,6 +158,7 @@ export default {
                     cId: this.user.id,
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
+                    category: this.current ,
                 }
             }).then(res => {
                 console.log(res);
@@ -163,6 +212,42 @@ export default {
             })
             this.fromVisible = false;
         },
+        selectCategory(categoryName) {
+            this.current = categoryName;
+            this.author = null,
+                this.load(1);
+        },
+        loadleft() {
+            this.$request.get("/menu/selectAll", {
+                params: {
+                    userId: this.user.id
+                }
+            }).then(res => {
+                console.log(res);
+                this.categoryList = res.data;
+                this.options=res.data;
+                console.log(this.options);
+                //this.categoryList.unshift({ name: '全部文献' })
+            })
+        },
     }
 }
 </script>
+<style>
+.category-item {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.category-item-active {
+    background-color: #1890ff;
+    color: #fff;
+    border-radius: 5px;
+}
+
+.search {
+    display: flex;
+}
+</style>

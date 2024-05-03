@@ -143,9 +143,9 @@ public class UserService {
         userMapper.updateById(dbUser);
     }
 
-    public PageInfo<User> selectPro(Integer pageNum, Integer pageSize) {
+    public PageInfo<User> selectPro(User user,Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<User> list = userMapper.selectPro();
+        List<User> list = userMapper.selectPro(user);
         return PageInfo.of(list);
     }
     public void recharge(Double account) {

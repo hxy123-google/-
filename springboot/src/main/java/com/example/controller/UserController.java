@@ -98,11 +98,11 @@ public class UserController {
         return Result.success(page);
     }
     @GetMapping("/selectPro")
-    public Result selectPro(@RequestParam(defaultValue = "1") Integer pageNum,
+    public Result selectPro(User user,
+                            @RequestParam(defaultValue = "1") Integer pageNum,
                             @RequestParam(defaultValue = "10") Integer pageSize){
-        PageInfo<User> page = userService.selectPro( pageNum, pageSize);
+        PageInfo<User> page = userService.selectPro( user,pageNum, pageSize);
         return Result.success(page);
-
     }
     @GetMapping("/recharge")
     public Result recharge(@RequestParam Double account) {

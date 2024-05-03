@@ -108,9 +108,23 @@
                         <el-input v-model="form.byId" disabled></el-input>
                     </el-form-item>
                 </el-form>
+
                 <div slot="footer" class="dialog-footer">
                     <el-button @click="fromVisible = false">取 消</el-button>
                     <el-button type="primary" @click="addReference">确 定</el-button>
+                </div>
+            </el-dialog>
+            <el-dialog title="文献收藏" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="menu" >
+                    <el-select v-model="menu.name" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                        </el-option>
+                    </el-select>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addMyMenu">确 定</el-button>
                 </div>
             </el-dialog>
 
@@ -128,7 +142,10 @@ export default {
     name: "Article",
     data() {
         return {
+            articleId:null,
+            options: [],
             fromVisible: false,
+            menuVisible: false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
@@ -144,6 +161,9 @@ export default {
             categoryList: [],
             sr: null,
             form: {},
+            menu: {  // 用于收藏的表单对象
+            name: null,
+        },
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
 
         }
@@ -154,6 +174,23 @@ export default {
     },
 
     methods: {
+        addMyMenu(){
+            console.log(this.menu.name);
+             this.$request.get('/collection/add/', {
+                params: {
+                    articleId: this.articleId,
+                    cId: this.user.id,
+                    name:this.menu.name,
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('添加成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+
+        },
         loadleft() {
             this.$request.get("/category").then(res => {
                 console.log(res);
@@ -228,7 +265,7 @@ export default {
                         endDate: this.endDate,
                         recommend: this.recommend,
                         category: this.current === '全部文献' ? null : this.current,
-                        journal:this.journal,
+                        journal: this.journal,
                         author: this.author
                     }
                 }).then(res => {
@@ -282,20 +319,36 @@ export default {
             location.href = url
         },
         col(id) {
-            this.$request.get('/collection/add/', {
+            this.menuVisible = true;
+            this.loadleftmenu();
+            this.articleId=id;
+            //console.log(this.menu.name);
+            // this.$request.get('/collection/add/', {
+            //     params: {
+            //         articleId: id,
+            //         cId: this.user.id,
+            //         name:this.menu.value
+            //     }
+            // }).then(res => {
+            //     if (res.code === '200') {
+            //         this.$message.success('添加成功')
+            //     } else {
+            //         this.$message.error(res.msg)
+            //     }
+            // })
+        },
+        loadleftmenu() {
+            this.$request.get("/menu/selectAll", {
                 params: {
-                    articleId: id,
-                    cId: this.user.id
+                    userId: this.user.id
                 }
             }).then(res => {
-                if (res.code === '200') {
-                    this.$message.success('添加成功')
-                } else {
-                    this.$message.error(res.msg)
-                }
+                console.log(res);
+                this.categoryList = res.data;
+                this.options = res.data;
+                //this.categoryList.unshift({ name: '全部文献' })
             })
         },
-
     }
 }
 </script>

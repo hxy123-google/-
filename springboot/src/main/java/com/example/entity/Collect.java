@@ -15,7 +15,7 @@ public class Collect implements Serializable {
     private Integer id;
     private Integer articleId;
     private Integer cId;
-
+    private String name;
     public Integer getId() {
         return id;
     }
@@ -38,5 +38,13 @@ public class Collect implements Serializable {
 
     public void setcId(Integer cId) {
         this.cId = cId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

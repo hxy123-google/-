@@ -54,7 +54,8 @@ const routes = [
       { path: 'professor', name: 'Professor', meta: { name: '教授信息' }, component: () => import('../views/front/Professor') },
       { path: 'refarticle', name: 'refarticle', meta: { name: '文献' }, component: () => import('../views/front/refarticle') },
       { path: 'Collect', name: 'Collect', meta: { name: '我的收藏' }, component: () => import('../views/front/Collect.vue') },
-      { path: 'ProfessorPage', name: 'ProfessorPage', meta: { name: '教授' }, component: () => import('../views/front/ProfessorPage.vue') },
+      { path: 'test', name: 'test', meta: { name: '教授' }, component: () => import('../views/front/test.vue') },
+      { path: 'professorPage', name: 'ProfessorPage', meta: { name: '教授查询' }, component: () => import('../views/front/ProfessorPage.vue') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },
