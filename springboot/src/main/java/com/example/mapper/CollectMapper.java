@@ -20,7 +20,9 @@ public interface CollectMapper {
     List<Collect> selectAll(Collect collection);
     @Select("select * from collection where article_id=#{articleId} and c_id=#{cId}")
     Collect selectById(Collect collection);
-    List<Article> findById(Integer cId,String category);
+    List<Article> findById(Integer cId,String category,String journal,
+                           String type,String keywords,String aName,
+                           String author);
     int deleteById(Collect collect);
 
     void deleteByName(Collect collection);

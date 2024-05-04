@@ -13,6 +13,26 @@
                 </div>
             </div>
             <div style="flex:1" class="card">
+                <div class="search">
+                    <el-select v-model="journal" placeholder="请选择期刊" style="width: 100px">
+                        <el-option label="Advanced Materials" value="Advanced Materials"></el-option>
+                        <el-option label="Materials Science and Engineering: R: Reports"
+                            value="Materials Science and Engineering: R: Reports"></el-option>
+                        <el-option label="Nature Materials" value="Nature Materials"></el-option>
+                        <el-option label="硅酸盐学报" value="硅酸盐学报"></el-option>
+                        <el-option label="全部" value:null></el-option>
+                    </el-select>
+                    <el-input placeholder="文献关键字" style="width: 100px" v-model="keywords"></el-input>
+                    <el-input placeholder="文献名称" style="width: 100px" v-model="aName"></el-input>
+                    <el-input placeholder="作者名称" style="width: 100px" v-model="author"></el-input>
+                    <el-select v-model="type" placeholder="请选择类型" style="width: 100px">
+                        <el-option label="中文" value="CHINESE"></el-option>
+                        <el-option label="英文" value="ENGLISH"></el-option>
+                        <el-option label="全部" value:null></el-option>
+                    </el-select>
+                    <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
+                    <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
+                </div>
                 <div class="table">
                     <el-table :data="tableData">
                         <el-table-column prop="id" label="序号" width="80" align="center" sortable></el-table-column>
@@ -137,6 +157,11 @@ export default {
             form: {},
             menu: {},
             menu1: {},
+            journal: null,
+            aName: null,
+            author: null,
+            keywords: null,
+            type: null,
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         }
     },
@@ -194,6 +219,11 @@ export default {
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
                     category: this.current,
+                    journal: this.journal,
+                    aName: this.aName,
+                    author: this.author,
+                    keywords: this.keywords,
+                    type: this.type,
                 }
             }).then(res => {
                 console.log(res);
@@ -265,6 +295,15 @@ export default {
                 console.log(this.options);
                 //this.categoryList.unshift({ name: '全部文献' })
             })
+        },
+        reset() {
+            this.author = null;
+            this.aName = null;
+            this.type=null;
+            this.category=null;
+            this.keywords=null;
+            this.journal=null;
+            this.load(1)
         },
     }
 }

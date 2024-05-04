@@ -40,6 +40,11 @@
         <where>
             <if test="cId != null">collection.c_id=#{cId} </if>
             <if test="category!=null and category!=''"> and collection.name=#{category}</if>
+            <if test="journal!=null and journal!=''"> and article.journal=#{journal}</if>
+            <if test="type!=null and type!=''"> and article.type=#{type}</if>
+            <if test="aName!=null and aName!=''"> and article.name like concat('%', #{name}, '%')</if>
+            <if test="keywords!=null and keywords!=''"> and article.keywords concat('%', #{keywords}, '%')</if>
+            <if test="author!=null and author!=''"> and article.author like concat('%', #{author}, '%')</if>
         </where>
     </select>
     <delete id="deleteById">

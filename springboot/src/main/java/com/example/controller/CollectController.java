@@ -41,8 +41,15 @@ public class CollectController {
     public Result selectPager(Collect collect ,
                               @RequestParam(defaultValue ="") String category,
                               @RequestParam(defaultValue = "1") Integer pageNum,
-                              @RequestParam(defaultValue = "10") Integer pageSize) {
-        PageInfo<Article> page = collectService.selectPager(collect, category,pageNum, pageSize);
+                              @RequestParam(defaultValue = "10") Integer pageSize,
+                              @RequestParam(defaultValue = "") String journal,
+                              @RequestParam(defaultValue="") String aName,
+                              @RequestParam(defaultValue="") String author,
+                              @RequestParam(defaultValue="") String keywords,
+                              @RequestParam(defaultValue="") String type
+                              ) {
+        PageInfo<Article> page = collectService.selectPager(collect, category,pageNum,
+                pageSize,journal, type,keywords,aName, author);
         return Result.success(page);
     }
     @GetMapping("/collection/delete")

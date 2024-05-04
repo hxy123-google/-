@@ -33,7 +33,7 @@
         left join user
         on comment.user_id = user.id
         <where>
-            <if test="userName != null"> and user.name like concat('%', #{userName}, '%')</if>
+            <if test="userName != null"> and user.username like concat('%', #{userName}, '%')</if>
             <if test="fid != null"> and comment.fid  = #{fid}</if>
             <if test="module != null"> and comment.module = #{module}</if>
             and comment.pid is null

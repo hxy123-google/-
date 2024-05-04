@@ -25,9 +25,13 @@ public class CollectService {
     @Resource
     private CollectMapper collectMapper;
 
-    public PageInfo<Article> selectPager(Collect collect, String category,Integer pageNum, Integer pageSize) {
+    public PageInfo<Article> selectPager(Collect collect, String category,Integer pageNum,
+                                         Integer pageSize,String journal,
+                                         String type,String keywords,String aName,
+                                         String author) {
         PageHelper.startPage(pageNum, pageSize);
-        List<Article> list = collectMapper.findById(collect.getcId(),category);
+        List<Article> list = collectMapper.findById(collect.getcId(),category,
+                journal, type,keywords,aName, author);
         return PageInfo.of(list);
     }
 

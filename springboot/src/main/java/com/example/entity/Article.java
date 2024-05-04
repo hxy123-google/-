@@ -39,28 +39,6 @@ public class Article {
     private String keywords;
     private Integer authorId;
 
-    @Override
-    public String toString() {
-        return "Article{" +
-                "id=" + id +
-                ", img='" + img + '\'' +
-                ", name='" + name + '\'' +
-                ", content='" + content + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                ", video='" + video + '\'' +
-                ", file='" + file + '\'' +
-                ", discount=" + discount +
-                ", recommend='" + recommend + '\'' +
-                ", reference=" + reference +
-                ", time=" + time +
-                ", author='" + author + '\'' +
-                ", category='" + category + '\'' +
-                ", journal='" + journal + '\'' +
-                ", keywords='" + keywords + '\'' +
-                ", authorId=" + authorId +
-                '}';
-    }
 
     public Integer getAuthorId() {
         return authorId;
@@ -198,7 +176,8 @@ public class Article {
         this.author = author;
     }
 
-    public Article(Integer id, String img, String name, String content, String type, Double price, String video, String file, Double discount, String recommend, Integer reference, Date time, String author, String category, String journal, String keywords) {
+
+    public Article(Integer id, String img, String name, String content, String type, Double price, String video, String file, Double discount, String recommend, Integer reference, Date time, String author, String category, String journal, String keywords, Integer authorId, String keyword) {
         this.id = id;
         this.img = img;
         this.name = name;
@@ -215,8 +194,11 @@ public class Article {
         this.category = category;
         this.journal = journal;
         this.keywords = keywords;
-        this.authorId=authorId;
+        this.authorId = authorId;
     }
+
+
+
     public Article(){
 
     }
