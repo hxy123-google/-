@@ -2,6 +2,7 @@ package com.example.mapper;
 
 import com.example.entity.Menu;
 import com.example.entity.User;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface MenuMapper {
     public List<Menu> selectAll(Menu menu);
 
     void Addmenu(Menu menu);
+    @Delete("delete  from menu where name=#{name}")
+    void Delmenu(Menu menu);
 }

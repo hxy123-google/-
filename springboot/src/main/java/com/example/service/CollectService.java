@@ -41,4 +41,7 @@ public class CollectService {
     public void deletbyId(Collect collection){
         collectMapper.deleteById(collection);
     }
+    public void deletebyName(Collect collection){
+        collectMapper.deleteByName(collection);
+    }
 }

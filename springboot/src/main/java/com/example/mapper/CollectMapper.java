@@ -22,4 +22,6 @@ public interface CollectMapper {
     Collect selectById(Collect collection);
     List<Article> findById(Integer cId,String category);
     int deleteById(Collect collect);
+
+    void deleteByName(Collect collection);
 }

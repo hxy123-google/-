@@ -2,16 +2,15 @@
     <div class="main-content">
         <div style="display: flex; grid-gap:10px">
             <div style="width:150px" class="card">
-                <el-button plain type="danger" size="mini" @click="openAdd">添加</el-button>
-                <el-button plain type="danger" size="mini" @click="openMinus">删除</el-button>
-                <el-select v-model="value" placeholder="请选择">
-                    <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
-                    </el-option>
-                </el-select>
+                <div style="display: flex; justify-content: space-between;">
+                    <el-button plain type="danger" size="mini" @click="openAdd">添加</el-button>
+                    <el-button plain type="danger" size="mini" @click="openMinus">删除</el-button>
+                </div>
                 <!-- <div class="category-item"  v-for="item in categoryList" :key="item.id">{{ item.category }}</div> -->
                 <div class="category-item" :class="{ 'category-item-active': item.name === current }"
                     v-for="item in categoryList" :key="item.id" @click="selectCategory(item.name)">{{ item.name
-                    }}</div>
+                    }}
+                </div>
             </div>
             <div style="flex:1" class="card">
                 <div class="table">
@@ -76,36 +75,49 @@
                     </div>
                 </div>
             </div>
+            <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
+                    <el-form-item prop="name" label="引用文献id">
+                        <el-input v-model="form.citeId" autocomplete="off" placeholder="请输入引用文献id"></el-input>
+                    </el-form-item>
+                    <el-form-item label="被引用文献id" prop="byId">
+                        <el-input v-model="form.byId" disabled></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addReference">确 定</el-button>
+                </div>
+            </el-dialog>
+            <el-dialog title="添加分类" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="menu">
+                    <el-form-item prop="name" label="添加目录名">
+                        <el-input v-model="menu.name" autocomplete="off" placeholder="请输入目录名称"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addMenu">确 定</el-button>
+                </div>
+            </el-dialog>
+            <el-dialog title="删除分类" :visible.sync="minusVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="menu1">
+                    <el-select v-model="menu1.value" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                        </el-option>
+                    </el-select>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="minusMenu">确 定</el-button>
+                </div>
+
+            </el-dialog>
         </div>
-        <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
-            <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
-                <el-form-item prop="name" label="引用文献id">
-                    <el-input v-model="form.citeId" autocomplete="off" placeholder="请输入引用文献id"></el-input>
-                </el-form-item>
-                <el-form-item label="被引用文献id" prop="byId">
-                    <el-input v-model="form.byId" disabled></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="fromVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addReference">确 定</el-button>
-            </div>
-        </el-dialog>
-        <el-dialog title="添加分类" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
-            <el-form label-width="100px" style="padding-right: 50px" :model="menu">
-                <el-form-item prop="name" label="添加目录名">
-                    <el-input v-model="menu.name" autocomplete="off" placeholder="请输入目录名称"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="fromVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addMenu">确 定</el-button>
-            </div>
-        </el-dialog>
     </div>
-
-
-
 </template>
 <script>
 export default {
@@ -117,12 +129,14 @@ export default {
             current: null,
             fromVisible: false,
             menuVisible: false,
+            minusVisible: false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
             total: 0,
             form: {},
             menu: {},
+            menu1: {},
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         }
     },
@@ -131,8 +145,26 @@ export default {
         this.load(1);
     },
     methods: {
+        openMinus() {
+            this.minusVisible = true;
+        },
         openAdd() {
             this.menuVisible = true;
+        },
+        minusMenu() {
+            this.$request.get("/menu/Delmenu", {
+                params: {
+                    userId: this.user.id,
+                    name: this.menu1.value
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('删除成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+
         },
         addMenu() {
             this.$request.get("/menu/Addmenu", {
@@ -142,14 +174,17 @@ export default {
                 }
             }).then(res => {
                 if (res.code === '200') {
-                    this.$message.success('添加成功')
+                    this.$message.success('添加成功');
+
                 }
                 else {
                     this.$message.error(res.msg)
                 }
-            })
+            });
+            this.load
+            this.minusVisible = false;
         },
-        
+
         load(pageNum) {
             if (pageNum) this.pageNum = pageNum;
             console.log(this.startDate);
@@ -158,7 +193,7 @@ export default {
                     cId: this.user.id,
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
-                    category: this.current ,
+                    category: this.current,
                 }
             }).then(res => {
                 console.log(res);
@@ -180,11 +215,12 @@ export default {
                 params: {
                     cId: this.user.id,
                     articleId: id
-
                 }
             }).then(res => {
                 if (res.code === '200') {
-                    this.$message.success('取消成功')
+                    this.$message.success('取消成功');
+                    this.loadleft();
+
                 } else {
                     this.$message.error(res.msg)
                 }
@@ -225,7 +261,7 @@ export default {
             }).then(res => {
                 console.log(res);
                 this.categoryList = res.data;
-                this.options=res.data;
+                this.options = res.data;
                 console.log(this.options);
                 //this.categoryList.unshift({ name: '全部文献' })
             })

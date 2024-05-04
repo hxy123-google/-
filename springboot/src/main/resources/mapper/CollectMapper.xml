@@ -46,4 +46,8 @@
         delete from collection
         where  collection.article_id = #{articleId} and collection.c_id=#{cId}
     </delete>
+    <delete id="deleteByName">
+        delete from collection
+        where  collection.name = #{name} and collection.c_id=#{cId}
+    </delete>
 </mapper>

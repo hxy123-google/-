@@ -29,4 +29,8 @@ public class MenuService {
     public void Addmenu(Menu menu) {
         menuMapper.Addmenu(menu);
     }
+
+    public void Delmenu(Menu menu) {
+        menuMapper.Delmenu(menu);
+    }
 }
