@@ -50,6 +50,7 @@
         <el-table-column prop="time" label="发表时间"></el-table-column>
         <el-table-column label="操作" width="180" align="center">
           <template v-slot="scope">
+            <el-button plain type="primary" @click="handleRef(scope.row.id)" size="mini">引用</el-button>
             <el-button plain type="primary" @click="handleEdit(scope.row)" size="mini">编辑</el-button>
             <el-button plain type="danger" size="mini" @click=del(scope.row.id)>删除</el-button>
           </template>
@@ -62,7 +63,22 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog title="文献引用" :visible.sync="referenceVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="form1" :rules="rules" ref="formRef">
+                    <el-form-item prop="name" label="引用文献id">
+                        <el-input v-model="form1.citeId" autocomplete="off" placeholder="请输入引用文献id"></el-input>
+                    </el-form-item>
+                    <el-form-item label="被引用文献id" prop="byId">
+                        <el-input v-model="form1.byId" disabled></el-input>
+                    </el-form-item>
+                </el-form>
 
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addReference">确 定</el-button>
+                </div>
+            </el-dialog>
 
     <el-dialog title="文献信息" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
       <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
@@ -169,7 +185,9 @@ export default {
       discount: null,
       price: null,
       fromVisible: false,
+      referenceVisible:false,
       form: {},
+      form1:{},//ref
       user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
       rules: {
         name: [
@@ -329,7 +347,28 @@ export default {
     },
     down(url) {
       location.href = url
-    }
+    },
+    handleRef(id) {
+            this.form1.byId = id;
+            this.referenceVisible = true;
+            //this.addReference();
+        },
+        addReference() {
+            this.$request.get('/bycited/add', {
+                params: {
+                    byId: this.form1.byId,
+                    citeId: this.form1.citeId,
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('添加成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+            this.referenceVisible = false;
+            this.reset();
+        },
   }
 }
 </script>

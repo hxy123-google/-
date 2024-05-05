@@ -15,6 +15,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -35,7 +36,9 @@ public class BycitedService {
     private ArticleMapper articleMapper;
     public void add(Bycited bycited) {
         String year = DateUtil.format(new Date(), "yyyy");
-        bycited.setTime(DateUtil.now());
+        Article articlee=articleMapper.selectById(bycited.getCiteId());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        bycited.setTime(sdf.format(articlee.getTime()));
         bycited.setYear(year);
         bycitedMapper.insert(bycited);
     }

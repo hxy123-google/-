@@ -46,9 +46,6 @@ public class BycitedController {
             throw new CustomException(ResultCodeEnum.CITE_NOT_EXIST);
         }
         article=articleService.selectById(bycited.getCiteId());
-        if(article.getAuthorId()!=userId){
-            throw new CustomException(ResultCodeEnum.YOU_NOT_AUTHOR);
-        }
         if (ObjectUtil.isNull(article)) {
             throw new CustomException(ResultCodeEnum.ARTICLE_NOT_EXIST);
         }
