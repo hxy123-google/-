@@ -12,7 +12,7 @@
                     <el-button type="success">{{ courseData.type === 'ENGLISH' ? '英文' : '中文' }}</el-button>
                     <span style="font-size: 20px; font-weight: 550; color: #333333; margin-left: 20px">{{
                         courseData.name
-                        }}</span>
+                    }}</span>
                 </div>
                 <div style="text-align: center; margin-top: 15px">
                     <span style="color: #666666; margin-left: 50px">发布时间：{{ courseData.time }}</span>
@@ -27,22 +27,24 @@
                 <!--   课程介绍区域   -->
                 <div style="margin-top: 20px">
                     <div style="font-size: 18px">文献笔记</div>
-                    <el-button type="info" plain style="margin-left: 10px" size="mini" @click="note(courseData.descr)">增加笔记</el-button>
+                    <el-button type="info" plain style="margin-left: 10px" size="mini"
+                        @click="note(courseData.descr)">增加笔记</el-button>
                     <div style="margin-top: 10px" v-html="courseData.descr" class="w-e-text w-e-text-container"></div>
                 </div>
             </div>
-            <el-dialog title="添加笔记" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
-            <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
-                <el-form-item prop="descr" label="文献笔记">
-                    <div id="editor"></div>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="fromVisible = false">取 消</el-button>
-                <el-button type="primary" @click="addDescr">确 定</el-button>
-            </div>
-        </el-dialog>
-            <!-- <div style="width:260px" class="card">
+            <el-dialog title="添加笔记" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
+                    <el-form-item prop="descr" label="文献笔记">
+                        <div id="editor"></div>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addDescr">确 定</el-button>
+                </div>
+            </el-dialog>
+            <div style="width:260px" class="card">
                 <div style="display: flex; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #ddd">
                     <div style="font-size: 20px; flex: 1">文章榜单</div>
                 </div>
@@ -64,7 +66,7 @@
                         :total="total">
                     </el-pagination>
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
@@ -82,11 +84,11 @@ export default {
             pageNum: 1,
             pageSize: 5,
             total: 0,
-            fromVisible:null,
-            descr:null,
+            fromVisible: null,
+            descr: null,
             flag: false,
             editor: null,
-            form:{},
+            form: {},
         }
     },
     mounted() {
@@ -115,26 +117,27 @@ export default {
                 }
             })
         },
-        addDescr(){
+        addDescr() {
             this.form.descr = this.editor.txt.html();
             console.log(this.form.descr);
-            this.$request.get('/Userarticle/edit/',{
-                params:{
-                    id:this.scoreId,
-                    descr:this.form.descr
-                }}).then(res=>{
-                    if(res.code==='200'){
-                        this.$message.success('修改成功')
-                        
-                    }else{
-                        this.$message.error(res.msg)
-                    }
-                })
-            
+            this.$request.get('/Userarticle/edit/', {
+                params: {
+                    id: this.scoreId,
+                    descr: this.form.descr
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('修改成功')
+
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+
         },
-        note(descr){
-            this.form.descr = JSON.parse(JSON.stringify(descr)) 
-            this.fromVisible=true;
+        note(descr) {
+            this.form.descr = JSON.parse(JSON.stringify(descr))
+            this.fromVisible = true;
             this.initWangEditor(this.form.descr || '')
             console.log(this.form.descr);
         }
