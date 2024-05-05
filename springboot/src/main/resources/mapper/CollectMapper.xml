@@ -43,7 +43,7 @@
             <if test="journal!=null and journal!=''"> and article.journal=#{journal}</if>
             <if test="type!=null and type!=''"> and article.type=#{type}</if>
             <if test="aName!=null and aName!=''"> and article.name like concat('%', #{name}, '%')</if>
-            <if test="keywords!=null and keywords!=''"> and article.keywords concat('%', #{keywords}, '%')</if>
+            <if test="keywords!=null and keywords!=''"> and article.keywords like concat('%', #{keywords}, '%')</if>
             <if test="author!=null and author!=''"> and article.author like concat('%', #{author}, '%')</if>
         </where>
     </select>

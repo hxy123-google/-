@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserArticleMapper">
+
+    <insert id="add" parameterType="com.example.entity.UserArticle" useGeneratedKeys="true">
+        insert into userarticle
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test=" articleId!= null">article_id,</if>
+            <if test="cId != null">c_id,</if>
+            <if test="name != null">name,</if>
+            <if test="type != null">type,</if>
+            <if test="file != null">file,</if>
+            <if test="author != null">author,</if>
+            <if test="time != null">time,</if>
+            <if test="category != null">descr,</if>
+            <if test="journal != null">journal,</if>
+            <if test="img != null">image,</if>
+            <if test="journal != null">keywords,</if>
+            <if test="articlename != null">articlename,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test=" articleId!= null">#{articleId},</if>
+            <if test="cId != null">#{cId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="type != null">#{type},</if>
+            <if test="file != null">#{file},</if>
+            <if test="author != null">#{author},</if>
+            <if test="time != null">#{time},</if>
+            <if test="category != null">#{descr},</if>
+            <if test="journal != null">#{journal},</if>
+            <if test="img != null">#{img},</if>
+            <if test="journal != null">#{keywords},</if>
+            <if test="articlename != null">#{articlename},</if>
+        </trim>
+    </insert>
+    <select id="selectAll" resultType="com.example.entity.UserArticle">
+        select
+        *
+        from userarticle
+        <where>
+            <if test="id != null"> and id= #{id}</if>
+            <if test="articleId != null"> and article_id=#{articleId}</if>
+            <if test="cId != null"> and c_id=#{cId}</if>
+            <if test="name != null"> and name=#{name}</if>
+            <if test="journal != null"> and journal=#{journal}</if>
+            <if test="author != null"> and author like concat('%',#{author},'%')</if>
+            <if test="type != null"> and type=#{type}</if>
+            <if test="keywords != null"> and keywords like concat('%', #{keywords}, '%')</if>
+            <if test="articlename != null"> and articlename like concat('%', #{articlename}, '%')</if>
+        </where>
+        order by id desc
+    </select>
+    <update id="edit" parameterType="com.example.entity.UserArticle">
+        update userarticle
+        <set>
+            <if test="img != null">
+                img = #{img},
+            </if>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="type != null">
+                type = #{type},
+            </if>
+            <if test="file != null">
+                file = #{file},
+            </if>
+            <if test="journal != null">
+                journal = #{journal},
+            </if>
+            <if test="descr != null and descr!=''">
+                descr = #{descr},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

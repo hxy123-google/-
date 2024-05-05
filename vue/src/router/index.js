@@ -56,6 +56,7 @@ const routes = [
       { path: 'Collect', name: 'Collect', meta: { name: '我的收藏' }, component: () => import('../views/front/Collect.vue') },
       { path: 'test', name: 'test', meta: { name: '教授' }, component: () => import('../views/front/test.vue') },
       { path: 'professorPage', name: 'ProfessorPage', meta: { name: '教授查询' }, component: () => import('../views/front/ProfessorPage.vue') },
+      { path: 'ruser', name: 'ruser', meta: { name: '个人查询详细文章' }, component: () => import('../views/front/ruser.vue') },
     ]
   },
   { path: '/login', name: 'Login', meta: { name: '登录' }, component: () => import('../views/Login.vue') },

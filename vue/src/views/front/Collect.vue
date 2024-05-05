@@ -32,6 +32,7 @@
                     </el-select>
                     <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
                     <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
+                    <el-button type="warning" plain style="margin-left: 10px" @click="openArticle">新增</el-button>
                 </div>
                 <div class="table">
                     <el-table :data="tableData">
@@ -45,9 +46,9 @@
                                 </div>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="name" label="文献名称" show-overflow-tooltip width="300">
+                        <el-table-column prop="articlename" label="文献名称" show-overflow-tooltip width="300">
                             <template v-slot="scope">
-                                <a :href="'/front/articleDetail?id=' + scope.row.id">{{ scope.row.name }}</a>
+                                <a :href="'/front/ruser?id=' + scope.row.id">{{ scope.row.articlename }}</a>
                             </template>
                         </el-table-column>
 
@@ -58,33 +59,7 @@
                                 <span v-else style="color: #448231">英文</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="price" label="所属积分">
-                            <template v-slot="scope">
-                                <span style="color: #12b127; font-size: 15px" v-if="scope.row.price > 0">{{
-                                    scope.row.price }} 积分</span>
-                                <span v-else style="color: green">公开资料</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="discount" label="文献折扣">
-                            <template v-slot="scope">
-                                <span style="color: #448231" v-if="scope.row.discount < 1">{{ scope.row.discount * 10 }}
-                                    折</span>
-                                <span style="color: #448231" v-else>——</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="reference" label="文献引用量">
-                            <template v-slot="scope">
-                                <a :href="'/front/refarticle?id=' + scope.row.id">{{ scope.row.reference }}</a>
-                            </template>
-                        </el-table-column>
                         <el-table-column prop="time" label="发表时间"></el-table-column>
-                        <el-table-column label="引用" width="180" align="center">
-                            <template v-slot="scope">
-                                <el-button plain type="primary" @click="handleRef(scope.row.id)"
-                                    size="mini">引用</el-button>
-                                <el-button plain type="danger" size="mini" @click=del(scope.row.id)>取消收藏</el-button>
-                            </template>
-                        </el-table-column>
                     </el-table>
 
                     <div class="pagination">
@@ -136,10 +111,62 @@
                 </div>
 
             </el-dialog>
+            <el-dialog title="文献信息" :visible.sync="addVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="form1" :rules="rules" ref="formRef">
+                    <el-form-item label="文献封面">
+                        <el-upload class="avatar-uploader" :action="$baseUrl + '/files/upload'"
+                            :headers="{ token: user.token }" list-type="picture" :on-success="handleImgSuccess">
+                            <el-button type="primary">上传图片</el-button>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item prop="articlename" label="文献名称">
+                        <el-input v-model="form1.articlename" autocomplete="off" placeholder="请输入文献名称"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="author" label="文献作者">
+                        <el-input v-model="form1.author" autocomplete="off" placeholder="文献作者"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="keywords" label="关键字">
+                        <el-input v-model="form1.keywords" autocomplete="off" placeholder="关键字"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="type" label="文献类别">
+                        <el-select v-model="form1.type" placeholder="请选择类型" style="width: 100%">
+                            <el-option label="中文" value="CHINESE"></el-option>
+                            <el-option label="英文" value="ENGLISH"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item prop="name" label="文献种类">
+                        <el-select v-model="form1.name" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                        </el-option>
+                    </el-select>
+                    </el-form-item>
+                    <el-form-item prop="journal" label="文献期刊">
+                        <el-input v-model="form1.journal" autocomplete="off" placeholder="请输入文献期刊名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="文献链接">
+                        <el-upload class="avatar-uploader" :action="$baseUrl + '/files/upload'"
+                            :headers="{ token: user.token }" :on-success="handleVideoSuccess">
+                            <el-button type="primary">上传文献</el-button>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item prop="time" label="发表时间">
+                        <div class="block">
+                            <el-date-picker v-model="form1.time" type="date" placeholder="选择日期">
+                            </el-date-picker>
+                        </div>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addMyMenu">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
     </div>
 </template>
 <script>
+import dayjs from 'dayjs'; // 导入 Day.js
 export default {
     name: "Collect",
     data() {
@@ -150,11 +177,13 @@ export default {
             fromVisible: false,
             menuVisible: false,
             minusVisible: false,
+            addVisible:false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
             total: 0,
             form: {},
+            form1:{},
             menu: {},
             menu1: {},
             journal: null,
@@ -175,6 +204,9 @@ export default {
         },
         openAdd() {
             this.menuVisible = true;
+        },
+        openArticle(){
+            this.addVisible=true;
         },
         minusMenu() {
             this.$request.get("/menu/Delmenu", {
@@ -213,17 +245,18 @@ export default {
         load(pageNum) {
             if (pageNum) this.pageNum = pageNum;
             console.log(this.startDate);
-            this.$request.get('/collection/selectPager', {
+            this.$request.get('Userarticle/selectAll', {
                 params: {
                     cId: this.user.id,
                     pageNum: this.pageNum,
                     pageSize: this.pageSize,
-                    category: this.current,
+                    name: this.current,
                     journal: this.journal,
-                    aName: this.aName,
+                    articlename: this.aName,
                     author: this.author,
                     keywords: this.keywords,
                     type: this.type,
+                    
                 }
             }).then(res => {
                 console.log(res);
@@ -241,15 +274,14 @@ export default {
             })
         },
         del(id) {
-            this.$request.get('/collection/delete', {
+            this.$request.get('/Userarticle/delete', {
                 params: {
-                    cId: this.user.id,
-                    articleId: id
+                    id:id
                 }
             }).then(res => {
                 if (res.code === '200') {
                     this.$message.success('取消成功');
-                    this.loadleft();
+                    this.load(1);
 
                 } else {
                     this.$message.error(res.msg)
@@ -296,13 +328,36 @@ export default {
                 //this.categoryList.unshift({ name: '全部文献' })
             })
         },
+        addMyMenu(){
+            const formattedDate = dayjs(this.form1.time).format('YYYY-MM-DD');
+            console.log(formattedDate);
+             this.$request.get('/Userarticle/add/', {
+                params: {
+                    articleId: -1,
+                    cId: this.user.id,
+                    name:this.form1.name,
+                    journal:this.form1.journal,
+                    articlename:this.form1.articlename,
+                    author:this.form1.author,
+                    keywords:this.form1.keywords,
+                    time:formattedDate
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('添加成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+
+        },
         reset() {
             this.author = null;
             this.aName = null;
-            this.type=null;
-            this.category=null;
-            this.keywords=null;
-            this.journal=null;
+            this.type = null;
+            this.category = null;
+            this.keywords = null;
+            this.journal = null;
             this.load(1)
         },
     }

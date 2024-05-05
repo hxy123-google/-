@@ -176,7 +176,7 @@ export default {
     methods: {
         addMyMenu(){
             console.log(this.menu.name);
-             this.$request.get('/collection/add/', {
+             this.$request.get('/Userarticle/add/', {
                 params: {
                     articleId: this.articleId,
                     cId: this.user.id,
