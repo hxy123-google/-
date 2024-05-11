@@ -13,6 +13,7 @@ import com.example.service.ArticleScoreService;
 import com.example.service.ArticleService;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,6 +48,7 @@ public class ArticleScoreController {
         articleScoreService.add(articleScore);
         return  Result.success();
     }
+
     @GetMapping("/articlescore/selectScore/")
     public Result selectScore(ArticleScore articleScore,
                               @RequestParam(defaultValue = "1") Integer pageNum,
@@ -60,5 +62,15 @@ public class ArticleScoreController {
                               @RequestParam(defaultValue = "5") Integer pageSize){
         PageInfo<Article> page=articleScoreService.selectArticle(articleScore,pageNum,pageSize);
         return Result.success(page);
+    }
+    @GetMapping("/articlescore/selectAllArticle/")
+    public Result selectAllArticle(ArticleScore articleScore ){
+        List<Article> page=articleScoreService.selectAllArticle(articleScore);
+        return Result.success(page);
+    }
+    @GetMapping("/articlescore/delArticle/{id}")
+    public Result delArticle(@PathVariable Integer id ){
+        articleScoreService.delArticle(id);
+        return Result.success();
     }
 }

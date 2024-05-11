@@ -41,4 +41,13 @@ public class ArticleScoreService {
         List<Article>list=articleScoreMapper.selectArticle(articleScore);
         return PageInfo.of(list);
     }
+
+    public List<Article> selectAllArticle(ArticleScore articleScore) {
+        List<Article>list=articleScoreMapper.selectArticle(articleScore);
+        return list;
+    }
+
+    public  void delArticle(Integer id) {
+        articleScoreMapper.delById(id);
+    }
 }

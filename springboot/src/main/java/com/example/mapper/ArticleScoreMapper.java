@@ -3,6 +3,7 @@ package com.example.mapper;
 import com.example.entity.Article;
 import com.example.entity.ArticleScore;
 import com.example.entity.Score;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
@@ -26,4 +27,6 @@ public interface ArticleScoreMapper {
     List<Score> selectScore(ArticleScore articleScore);
 
     List<Article> selectArticle(ArticleScore articleScore);
+    @Delete("delete  from articlescore where article_id=#{id}")
+    void delById(Integer id);
 }
