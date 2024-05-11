@@ -16,9 +16,9 @@
         <div>
           <div style="font-size: 18px; margin: 10px 0">资料</div>
           <div v-if="courseData.price === 0 || flag || user.role === 'PRO' || user.username === courseData.author">
-            <video :src="courseData.video" v-if="courseData.type === 'VIDEO'" controls
+            <video :src="courseData.video" v-if="courseData.type === 'CHINESE'" controls
               style="width: 65%; height: 400px"></video>
-            <div style="margin-top: 10px">资料链接：<a :href="courseData.file" target="_blank">{{ courseData.file }}</a>
+            <div style="margin-top: 10px">资料链接：<a :href="courseData.video" target="_blank">{{ courseData.video }}</a>
             </div>
           </div>
           <div v-else>
@@ -224,7 +224,7 @@ export default {
             this.$request.get('/comment/selectForUser', {
                 params: { fid: this.scoreId, module: '文章' }
             }).then(res => {
-                //console.log(res);
+                console.log(res);
                 this.commentList = res.data || []
             });
             this.$request.get('/comment/selectCount', {

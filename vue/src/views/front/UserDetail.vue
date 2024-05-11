@@ -3,7 +3,7 @@
       <div style="width: 70%; margin: 30px auto; min-height: 1000px">
         <div style="text-align: center">
           <el-button type="success">{{ userData.role === 'USER'? '用户' : '教授' }}</el-button>
-          <span style="font-size: 20px; font-weight: 550; color: #333333; margin-left: 20px">{{ userData.username }}</span>
+          <span style="font-size: 20px; font-weight: 550; color: #333333; margin-left: 20px">{{ userData.name }}</span>
         </div>
 
         <!--   课程保密区域   -->

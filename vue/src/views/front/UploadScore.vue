@@ -39,7 +39,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="type" label="资料类型"></el-table-column>
-                <el-table-column prop="aId" label="资料所属文献"></el-table-column>
+                <!-- <el-table-column prop="aId" label="资料所属文献"></el-table-column> -->
                 <el-table-column prop="price" label="所需积分"></el-table-column>
                 <el-table-column prop="file" label="资料链接" show-overflow-tooltip>
                     <template v-slot="scope">
@@ -53,6 +53,7 @@
                 <el-table-column label="操作" width="180" align="center">
                     <template v-slot="scope">
                         <el-button plain type="primary" @click="handleScore(scope.row.id)" size="mini">添加相关文献</el-button>
+                        <el-button plain type="primary"  size="mini">删除相关文献</el-button>
                         <el-button plain type="primary" @click="handleEdit(scope.row)" size="mini">编辑</el-button>
                         <el-button plain type="danger" size="mini" @click=del(scope.row.id)>删除</el-button>
                     </template>

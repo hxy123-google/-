@@ -8,6 +8,12 @@
                         articleData.name
                         }}</span>
                 </div>
+                <div style="text-align: center">
+                    <span style="color: black">作者:{{ articleData.author }}</span>
+                </div>
+                <div style="text-align: center">
+                    <span style="color: black">所属的期刊:{{ articleData.journal }}</span>
+                </div>
                 <div style="text-align: center; margin-top: 15px">
                     <span style="color: red" v-if="articleData.price > 0">{{ articleData.price }} 积分</span>
                     <span style="color: red" v-else>免费</span>
@@ -17,6 +23,7 @@
                     <span style="color: #666666; margin-left: 50px">发布时间：{{ articleData.time }}</span>
                 </div>
                 <!--   课程保密区域   -->
+                
                 <div>
                     <div style="font-size: 18px; margin: 10px 0">文献资料</div>
                     <div v-if="articleData.price === 0 || flag || user.role === 'PRO'">
@@ -34,10 +41,13 @@
                     <div style="font-size: 18px">文献介绍</div>
                     <div style="margin-top: 10px" v-html="articleData.content"></div>
                 </div>
-
+                <div style="margin-top: 20px">
+                    <div style="font-size: 18px">图片</div>
+                    <el-image :src="articleData.img" style="width: 400px; height: auto;"></el-image>
+                </div>
 
                 <!--  评论开始  -->
-                <div class="card">
+                <!-- <div class="card">
                     <h2 style="margin-top: 90px">评论 {{ commentCount }}</h2>
 
                     <div style="margin-bottom: 20px">
@@ -52,7 +62,7 @@
                             :key="item.id">
                             <img :src="item.avatar" alt="" style="width: 50px; height: 50px; border-radius: 50%">
                             <div style="flex: 1">
-                                <!-- 这是第一级评论 -->
+                               
                                 <div style="margin-bottom: 10px">
                                     <div style="color: #666; margin-bottom: 10px">{{ item.userName }}</div>
                                     <div style="color: #444; margin-bottom: 10px">{{ item.content }}</div>
@@ -74,7 +84,7 @@
                                     </div>
                                 </div>
 
-                                <!-- 这是回复 -->
+                               
                                 <div style="display: flex;  grid-gap: 20px; margin-bottom: 20px"
                                     v-for="sub in item.children" :key="item.id">
                                     <img :src="sub.avatar" alt="" style="width: 50px; height: 50px; border-radius: 50%">
@@ -104,7 +114,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!--  评论结束  -->
             </div>
             <div style="width:260px" class="card">

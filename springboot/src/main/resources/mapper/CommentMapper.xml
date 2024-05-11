@@ -24,7 +24,7 @@
             <if test="module != null"> and comment.module=#{module}</if>
             <if test="rootId != null"> and comment.root_id = #{rootId}</if>
         </where>
-        order by id desc
+        order by id asc
     </select>
     <select id="selectForUser" resultType="com.example.entity.Comment">
         select
@@ -38,7 +38,7 @@
             <if test="module != null"> and comment.module = #{module}</if>
             and comment.pid is null
         </where>
-        order by id desc
+        order by id asc
     </select>
 
     <select id="selectById" resultType="com.example.entity.Comment">

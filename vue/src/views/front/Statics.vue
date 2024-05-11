@@ -99,7 +99,9 @@
       data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // 示例数据：统计的维度（横坐标）
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      minInterval: 1 
+
     },
     tooltip: {
       trigger: 'item'

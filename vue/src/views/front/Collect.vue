@@ -60,6 +60,14 @@
                             </template>
                         </el-table-column>
                         <el-table-column prop="time" label="发表时间"></el-table-column>
+                        <el-table-column label="引用" width="180" align="center">
+                            <template v-slot="scope">
+                                <!-- <el-button plain type="primary" @click="handleRef(scope.row.id)"
+                                    size="mini">引用</el-button> -->
+                                    <el-button plain type="danger" size="mini" @click=del(scope.row.id)>修改</el-button>
+                                <el-button plain type="danger" size="mini" @click=del(scope.row.id)>取消收藏</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
 
                     <div class="pagination">

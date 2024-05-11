@@ -15,7 +15,6 @@
             <if test="file != null">file,</if>
             <if test="author != null">author,</if>
             <if test="time != null">time,</if>
-            <if test="category != null">descr,</if>
             <if test="journal != null">journal,</if>
             <if test="img != null">image,</if>
             <if test="journal != null">keywords,</if>
@@ -30,7 +29,6 @@
             <if test="file != null">#{file},</if>
             <if test="author != null">#{author},</if>
             <if test="time != null">#{time},</if>
-            <if test="category != null">#{descr},</if>
             <if test="journal != null">#{journal},</if>
             <if test="img != null">#{img},</if>
             <if test="journal != null">#{keywords},</if>

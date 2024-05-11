@@ -3,7 +3,7 @@
         <div style="display: flex; grid-gap:10px">
             <div style="flex:1 ;width: 50%; margin: 20px auto; min-height: 1000px">
                 <div style="text-align: center; margin-top: 15px">
-                    <span style="color: #666666; margin-left: 50px">文献名称：{{ courseData.articlename }}</span>
+                    <span style="font-size: 20px; font-weight: 550; color: #333333; margin-left: 20px">文献名称：{{ courseData.articlename }}</span>
                 </div>
                 <div style="text-align: center; margin-top: 15px">
                     <span style="color: #666666; margin-left: 50px">文献作者：{{ courseData.author }}</span>

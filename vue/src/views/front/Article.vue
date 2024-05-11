@@ -82,8 +82,8 @@
                         <el-table-column prop="time" label="发表时间"></el-table-column>
                         <el-table-column label="引用" width="180" align="center">
                             <template v-slot="scope">
-                                <el-button plain type="primary" @click="handleRef(scope.row.id)"
-                                    size="mini">引用</el-button>
+                                <!-- <el-button plain type="primary" @click="handleRef(scope.row.id)"
+                                    size="mini">引用</el-button> -->
                                 <el-button plain type="danger" size="mini" @click=col(scope.row.id)>收藏</el-button>
                             </template>
                         </el-table-column>
@@ -322,20 +322,6 @@ export default {
             this.menuVisible = true;
             this.loadleftmenu();
             this.articleId=id;
-            //console.log(this.menu.name);
-            // this.$request.get('/collection/add/', {
-            //     params: {
-            //         articleId: id,
-            //         cId: this.user.id,
-            //         name:this.menu.value
-            //     }
-            // }).then(res => {
-            //     if (res.code === '200') {
-            //         this.$message.success('添加成功')
-            //     } else {
-            //         this.$message.error(res.msg)
-            //     }
-            // })
         },
         loadleftmenu() {
             this.$request.get("/menu/selectAll", {

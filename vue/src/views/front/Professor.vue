@@ -65,6 +65,13 @@
                         <!-- <el-table-column prop="discount" label="文献折扣"></el-table-column> -->
                         <el-table-column prop="reference" label="文献引用量"></el-table-column>
                         <el-table-column prop="time" label="发表时间"></el-table-column>
+                        <el-table-column label="引用" width="180" align="center">
+                            <template v-slot="scope">
+                                <!-- <el-button plain type="primary" @click="handleRef(scope.row.id)"
+                                    size="mini">引用</el-button> -->
+                                <el-button plain type="danger" size="mini" @click=col(scope.row.id)>收藏</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
 
                     <div class="pagination">
@@ -75,9 +82,22 @@
                     </div>
                 </div>
             </div>
-            <div style="width:400px" class="card">
-                <div style="width: 100%; height: 400px"  id="bar"></div>
+            <div style="width:500px" class="card">
+                <div ref="chartContainer" style="width: 100%; height: 400px" id="bar"></div>
             </div>
+            <el-dialog title="文献收藏" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false"
+                destroy-on-close>
+                <el-form label-width="100px" style="padding-right: 50px" :model="menu">
+                    <el-select v-model="menu.name" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                        </el-option>
+                    </el-select>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addMyMenu">确 定</el-button>
+                </div>
+            </el-dialog>
         </div>
 
     </div>
@@ -99,7 +119,8 @@ let barOptions = {
         data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // 示例数据：统计的维度（横坐标）
     },
     yAxis: {
-        type: 'value'
+        type: 'value',
+        minInterval: 1
     },
     tooltip: {
         trigger: 'item'
@@ -131,25 +152,62 @@ export default {
             journal: null,
             author: null,
             authorId: authorId,
+            menuVisible:null,
+            menu:{},
             type: null,
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
             pageNum1: 1,   // 当前的页码
             pageSize1: 8,
             total1: 0,
+            options: [],
         }
     },
-    created(){
+    created() {
         this.loadPro();
         this.load(1);
     },
     mounted() {
-        
+        this.loadBar();
         //this.loadPro();
-       // this.load(1);
+        // this.load(1);
         //this.loadBar();
     },
 
     methods: {
+        addMyMenu(){
+            console.log(this.menu.name);
+             this.$request.get('/Userarticle/add/', {
+                params: {
+                    articleId: this.articleId,
+                    cId: this.user.id,
+                    name:this.menu.name,
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('添加成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+            this.menuVisible=false
+        },
+        loadleftmenu() {
+            this.$request.get("/menu/selectAll", {
+                params: {
+                    userId: this.user.id
+                }
+            }).then(res => {
+                console.log(res);
+                this.categoryList = res.data;
+                this.options = res.data;
+                //this.categoryList.unshift({ name: '全部文献' })
+            })
+        },
+        col(id) {
+            this.menuVisible = true;
+            this.loadleftmenu();
+            this.articleId=id;
+        },
         load(pageNum) {
             if (pageNum) this.pageNum = pageNum;
             console.log(this.startDate);
@@ -173,7 +231,7 @@ export default {
                 this.tableData = res.data?.list
                 this.total = res.data?.total
             })
-            this.loadBar();
+            //this.loadBar();
         },
         loadPro() {
             this.$request.get('/user/selectById/' + this.authorId).then(res => {
@@ -187,20 +245,29 @@ export default {
             )
 
         },
+
         loadBar() {
-            this.$request.get('/bycited/getProBar',{
-                params:{
-                   id:this.authorId 
+            this.$request.get('/bycited/getProBar', {
+                params: {
+                    id: this.authorId
                 }
             }).then(res => {
+                setTimeout(() => {
+                    console.log("500毫秒后执行的操作");
+                }, 1000); // 500毫秒
                 if (res.code === '200') {
                     console.log(res);
-                    let chartDom = document.getElementById('bar');
+                    //let chartDom = document.getElementById('bar');
+                    const chartDom = this.$refs.chartContainer;
+                    if (!chartDom) {
+                        console.error("Chart container is not available");
+                        return;
+                    }
                     let myChart = echarts.init(chartDom);
                     barOptions.title.text = res.data.text
                     barOptions.title.subtext = res.data.subText
                     barOptions.xAxis.data = res.data.xAxis
-                    barOptions.series[0].data = res.data.yAxis
+                    barOptions.series[0].data = res.data.yAxis;
                     myChart.setOption(barOptions);
                 } else {
                     this.$message.error(res.msg)
