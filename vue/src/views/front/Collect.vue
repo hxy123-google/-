@@ -64,7 +64,7 @@
                             <template v-slot="scope">
                                 <!-- <el-button plain type="primary" @click="handleRef(scope.row.id)"
                                     size="mini">引用</el-button> -->
-                                    <el-button plain type="danger" size="mini" @click=del(scope.row.id)>修改</el-button>
+                                <el-button plain type="danger" size="mini" @click=handleEdit(scope.row)>修改</el-button>
                                 <el-button plain type="danger" size="mini" @click=del(scope.row.id)>取消收藏</el-button>
                             </template>
                         </el-table-column>
@@ -78,7 +78,7 @@
                     </div>
                 </div>
             </div>
-            <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
+            <!-- <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
                 destroy-on-close>
                 <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
                     <el-form-item prop="name" label="引用文献id">
@@ -92,10 +92,10 @@
                     <el-button @click="fromVisible = false">取 消</el-button>
                     <el-button type="primary" @click="addReference">确 定</el-button>
                 </div>
-            </el-dialog>
+            </el-dialog> -->
             <el-dialog title="添加分类" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false"
                 destroy-on-close>
-                <el-form label-width="100px" style="padding-right: 50px" :model="menu">
+                <el-form label-width="100px" style="padding-right: 50px" :model="menu" ref="formRef">
                     <el-form-item prop="name" label="添加目录名">
                         <el-input v-model="menu.name" autocomplete="off" placeholder="请输入目录名称"></el-input>
                     </el-form-item>
@@ -145,9 +145,9 @@
                     </el-form-item>
                     <el-form-item prop="name" label="文献种类">
                         <el-select v-model="form1.name" placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
-                        </el-option>
-                    </el-select>
+                            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item prop="journal" label="文献期刊">
                         <el-input v-model="form1.journal" autocomplete="off" placeholder="请输入文献期刊名称"></el-input>
@@ -185,15 +185,19 @@ export default {
             fromVisible: false,
             menuVisible: false,
             minusVisible: false,
-            addVisible:false,
+            addVisible: false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
             total: 0,
             form: {},
-            form1:{},
-            menu: {},
-            menu1: {},
+            form1: {},
+            menu: {
+                name: null
+            },
+            menu1: {
+                name:null
+            },
             journal: null,
             aName: null,
             author: null,
@@ -207,52 +211,22 @@ export default {
         this.load(1);
     },
     methods: {
-        openMinus() {
-            this.minusVisible = true;
-        },
-        openAdd() {
-            this.menuVisible = true;
-        },
-        openArticle(){
-            this.addVisible=true;
-        },
-        minusMenu() {
-            this.$request.get("/menu/Delmenu", {
+        loadleft() {
+            this.$request.get("/menu/selectAll", {
                 params: {
-                    userId: this.user.id,
-                    name: this.menu1.value
+                    userId: this.user.id
                 }
             }).then(res => {
-                if (res.code === '200') {
-                    this.$message.success('删除成功')
-                } else {
-                    this.$message.error(res.msg)
-                }
+                console.log(res);
+                this.categoryList = res.data;
+                this.options = res.data;
+                //console.log(this.options);
+                //this.categoryList.unshift({ name: '全部文献' })
             })
-
         },
-        addMenu() {
-            this.$request.get("/menu/Addmenu", {
-                params: {
-                    userId: this.user.id,
-                    name: this.menu.name
-                }
-            }).then(res => {
-                if (res.code === '200') {
-                    this.$message.success('添加成功');
-
-                }
-                else {
-                    this.$message.error(res.msg)
-                }
-            });
-            this.load
-            this.minusVisible = false;
-        },
-
         load(pageNum) {
             if (pageNum) this.pageNum = pageNum;
-            console.log(this.startDate);
+            // console.log(this.startDate);
             this.$request.get('Userarticle/selectAll', {
                 params: {
                     cId: this.user.id,
@@ -264,10 +238,10 @@ export default {
                     author: this.author,
                     keywords: this.keywords,
                     type: this.type,
-                    
+
                 }
             }).then(res => {
-                console.log(res);
+                //console.log(res);
                 for (var i = 0; i < res.data.list.length; i++) {
 
                     var dateTimeString = res.data.list[i].time;
@@ -281,10 +255,68 @@ export default {
                 this.total = res.data?.total
             })
         },
+        openMinus() {
+            this.minusVisible = true;
+        },
+        openAdd() {
+            this.menuVisible = true;
+            console.log(this.menu);
+        },
+        openArticle() {
+            this.addVisible = true;
+        },
+        minusMenu() {
+            if(this.menu1.name!==null &&this.menu1.name!==''){
+            this.$request.get("/menu/Delmenu", {
+                params: {
+                    userId: this.user.id,
+                    name: this.menu1.value
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('删除成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+                this.minusVisible=false;
+                this.loadleft();
+            })}else{
+                this.$message.error('请选择要删除分类');
+                this.minusVisible=false;
+                this.loadleft();
+            }
+
+        },
+        addMenu() {
+            console.log(this.menu);
+            if (this.menu.name !== null && this.menu.name !== '') {
+                this.$request.get("/menu/Addmenu", {
+                    params: {
+                        userId: this.user.id,
+                        name: this.menu.name
+                    }
+                }).then(res => {
+                    if (res.code === '200') {
+                        this.$message.success('添加成功');
+                    }
+                    else {
+                        this.$message.error(res.msg)
+                    }
+                    this.menuVisible = false;
+                    this.loadleft();
+                });
+
+            }
+            else {
+                this.$message.error('请填入分类')
+            }
+        },
+
+
         del(id) {
             this.$request.get('/Userarticle/delete', {
                 params: {
-                    id:id
+                    id: id
                 }
             }).then(res => {
                 if (res.code === '200') {
@@ -297,58 +329,49 @@ export default {
             })
 
         },
-        handleRef(id) {
-            this.form.byId = id;
-            this.fromVisible = true;
-            //this.addReference();
-        },
-        addReference() {
-            this.$request.get('/bycited/add', {
-                params: {
-                    byId: this.form.byId,
-                    citeId: this.form.citeId,
-                    userId: this.user.id
-                }
-            }).then(res => {
-                if (res.code === '200') {
-                    this.$message.success('添加成功')
-                } else {
-                    this.$message.error(res.msg)
-                }
-            })
-            this.fromVisible = false;
-        },
+        // handleRef(id) {
+        //     this.form.byId = id;
+        //     this.fromVisible = true;
+        //     //this.addReference();
+        // },
+        // addReference() {
+        //     this.$request.get('/bycited/add', {
+        //         params: {
+        //             byId: this.form.byId,
+        //             citeId: this.form.citeId,
+        //             userId: this.user.id
+        //         }
+        //     }).then(res => {
+        //         if (res.code === '200') {
+        //             this.$message.success('添加成功')
+        //         } else {
+        //             this.$message.error(res.msg)
+        //         }
+        //     })
+        //     this.fromVisible = false;
+        // },
         selectCategory(categoryName) {
             this.current = categoryName;
             this.author = null,
                 this.load(1);
         },
-        loadleft() {
-            this.$request.get("/menu/selectAll", {
-                params: {
-                    userId: this.user.id
-                }
-            }).then(res => {
-                console.log(res);
-                this.categoryList = res.data;
-                this.options = res.data;
-                console.log(this.options);
-                //this.categoryList.unshift({ name: '全部文献' })
-            })
-        },
-        addMyMenu(){
+
+        addMyMenu() {
             const formattedDate = dayjs(this.form1.time).format('YYYY-MM-DD');
-            console.log(formattedDate);
-             this.$request.get('/Userarticle/add/', {
-                params: {
-                    articleId: -1,
+            console.log(this.form1.id);
+            this.$request(
+            {url: this.form1.id? '/Userarticle/edit/': 'Userarticle/add',
+               method:'POST',
+                data: {
+                    id:this.form1.id,
+                    articleId: this.form1.id? this.form1.articleId:-1,
                     cId: this.user.id,
-                    name:this.form1.name,
-                    journal:this.form1.journal,
-                    articlename:this.form1.articlename,
-                    author:this.form1.author,
-                    keywords:this.form1.keywords,
-                    time:formattedDate
+                    name: this.form1.name,
+                    journal: this.form1.journal,
+                    articlename: this.form1.articlename,
+                    author: this.form1.author,
+                    keywords: this.form1.keywords,
+                    time: formattedDate
                 }
             }).then(res => {
                 if (res.code === '200') {
@@ -356,6 +379,8 @@ export default {
                 } else {
                     this.$message.error(res.msg)
                 }
+                this.addVisible=false;
+                this.load(1);
             })
 
         },
@@ -368,6 +393,10 @@ export default {
             this.journal = null;
             this.load(1)
         },
+        handleEdit(row){
+            this.form1 = JSON.parse(JSON.stringify(row))
+            this.addVisible=true;
+        }
     }
 }
 </script>

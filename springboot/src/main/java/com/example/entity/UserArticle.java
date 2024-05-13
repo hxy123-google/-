@@ -132,4 +132,5 @@ public class UserArticle implements Serializable {
     public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
+
 }

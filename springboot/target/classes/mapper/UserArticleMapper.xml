@@ -55,23 +55,32 @@
     <update id="edit" parameterType="com.example.entity.UserArticle">
         update userarticle
         <set>
-            <if test="img != null">
+            <if test="img != null and img!=''">
                 img = #{img},
             </if>
-            <if test="name != null">
+            <if test="name != null and name!=''">
                 name = #{name},
             </if>
-            <if test="type != null">
+            <if test="type != null and type !=''">
                 type = #{type},
             </if>
-            <if test="file != null">
+            <if test="file != null and file!=''">
                 file = #{file},
             </if>
-            <if test="journal != null">
+            <if test="journal != null and journal!=''">
                 journal = #{journal},
             </if>
             <if test="descr != null and descr!=''">
                 descr = #{descr},
+            </if>
+            <if test="time != null and time!=''">
+                time = #{time},
+            </if>
+            <if test="articlename != null and articlename!=''">
+                articlename = #{articlename},
+            </if>
+            <if test="keywords != null and keywords!=''">
+                keywords = #{keywords},
             </if>
         </set>
         where id = #{id}

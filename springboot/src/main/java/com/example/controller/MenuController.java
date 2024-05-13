@@ -4,8 +4,10 @@ import com.example.common.Result;
 import com.example.entity.Collect;
 import com.example.entity.Menu;
 import com.example.entity.User;
+import com.example.entity.UserArticle;
 import com.example.service.CollectService;
 import com.example.service.MenuService;
+import com.example.service.UserArticleService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,7 +28,7 @@ public class MenuController {
     @Resource
     private MenuService menuService;
     @Resource
-    private CollectService collectService;
+    private UserArticleService userArticleService;
     @GetMapping("/menu/selectAll")
     Result SelectAll(Menu menu){
        List<Menu> list =menuService.selectAll(menu);
@@ -39,10 +41,10 @@ public class MenuController {
     }
     @GetMapping("/menu/Delmenu")
     Result Delmenu(Menu menu){
-        Collect collect=new Collect();
-        collect.setName(menu.getName());
-        collect.setcId(menu.getUserId());
-        collectService.deletebyName(collect);
+        UserArticle userArticle =new UserArticle();
+        userArticle.setName(menu.getName());
+        userArticle.setcId(menu.getUserId());
+        userArticleService.deletebyName(userArticle);
         menuService.Delmenu(menu);
         return Result.success();
     }

@@ -45,4 +45,8 @@ public class UserArticleService {
     public void edit(UserArticle userArticle) {
         userArticleMapper.edit(userArticle);
     }
+
+    public void deletebyName(UserArticle userArticle) {
+        userArticleMapper.deleteByName(userArticle);
+    }
 }

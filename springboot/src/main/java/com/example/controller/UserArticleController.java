@@ -8,10 +8,7 @@ import com.example.service.ArticleService;
 import com.example.service.OrdersService;
 import com.example.service.UserArticleService;
 import com.github.pagehelper.PageInfo;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -34,8 +31,8 @@ public class UserArticleController {
     private ArticleService articleService;
     @Resource
     private OrdersService ordersService;
-    @GetMapping("Userarticle/add")
-    public Result add(UserArticle userArticle){
+    @PostMapping("Userarticle/add")
+    public Result add(@RequestBody UserArticle userArticle){
         if(userArticle.getArticleId()!=-1) {
             Orders orders=new Orders();
             orders.setArticleId(userArticle.getArticleId());
@@ -75,8 +72,8 @@ public class UserArticleController {
         UserArticle userArticle=userArticleService.selectById(id);
         return Result.success(userArticle);
     }
-    @GetMapping("Userarticle/edit/")
-    public Result edit(UserArticle userArticle){
+    @PostMapping("Userarticle/edit/")
+    public Result edit(@RequestBody UserArticle userArticle){
         userArticleService.edit(userArticle);
         return Result.success();
     }

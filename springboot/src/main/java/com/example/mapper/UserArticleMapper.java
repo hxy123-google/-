@@ -25,4 +25,6 @@ public interface UserArticleMapper {
     UserArticle selectbyId(Integer id);
 
     void edit(UserArticle userArticle);
+    @Delete("delete from userarticle where c_id=#{cId} and name=#{name}")
+    void deleteByName(UserArticle userArticle);
 }

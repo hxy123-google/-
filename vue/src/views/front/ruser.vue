@@ -120,8 +120,10 @@ export default {
         addDescr() {
             this.form.descr = this.editor.txt.html();
             console.log(this.form.descr);
-            this.$request.get('/Userarticle/edit/', {
-                params: {
+            this.$request({
+                url:'/Userarticle/edit/', 
+                method:'POST',
+                data: {
                     id: this.scoreId,
                     descr: this.form.descr
                 }
@@ -132,6 +134,7 @@ export default {
                 } else {
                     this.$message.error(res.msg)
                 }
+                this.loadCourse();
             })
 
         },
