@@ -57,4 +57,6 @@ public interface ArticleMapper {
                                  String category,String author,Integer authorId,String journal);
 
         List<Article> selectArticle(Article article);
+        @Select("select * from article where name=#{name} and journal=#{journal} and author=#{author}")
+        List<Article> selectAccArticle(Article article);
 }

@@ -196,7 +196,7 @@ export default {
                 name: null
             },
             menu1: {
-                name:null
+                value:null
             },
             journal: null,
             aName: null,
@@ -266,7 +266,7 @@ export default {
             this.addVisible = true;
         },
         minusMenu() {
-            if(this.menu1.name!==null &&this.menu1.name!==''){
+            if(this.menu1.value!==null &&this.menu1.value!==''){
             this.$request.get("/menu/Delmenu", {
                 params: {
                     userId: this.user.id,

@@ -1,29 +1,7 @@
 <template>
     <div class="main-content">
         <div style="display: flex; grid-gap:10px">
-            <div style="width:150px" class="card">
-                <!-- <div class="category-item category-item-active">全部</div> -->
-                <!-- <div class="category-item"  v-for="item in categoryList" :key="item.id">{{ item.category }}</div> -->
-                <div class="category-item" :class="{ 'category-item-active': item.category === current }"
-                    v-for="item in categoryList" :key="item.id" @click="selectCategory(item.category)">{{ item.category
-                    }}</div>
-            </div>
             <div style="flex:1" class="card">
-                <div class="search">
-                    <el-select v-model="journal" placeholder="请选择期刊" style="width: 100px">
-                        <el-option label="Advanced Materials" value="Advanced Materials"></el-option>
-                        <el-option label="Materials Science and Engineering: R: Reports"
-                            value="Materials Science and Engineering: R: Reports"></el-option>
-                        <el-option label="Nature Materials" value="Nature Materials"></el-option>
-                        <el-option label="硅酸盐学报" value="硅酸盐学报"></el-option>
-                        <el-option label="全部" value:null></el-option>
-                    </el-select>
-                    <el-input placeholder="请输入作者名称" style="width: 100px" v-model="author"></el-input>
-                    <el-date-picker v-model="startDate" type="date" placeholder="选择日期时间"></el-date-picker>
-                    <el-date-picker v-model="endDate" type="date" placeholder="选择日期时间"></el-date-picker>
-                    <el-button type="info" plain style="margin-left: 10px" @click="load(1)">查询</el-button>
-                    <el-button type="warning" plain style="margin-left: 10px" @click="reset">重置</el-button>
-                </div>
                 <div class="table">
                     <el-table :data="tableData">
                         <el-table-column prop="id" label="序号" width="80" align="center" sortable></el-table-column>
@@ -60,8 +38,8 @@
                         <!-- <el-table-column prop="file" label="文献链接" show-overflow-tooltip>
                             <template v-slot="scope">
                                 <el-button type="warning" size="mini" @click="down(scope.row.file)">点击下载</el-button>
-                            </template> -->
-                        <!-- </el-table-column> -->
+                            </template>
+                        </el-table-column> -->
                         <el-table-column prop="discount" label="文献折扣">
                             <template v-slot="scope">
                                 <span style="color: #448231" v-if="scope.row.discount < 1">{{ scope.row.discount * 10 }}
@@ -69,54 +47,34 @@
                                 <span style="color: #448231" v-else>——</span>
                             </template>
                         </el-table-column>
-                        <!-- <el-table-column prop="file" label="文献资料" show-overflow-tooltip></el-table-column> -->
-                        <!-- <el-table-column prop="discount" label="文献折扣"></el-table-column> -->
+                        <el-table-column prop="discount" label="文献折扣"></el-table-column>
                         <el-table-column prop="reference" label="文献引用量"></el-table-column>
                         <el-table-column prop="time" label="发表时间"></el-table-column>
+                        <el-table-column label="引用" width="180" align="center">
+                            <template v-slot="scope">
+                                <!-- <el-button plain type="primary" @click="handleRef(scope.row.id)"
+                                    size="mini">引用</el-button> -->
+                                <el-button plain type="danger" size="mini" @click=col(scope.row.id)>收藏</el-button>
+                            </template>
+                        </el-table-column>
                     </el-table>
-
-                    <div class="pagination">
-                        <el-pagination background @current-change="handleCurrentChange" :current-page="pageNum"
-                            :page-sizes="[5, 10, 20]" :page-size="pageSize" layout="total, prev, pager, next"
-                            :total="total">
-                        </el-pagination>
-                    </div>
-                </div>
-            </div>
-            <div style="width:260px" class="card">
-                <div v-for="item in userData" :key="item.id">
-                    <div>
-                        <div style="font-size: 18px; margin: 10px 0">头像</div>
-                        <div>
-                            <img :src="item.avatar" controls style="width: 65%; height: 400px"
-                                @click="naveToUser(item.id)">
-                            <!-- <div style="margin-top: 10px">头像：<a :href="courseData.file" target="_blank">{{ userData.avatar }}</a></div> -->
-                        </div>
-                        <!-- <div style="font-size: 18px; margin: 10px 0">邮箱</div>
-                        <div>{{ userData.email }}</div>
-                        <div style="font-size: 18px; margin: 10px 0">电话</div>
-                        <div>{{ userData.phone }}</div> -->
-                    </div>
-                    <!--   课程介绍区域   -->
-                    <div style="margin-top: 20px">
-                        <div style="font-size: 18px">个人介绍</div>
-                        <div style="margin-top: 10px" v-html="item.introduce" class="w-e-text w-e-text-container">
-                        </div>
-                    </div>
-                </div>
-                <div class="pagination">
-                    <el-pagination background @current-change="handleCurrentChange1" :current-page="pageNum1"
-                        :page-sizes="[5, 10, 20]" :page-size="pageSize1" layout="total, prev, pager, next"
-                        :total="total1">
-                    </el-pagination>
                 </div>
             </div>
         </div>
+        <el-dialog title="文献收藏" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
+            <el-form label-width="100px" style="padding-right: 50px" :model="menu">
+                <el-select v-model="menu.name" placeholder="请选择">
+                    <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                    </el-option>
+                </el-select>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="menuVisible = false">取 消</el-button>
+                <el-button type="primary" @click="addMyMenu">确 定</el-button>
+            </div>
+        </el-dialog>
 
     </div>
-
-
-
 </template>
 
 <script>
@@ -124,144 +82,77 @@
 export default {
     name: "ReferenceSearch",
     data() {
+        let myArray = this.$route.query.articleArray;
         return {
+            options:[],
             tableData: [],  // 所有的数据
-            pageNum: 1,   // 当前的页码
-            pageSize: 5,  // 每页显示的个数
-            total: 0,
-            name: null,
-            journal: null,
-            author: null,
-            type: null,
-            recommend: null,
-            userData: [],
-            startDate: null,
-            endDate: null,
-            current: '全部文献',
-            categoryList: [],
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
-            pageNum1: 1,   // 当前的页码
-            pageSize1: 1,
-            total1: 0,
+            myArray: myArray,
+            menuVisible: false,
+            menu: {  // 用于收藏的表单对象
+                name: null,
+            },
         }
     },
     mounted() {
-        this.loadleft();
-        this.load(1);
+        //let myArray = this.$route.query.articleArray;
+        //console.log(myArray); // 输出 [1, 2, 3]
+        //this.loadleft();
+        this.load();
     },
 
     methods: {
-        loadleft() {
-            this.$request.get("/category").then(res => {
-                console.log(res);
-                this.categoryList = res.data;
-                this.categoryList.unshift({ category: '全部文献' })
+        load() {
+            this.tableData = this.myArray.data;
+            console.log(this.tableData);
+            this.tableData.forEach((item, index) => {
+                console.log(`Item ${index}:`, item);
+                var dateTimeString = item.time;
+                var dateTime = new Date(dateTimeString);
+                var year = dateTime.getFullYear();
+                var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
+                var day = dateTime.getDate();
+                item.time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+                // 继续输出其他属性
             })
         },
-        selectCategory(categoryName) {
-            this.current = categoryName;
-            this.load(1);
-        },
-        load(pageNum) {
-            if (this.author !== null) {
-                this.$request.get('/user/getAccPro',
-                    {
-                        params: {
-                            name: this.author,
-                            role: 'PRO',
-                            pageNum1: this.pageNum1,
-                            pageSize1: this.pageSize1,
-                        }
-                    }
-                ).then(res => {
-                    this.userData = res.data?.list
-                    this.total1 = res.data?.total
+        addMyMenu() {
+            console.log(this.menu.name);
+            this.$request({
+            url:'/Userarticle/add/', 
+            method:'POST',
+                data: {
+                    articleId: this.articleId,
+                    cId: this.user.id,
+                    name: this.menu.name,
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('添加成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
 
-                    console.log(this.userData);
-                })
-            }
-            console.log(this.startDate);
-            if (this.startDate != null) {
-                var dateTimeString = this.startDate;
-                var dateTime = new Date(dateTimeString);
-                var year = dateTime.getFullYear();
-                var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
-                var day = dateTime.getDate();
-                this.startDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-            }// 分页查询
-            if (this.endDate != null) {
-                var dateTimeString = this.endDate;
-                var dateTime = new Date(dateTimeString);
-                var year = dateTime.getFullYear();
-                var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
-                var day = dateTime.getDate();
-                this.endDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-            }// 分页查询}
-            if (pageNum) this.pageNum = pageNum;
-            console.log(this.startDate);
-            this.$request.get('/article/selectAccPage', {
+        },
+        col(id) {
+            this.menuVisible = true;
+            this.loadleftmenu();
+            this.articleId = id;
+        },
+        loadleftmenu() {
+            this.$request.get("/menu/selectAll", {
                 params: {
-                    pageNum: this.pageNum,
-                    pageSize: this.pageSize,
-                    name: this.name,
-                    startDate: this.startDate,
-                    endDate: this.endDate,
-                    author: this.author,
-                    category: this.current === '全部文献' ? null : this.current,
-                    journal: this.journal
+                    userId: this.user.id
                 }
             }).then(res => {
                 console.log(res);
-                for (var i = 0; i < res.data.list.length; i++) {
-
-                    var dateTimeString = res.data.list[i].time;
-                    var dateTime = new Date(dateTimeString);
-                    var year = dateTime.getFullYear();
-                    var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
-                    var day = dateTime.getDate();
-                    res.data.list[i].time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
-                }
-                this.tableData = res.data?.list
-                this.total = res.data?.total
+               // this.categoryList = res.data;
+                this.options = res.data;
+                //this.categoryList.unshift({ name: '全部文献' })
             })
         },
-        reset() {
-            this.name = null,
-                this.author = null,
-                this.startDate = null,
-                this.endDate = null
-            this.load(1)
-        },
-        handleCurrentChange(pageNum) {
-            this.load(pageNum)
-        },
-        down(url) {
-            location.href = url
-        },
-        handleCurrentChange1(pageNum1) {
-            if (this.author !== null) {
-                this.pageNum1 = pageNum1;
-                this.$request.get('/user/getAccPro',
-                    {
-                        params: {
-                            name: this.author,
-                            role: 'PRO',
-                            pageNum1: this.pageNum1,
-                            pageSize1: this.pageSize1,
-                        }
-                    }
-                ).then(res => {
-                    console.log(res.data);
-                    this.userData = res.data?.list
-                    this.total1 = res.data?.total
-
-                })
-            }
-        },
-        naveToUser(id) {
-            location.href = '/front/userDetail?id=' + id
-        },
-    }
+    },
 }
 </script>
 <style>

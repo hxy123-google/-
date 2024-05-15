@@ -14,13 +14,32 @@
             <el-submenu index="2">
               <template slot="title">文献搜索</template>
               <el-menu-item index="/front/article">模糊搜索</el-menu-item>
-              <el-menu-item index="/front/ReferenceSearch">精准查询</el-menu-item>
+              <el-menu-item @click='openAcc'>精准查询</el-menu-item>
             </el-submenu>
             <el-menu-item index="/front/ProfessorPage">教授查询</el-menu-item>
             <el-menu-item index="/front/score">评论专区</el-menu-item>
             <el-menu-item index="/front/Statics">数据统计</el-menu-item>
           </el-menu>
         </div>
+        <el-dialog title="精准搜索" :visible.sync="selectVisible" width="55%" :close-on-click-modal="false"
+          destroy-on-close>
+          <el-form label-width="100px" style="padding-right: 50px" :model="form">
+            <el-form-item prop="name" label="文献名称">
+              <el-input v-model="form.name" autocomplete="off" placeholder="请输入文献名称"></el-input>
+            </el-form-item>
+            <el-form-item prop="author" label="文献作者">
+              <el-input v-model="form.author" autocomplete="off" placeholder="请输入作者名称"></el-input>
+            </el-form-item>
+            <el-form-item prop="journal" label="文献期刊">
+              <el-input v-model="form.journal" autocomplete="off" placeholder="请输入期刊名称"></el-input>
+            </el-form-item>
+          </el-form>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="selectVisible = false">取 消</el-button>
+            <el-button type="primary" @click="searchAcc">确 定</el-button>
+          </div>
+        </el-dialog>
       </div>
       <div class="front-header-right">
         <div v-if="!user.username">
@@ -83,6 +102,7 @@ export default {
       top: '',
       notice: [],
       user: JSON.parse(localStorage.getItem("xm-user") || '{}'),
+      selectVisible: false,
       form: {},
     }
   },
@@ -130,7 +150,20 @@ export default {
     navto(url) {
       location.href = url;
     },
-
+    openAcc(){
+      this.selectVisible=true;
+    },
+    searchAcc(){
+       this.$request.get('/article/getAccArticle',{params:{
+        name:this.form.name,
+        journal:this.form.journal,
+        author:this.form.author
+       }}).then(res=>{
+        console.log(res);
+        this.selectVisible=false;
+        this.$router.push({path:'/front/ReferenceSearch',query:{articleArray:res}});
+       })
+    },
   }
 
 }

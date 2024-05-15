@@ -123,7 +123,7 @@
                     </el-select>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="fromVisible = false">取 消</el-button>
+                    <el-button @click="menuVisible = false">取 消</el-button>
                     <el-button type="primary" @click="addMyMenu">确 定</el-button>
                 </div>
             </el-dialog>
@@ -176,8 +176,10 @@ export default {
     methods: {
         addMyMenu(){
             console.log(this.menu.name);
-             this.$request.get('/Userarticle/add/', {
-                params: {
+             this.$request({
+                url:'/Userarticle/add/', 
+                method:'POST',
+                data: {
                     articleId: this.articleId,
                     cId: this.user.id,
                     name:this.menu.name,

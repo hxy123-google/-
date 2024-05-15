@@ -147,7 +147,6 @@
                 <el-button type="primary" @click="delMyRel">确 定</el-button>
             </div>
         </el-dialog>
-
         <el-dialog title="资料内容" :visible.sync="editorVisible" width="50%" :close-on-click-modal="false"
             destroy-on-close>
             <div v-html="viewData" class="w-e-text w-e-text-container"></div>

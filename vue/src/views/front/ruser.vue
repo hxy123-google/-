@@ -91,8 +91,12 @@ export default {
             form: {},
         }
     },
+    created(){
+       this.loadCourse();
+    },
     mounted() {
-        this.loadCourse();
+        //this.loadCourse();
+        this.loadScore(1);
     },
     // methods：本页面所有的点击事件或者其他函数定义区
     methods: {
@@ -111,7 +115,7 @@ export default {
         loadCourse() {
             this.$request.get('/Userarticle/selectById/' + this.scoreId).then(res => {
                 if (res.code === '200') {
-                    this.courseData = res.data
+                    this.courseData = res.data;
                 } else {
                     this.$message.error(res.msg)
                 }
@@ -119,7 +123,6 @@ export default {
         },
         addDescr() {
             this.form.descr = this.editor.txt.html();
-            console.log(this.form.descr);
             this.$request({
                 url:'/Userarticle/edit/', 
                 method:'POST',
@@ -142,8 +145,33 @@ export default {
             this.form.descr = JSON.parse(JSON.stringify(descr))
             this.fromVisible = true;
             this.initWangEditor(this.form.descr || '')
-            console.log(this.form.descr);
-        }
+        },
+        loadScore(pageNum) {
+            let ffff;
+            this.$request.get('/Userarticle/selectById/' + this.scoreId).then(res => {
+                if (res.code === '200') {
+                    ffff = res.data.articleId;
+                    console.log(ffff);
+                    this.pageNum=pageNum;
+                    this.$request.get('/articlescore/selectScore/', {
+                params: {
+                    pageNum: this.pageNum,
+                    pageSize: this.pageSize,
+                    articleId: ffff
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    console.log(ffff);
+                    this.showList = res.data?.list
+                    this.total = res.data?.total
+                }
+            })
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+            //console.log(this.courseData.articleId);
+        },
     }
 }
 </script>

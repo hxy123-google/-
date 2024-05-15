@@ -116,20 +116,20 @@ public class ArticleController {
         PageInfo<Article> page = articleService.selectPage(article, pageNum, pageSize, startdate1, enddate1);
         return Result.success(page);
     }
-    @GetMapping("/selectAccPage")
-    public Result selectAccPage(Article article,
-                             @RequestParam(defaultValue = "1") Integer pageNum,
-                             @RequestParam(defaultValue = "10") Integer pageSize,
-                             @RequestParam(defaultValue = "1945-3-7") String startDate,
-                             @RequestParam(defaultValue = "2222-4-7") String endDate) {
-        System.out.println(article);
-        java.util.Date startdate1 = java.sql.Date.valueOf(startDate);
-        java.util.Date enddate1 = java.sql.Date.valueOf(endDate);
-        System.out.println(startDate);
-        System.out.println(endDate);
-        PageInfo<Article> page = articleService.selectAccPage(article, pageNum, pageSize, startdate1, enddate1);
-        return Result.success(page);
-    }
+//    @GetMapping("/selectAccPage")
+//    public Result selectAccPage(Article article,
+//                             @RequestParam(defaultValue = "1") Integer pageNum,
+//                             @RequestParam(defaultValue = "10") Integer pageSize,
+//                             @RequestParam(defaultValue = "1945-3-7") String startDate,
+//                             @RequestParam(defaultValue = "2222-4-7") String endDate) {
+//        System.out.println(article);
+//        java.util.Date startdate1 = java.sql.Date.valueOf(startDate);
+//        java.util.Date enddate1 = java.sql.Date.valueOf(endDate);
+//        System.out.println(startDate);
+//        System.out.println(endDate);
+//        PageInfo<Article> page = articleService.selectAccPage(article, pageNum, pageSize, startdate1, enddate1);
+//        return Result.success(page);
+//    }
     @GetMapping("/selectPager")
     public Result selectPager(Article article,
                              @RequestParam(defaultValue = "1") Integer pageNum,
@@ -173,6 +173,10 @@ public class ArticleController {
 
         return Result.success(resultMap);
     }
-
+    @GetMapping("/getAccArticle")
+    public Result getAccArticle(Article article){
+        List<Article> list=articleService.getAccArticle(article);
+        return Result.success(list);
+    }
 
 }

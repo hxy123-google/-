@@ -153,4 +153,8 @@ public class ArticleService {
         return articleMapper.selectByAuthorId(user.getId());
 
     }
+    public List<Article>getAccArticle(Article article){
+        List<Article>list=articleMapper.selectAccArticle(article);
+        return list;
+    }
 }
