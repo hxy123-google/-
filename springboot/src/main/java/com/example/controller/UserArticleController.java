@@ -1,9 +1,11 @@
 package com.example.controller;
 
 import com.example.common.Result;
+import com.example.common.enums.ResultCodeEnum;
 import com.example.entity.Article;
 import com.example.entity.Orders;
 import com.example.entity.UserArticle;
+import com.example.exception.CustomException;
 import com.example.service.ArticleService;
 import com.example.service.OrdersService;
 import com.example.service.UserArticleService;
@@ -12,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ClassName: UserArticleController
@@ -37,8 +42,9 @@ public class UserArticleController {
             Orders orders=new Orders();
             orders.setArticleId(userArticle.getArticleId());
             orders.setUserId(userArticle.getcId());
-            //List<Orders> list=ordersService.selectAll(orders);
+            List<Orders> list=ordersService.selectAll(orders);
             Article article = articleService.selectById(userArticle.getArticleId());
+            if(list.size()==0&&article.getPrice()!=0) throw new CustomException(ResultCodeEnum.Not_buy);
             userArticle.setJournal(article.getJournal());
             userArticle.setKeywords(article.getKeywords());
             userArticle.setAuthor(article.getAuthor());
@@ -76,6 +82,29 @@ public class UserArticleController {
     public Result edit(@RequestBody UserArticle userArticle){
         userArticleService.edit(userArticle);
         return Result.success();
+    }
+    @GetMapping("/Userarticle/getBar/")
+    public Result getBar(UserArticle userArticle) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String,Integer> resultMap1=new HashMap<>();
+        List<String> xList = new ArrayList<>();
+        List<Integer> yList = new ArrayList<>();
+        List<UserArticle>list=userArticleService.selectAll(userArticle);
+        for(int i=0;i<list.size();i++){
+            if(resultMap1.get(list.get(i).getName())==null)
+                resultMap1.put(list.get(i).getName(),1);
+            else resultMap1.put(list.get(i).getName(),resultMap1.get(list.get(i).getName())+1);
+        }
+        for (String key : resultMap1.keySet()) {
+            xList.add(key);
+            yList.add(resultMap1.get(key));
+            //System.out.println("Key: " + key + ", Value: " + resultMap1.get(key));
+        }
+        resultMap.put("text", "平台所有资料总数统计（柱状图）");
+        resultMap.put("subText", "统计维度：资料类型");
+        resultMap.put("xAxis", xList);
+        resultMap.put("yAxis", yList);
+        return Result.success(resultMap);
     }
 }
 

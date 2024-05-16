@@ -26,7 +26,10 @@ public class UserArticleService {
     public void add(UserArticle userArticle) {
         userArticleMapper.add(userArticle);
     }
-
+    public List<UserArticle> selectAll(UserArticle userArticle){
+        List<UserArticle>list=userArticleMapper.selectAll(userArticle);
+        return list;
+    }
     public PageInfo<UserArticle> selectPager(UserArticle userArticle, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<UserArticle> list = userArticleMapper.selectAll(userArticle);

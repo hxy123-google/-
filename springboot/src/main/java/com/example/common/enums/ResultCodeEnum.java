@@ -23,6 +23,7 @@ public enum ResultCodeEnum {
     ARTICLE_NOT_EXIST("5012","你的文章未上传本系统"),
     YOU_NOT_AUTHOR("5013","你不是作者"),
     Collection_ALREADT_EXIST("5014","你已收藏过了"),
+    Not_buy("5015","你没有购买不能收藏"),
     ;
 
     public String code;

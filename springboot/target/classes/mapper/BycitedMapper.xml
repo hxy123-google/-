@@ -34,7 +34,7 @@
             <if test="year != null"> year</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">id,</if>
+            <if test="id != null">#{id},</if>
             <if test=" citeId!= null">#{citeId},</if>
             <if test="byId != null">#{byId},</if>
             <if test="time != null"> #{time},</if>

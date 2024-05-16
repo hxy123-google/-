@@ -40,7 +40,7 @@
             score.*
         from articlescore
                  left join score on score.id=articlescore.score_id
-        where articlescore.article_id=#{articleId}
+        where articlescore.article_id=#{articleId} and score.status='审核通过'
     </select>
     <select id="selectArticle" resultType="com.example.entity.Article">
         select

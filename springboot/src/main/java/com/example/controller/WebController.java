@@ -127,7 +127,6 @@ public class WebController {
         resultMap.put("subText", "统计维度：资料类型");
         resultMap.put("xAxis", xList);
         resultMap.put("yAxis", yList);
-
         return Result.success(resultMap);
     }
 

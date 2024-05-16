@@ -35,10 +35,10 @@ public class BycitedService {
     @Resource
     private ArticleMapper articleMapper;
     public void add(Bycited bycited) {
-        String year = DateUtil.format(new Date(), "yyyy");
         Article articlee=articleMapper.selectById(bycited.getCiteId());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         bycited.setTime(sdf.format(articlee.getTime()));
+        String year= DateUtil.format(articlee.getTime(), "yyyy");
         bycited.setYear(year);
         bycitedMapper.insert(bycited);
     }
