@@ -5,6 +5,8 @@ import com.example.common.Result;
 import com.example.entity.Article;
 import com.example.service.ArticleService;
 import com.github.pagehelper.PageInfo;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -30,7 +32,8 @@ public class ArticleController {
 
     @Resource
     private ArticleService articleService;
-
+    @Resource
+    private RedisTemplate redisTemplate;
     /**
      * 新增
      */
@@ -72,8 +75,10 @@ public class ArticleController {
      */
     @GetMapping("/selectById/{id}")
     public Result selectById(@PathVariable Integer id) {
-        System.out.println(id);
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        //valueOperations.set("user:"+id, new User(2000300123L, "张三", 20));
         Article article = articleService.selectById(id);
+        valueOperations.set("article:"+id, article);
         System.out.println(article);
         return Result.success(article);
     }
@@ -108,6 +113,7 @@ public class ArticleController {
                              @RequestParam(defaultValue = "10") Integer pageSize,
                              @RequestParam(defaultValue = "1945-3-7") String startDate,
                              @RequestParam(defaultValue = "2222-4-7") String endDate) {
+        //System.out.println(redisTemplate);
         System.out.println(article);
         java.util.Date startdate1 = java.sql.Date.valueOf(startDate);
         java.util.Date enddate1 = java.sql.Date.valueOf(endDate);

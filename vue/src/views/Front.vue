@@ -76,7 +76,9 @@
               <el-dropdown-item>
                 <div style="text-decoration: none" @click="navto('/front/Collect')">我的收藏</div>
               </el-dropdown-item>
-
+              <el-dropdown-item>
+                <div style="text-decoration: none" @click="navto('/front/Mystatics')">我的数据</div>
+              </el-dropdown-item>
 
             </el-dropdown-menu>
           </el-dropdown>
