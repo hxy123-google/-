@@ -78,6 +78,9 @@
                     </div>
                 </div>
             </div>
+            <div style="width:150px" class="card">
+                
+            </div>
             <!-- <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
                 destroy-on-close>
                 <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">

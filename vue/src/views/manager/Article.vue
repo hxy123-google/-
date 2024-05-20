@@ -51,6 +51,7 @@
         <el-table-column label="操作" width="180" align="center">
           <template v-slot="scope">
             <el-button plain type="primary" @click="handleRef(scope.row.id)" size="mini">引用</el-button>
+            <el-button plain type="primary" @click="delRef(scope.row.id)" size="mini">删除引用</el-button>
             <el-button plain type="primary" @click="handleEdit(scope.row)" size="mini">编辑</el-button>
             <el-button plain type="danger" size="mini" @click=del(scope.row.id)>删除</el-button>
           </template>
@@ -63,6 +64,18 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog title="文献引用删除" :visible.sync="EditRefVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
+      <el-form label-width="100px" style="padding-right: 50px" :model="reference">
+        <el-select v-model="reference.id" placeholder="请选择">
+          <el-option v-for="item in options" :key="item.id" :label="item.id + ' ' + item.name" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="EditRefVisible = false">取 消</el-button>
+        <el-button type="primary" @click="delMyRel">确 定</el-button>
+      </div>
+    </el-dialog>
     <el-dialog title="文献引用" :visible.sync="referenceVisible" width="55%" :close-on-click-modal="false" destroy-on-close>
       <el-form label-width="100px" style="padding-right: 50px" :model="form1" :rules="rules" ref="formRef">
         <el-form-item prop="name" label="引用文献id">
@@ -74,7 +87,7 @@
       </el-form>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="fromVisible = false">取 消</el-button>
+        <el-button @click="referenceVisible= false">取 消</el-button>
         <el-button type="primary" @click="addReference">确 定</el-button>
       </div>
     </el-dialog>
@@ -170,6 +183,12 @@ export default {
   name: "Article",
   data() {
     return {
+      EditRefVisible: false,
+      reference:{
+        id:null
+      },
+      which:null,
+      options: [],
       tableData: [],  // 所有的数据
       pageNum: 1,   // 当前的页码
       pageSize: 10,  // 每页显示的个数
@@ -281,7 +300,6 @@ export default {
       })
     },
     load(pageNum) {
-      console.log(this.startDate);
       if (this.startDate != null) {
         var dateTimeString = this.startDate;
         var dateTime = new Date(dateTimeString);
@@ -299,10 +317,6 @@ export default {
         this.endDate = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
       }// 分页查询}
       if (pageNum) this.pageNum = pageNum;
-      console.log("type");
-      console.log(this.recommend);
-      console.log("category");
-      console.log(this.category);
       this.$request.get('/article/selectPage', {
         params: {
           pageNum: this.pageNum,
@@ -368,6 +382,51 @@ export default {
       this.referenceVisible = false;
       this.reset();
     },
+    loadrefdata(id) {
+      this.$request.get('/bycited/selectAll', {
+        params: {
+          byId: id,
+        }
+      }).then(res => {
+        if (res.code === '200') {
+          // for (var i = 0; i < res.data.list.length; i++) {
+
+          //   var dateTimeString = res.data.list[i].time;
+          //   var dateTime = new Date(dateTimeString);
+          //   var year = dateTime.getFullYear();
+          //   var month = dateTime.getMonth() + 1; // 注意：月份从 0 开始，所以要加 1
+          //   var day = dateTime.getDate();
+          //   res.data.list[i].time = year + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+          // }
+          this.options = res.data;
+          console.log(this.options);
+        } else {
+          this.$message.error(res.msg);
+        }
+      })
+
+    },
+    delMyRel(){
+      this.$request.get('/bycited/deletbyId/', {
+        params: {
+          byId:this.which,
+          citeId: this.reference.id,
+        }
+      }).then(res => {
+        if (res.code === '200') {
+          this.$message.success('删除成功')
+        } else {
+          this.$message.error(res.msg);
+        }
+        this.reference.id=null
+      })
+      
+    },
+    delRef(id) {
+      this.which=id;
+      this.loadrefdata(id);
+      this.EditRefVisible = true;
+    }
   }
 }
 </script>

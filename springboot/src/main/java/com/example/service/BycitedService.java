@@ -49,8 +49,15 @@ public class BycitedService {
         List<Article> list = bycitedMapper.findById(bycited);
         return PageInfo.of(list);
     }
-
+    public List<Article> selectAllM(Bycited bycited){
+        List<Article> list = bycitedMapper.findById(bycited);
+        return list;
+    }
     public List<Bycited> selectAll(Bycited bycited) {
         return bycitedMapper.selectAll(bycited);
+    }
+
+    public void deletebyId(Bycited bycited) {
+        bycitedMapper.deletebyId(bycited);
     }
 }

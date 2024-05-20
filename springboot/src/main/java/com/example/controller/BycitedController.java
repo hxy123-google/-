@@ -66,6 +66,16 @@ public class BycitedController {
         PageInfo<Article> page = bycitedService.selectPager(bycited, pageNum, pageSize);
         return Result.success(page);
     }
+    @GetMapping("/bycited/deletbyId/")
+    public Result selectPager(Bycited bycited) {
+        bycitedService.deletebyId(bycited);
+        return Result.success();
+    }
+    @GetMapping("/bycited/selectAll")
+    public Result selectAll(Bycited bycited){
+        List<Article> list=bycitedService.selectAllM(bycited);
+        return Result.success(list);
+    }
     @GetMapping("bycited/getProBar")
     public Result getProBar(User user){
         Map<String, Object> resultMap = new HashMap<>();

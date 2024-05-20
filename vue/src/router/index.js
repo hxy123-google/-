@@ -30,7 +30,7 @@ const routes = [
       { path: 'scoreOrder', name: 'ScoreOrder', meta: { name: '积分兑课' }, component: () => import('../views/manager/ScoreOrder') },
       { path: 'information', name: 'Information', meta: { name: '审核区域' }, component: () => import('../views/manager/Information') },
       { path: 'orders', name: 'Orders', meta: { name: '课程订单' }, component: () => import('../views/manager/Orders') },
-
+      { path: 'imSingle', name:'ImSingle', meta:{name :'私信教授'} ,component:()=>import('../views/manager/ImSingle.vue')},
     ]
   },
   {
