@@ -5,7 +5,7 @@
         <div style="width: 50%; height: 400px" class="card" id="bar"></div>
       </div>
     </div>
-  </template>
+</template>
 <script>
   import * as echarts from "echarts";
   let barOptions = {

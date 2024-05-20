@@ -17,7 +17,7 @@
               <el-menu-item @click='openAcc'>精准查询</el-menu-item>
             </el-submenu>
             <el-menu-item index="/front/ProfessorPage">教授查询</el-menu-item>
-            <el-menu-item index="/front/score">评论专区</el-menu-item>
+            <el-menu-item index="/front/score">导读专区</el-menu-item>
             <el-menu-item index="/front/Statics">数据统计</el-menu-item>
           </el-menu>
         </div>

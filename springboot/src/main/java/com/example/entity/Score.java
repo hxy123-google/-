@@ -25,7 +25,7 @@ public class Score implements Serializable {
     private String file;
     private String recommend;
     private String time;
-    private String aId;
+    private Integer aId;
     private String author;
     private String status;
     private String descr;
@@ -78,11 +78,11 @@ public class Score implements Serializable {
         return id;
     }
 
-    public String getaId() {
+    public Integer getaId() {
         return aId;
     }
 
-    public void setaId(String aId) {
+    public void setaId(Integer aId) {
         this.aId = aId;
     }
 
@@ -161,7 +161,7 @@ public class Score implements Serializable {
         this.time = time;
     }
 
-    public Score(Integer id, String img, String name, String content, String type, Integer price, String video, String file, String recommend, String time, String aId, String author, String status, String descr) {
+    public Score(Integer id, String img, String name, String content, String type, Integer price, String video, String file, String recommend, String time, Integer aId, String author, String status, String descr) {
         this.id = id;
         this.img = img;
         this.name = name;

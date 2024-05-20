@@ -15,7 +15,6 @@ spring:
   redis:
     host: localhost
     port: 6379
-    password: 20020606Hxy
     database: 10
 # 配置mybatis实体和xml映射
 mybatis:

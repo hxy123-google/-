@@ -72,10 +72,10 @@
                             </template>
                         </el-table-column>
                         <el-table-column prop="time" label="发表时间"></el-table-column>
-                        <el-table-column label="引用" width="180" align="center">
+                        <el-table-column label="收藏" width="180" align="center">
                             <template v-slot="scope">
-                                <el-button plain type="primary" @click="handleRef" size="mini">引用</el-button>
-                                <el-button plain type="danger" size="mini" @click=del(scope.row.id)>收藏</el-button>
+                                <!-- <el-button plain type="primary" @click="handleRef" size="mini">引用</el-button> -->
+                                <el-button plain type="danger" size="mini" @click=col(scope.row.id)>收藏</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -89,19 +89,17 @@
                 </div>
             </div>
             <div style="width:260px" class="card"></div>
-            <el-dialog title="文献引用" :visible.sync="fromVisible" width="55%" :close-on-click-modal="false"
+            <el-dialog title="文献收藏" :visible.sync="menuVisible" width="55%" :close-on-click-modal="false"
                 destroy-on-close>
-                <el-form label-width="100px" style="padding-right: 50px" :model="form" :rules="rules" ref="formRef">
-                    <el-form-item prop="name" label="引用文献id">
-                        <el-input v-model="form.citeId" autocomplete="off" placeholder="请输入引用文献id"></el-input>
-                    </el-form-item>
-                    <el-form-item label="被引用文献id" prop="byId">
-                        <el-input v-model="form.byId"  disabled></el-input>
-                    </el-form-item>
+                <el-form label-width="100px" style="padding-right: 50px" :model="menu" >
+                    <el-select v-model="menu.name" placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
+                        </el-option>
+                    </el-select>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
-                    <el-button @click="fromVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="addReference">确 定</el-button>
+                    <el-button @click="menuVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addMyMenu">确 定</el-button>
                 </div>
             </el-dialog>
         </div>
@@ -120,8 +118,10 @@ export default {
     data() {
         let ById = this.$route.query.id;
         return {
+            articleId:null,
             categoryList: [],
             fromVisible: false,
+            menuVisible:false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
             pageSize: 10,  // 每页显示的个数
@@ -137,6 +137,10 @@ export default {
             categoryList: [],
             sr: null,
             form: {},
+            menu: {  // 用于收藏的表单对象
+            name: null,
+        },
+        options:[],
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
         }
     },
@@ -295,7 +299,43 @@ export default {
         },
         down(url) {
             location.href = url
-        }
+        },
+        col(id) {
+            this.menuVisible = true;
+            this.loadleftmenu();
+            this.articleId=id;
+        },
+        loadleftmenu() {
+            this.$request.get("/menu/selectAll", {
+                params: {
+                    userId: this.user.id
+                }
+            }).then(res => {
+                console.log(res);
+                this.options = res.data;
+                //this.categoryList.unshift({ name: '全部文献' })
+            })
+        },
+        addMyMenu(){
+            console.log(this.menu.name);
+             this.$request({
+                url:'/Userarticle/add/', 
+                method:'POST',
+                data: {
+                    articleId: this.articleId,
+                    cId: this.user.id,
+                    name:this.menu.name,
+                }
+            }).then(res => {
+                if (res.code === '200') {
+                    this.$message.success('添加成功')
+                } else {
+                    this.$message.error(res.msg)
+                }
+            })
+
+        },
+
     }
 }
 </script>

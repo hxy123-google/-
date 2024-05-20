@@ -3,7 +3,7 @@
     <div style="display: flex; grid-gap:10px">
       <div style="flex:1 ;width: 50%; margin: 20px auto; min-height: 1000px">
         <div style="text-align: center">
-          <el-button type="success">{{ courseData.type === 'ENGLISH' ? '英文' : '中文' }}</el-button>
+          <el-button type="success">{{ courseData.type === 'CHINESE' ? '中文' : '英文' }}</el-button>
           <span style="font-size: 20px; font-weight: 550; color: #333333; margin-left: 20px">{{ courseData.name
             }}</span>
         </div>
@@ -16,9 +16,7 @@
         <div>
           <div style="font-size: 18px; margin: 10px 0">资料</div>
           <div v-if="courseData.price === 0 || flag || user.role === 'PRO' || user.username === courseData.author">
-            <video :src="courseData.video" v-if="courseData.type === 'CHINESE'" controls
-              style="width: 65%; height: 400px"></video>
-            <div style="margin-top: 10px">资料链接：<a :href="courseData.video" target="_blank">{{ courseData.video }}</a>
+            <div style="margin-top: 10px">资料链接：<a :href="courseData.file" target="_blank">{{ courseData.file }}</a>
             </div>
           </div>
           <div v-else>
@@ -152,7 +150,8 @@ export default {
       console.log("hi");
       this.$request.get('/score/selectById/' + this.scoreId).then(res => {
         if (res.code === '200') {
-          this.courseData = res.data
+          this.courseData = res.data;
+          console.log(this.courseData);
         } else {
           this.$message.error(res.msg)
         }

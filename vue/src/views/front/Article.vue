@@ -67,7 +67,7 @@
                                 <span v-else style="color: green">公开资料</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="discount" label="课程折扣">
+                        <el-table-column prop="discount" label="文献折扣">
                             <template v-slot="scope">
                                 <span style="color: #448231" v-if="scope.row.discount < 1">{{ scope.row.discount * 10 }}
                                     折</span>
@@ -332,7 +332,7 @@ export default {
                 }
             }).then(res => {
                 console.log(res);
-                this.categoryList = res.data;
+                //this.categoryList = res.data;
                 this.options = res.data;
                 //this.categoryList.unshift({ name: '全部文献' })
             })

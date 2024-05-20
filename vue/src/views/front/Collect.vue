@@ -391,6 +391,8 @@ export default {
             this.category = null;
             this.keywords = null;
             this.journal = null;
+            this.name=null,
+            this.current=null,
             this.load(1)
         },
         handleEdit(row){

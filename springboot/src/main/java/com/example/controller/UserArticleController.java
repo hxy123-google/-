@@ -100,7 +100,7 @@ public class UserArticleController {
             yList.add(resultMap1.get(key));
             //System.out.println("Key: " + key + ", Value: " + resultMap1.get(key));
         }
-        resultMap.put("text", "平台所有资料总数统计（柱状图）");
+        resultMap.put("text", "个人资料统计（柱状图）");
         resultMap.put("subText", "统计维度：资料类型");
         resultMap.put("xAxis", xList);
         resultMap.put("yAxis", yList);

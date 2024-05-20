@@ -56,7 +56,7 @@
                             size="mini">添加相关文献</el-button>
                         <el-button plain type="primary" size="mini" @click="deleteRel(scope.row.id)">删除相关文献</el-button>
                         <el-button plain type="primary" @click="handleEdit(scope.row)" size="mini">编辑</el-button>
-                        <el-button plain type="danger" size="mini" @click=del(scope.row.id)>删除</el-button>
+                        <!-- <el-button plain type="danger" size="mini" @click=del(scope.row.id)>删除</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -95,13 +95,10 @@
                 <el-form-item prop="price" label="所需积分">
                     <el-input v-model="form.price" autocomplete="off" placeholder="请输入积分（0表示公开分享）"></el-input>
                 </el-form-item>
-                <el-form-item prop="aId" label="资料所属文献">
-                    <el-input v-model="form.aId" autocomplete="off" placeholder="请输入文献id"></el-input>
-                </el-form-item>
                 <el-form-item label="资料链接">
                     <el-upload class="avatar-uploader" :action="$baseUrl + '/files/upload'"
                         :headers="{ token: user.token }" :on-success="handleVideoSuccess">
-                        <el-button type="primary">上传资料(也可以是视频)</el-button>
+                        <el-button type="primary">上传资料</el-button>
                     </el-upload>
                 </el-form-item>
                 <!-- <el-form-item prop="file" label="资料链接">
@@ -162,6 +159,7 @@ export default {
     data() {
         return {
             relate:{},
+            which:null,
             scoreVisible: false,
             editor: null,
             tableData: [],  // 所有的数据
@@ -216,8 +214,8 @@ export default {
         deleteRel(id){
             this.loadRel(id);
             this.RelVisible=true;
-            
-            
+            this.relate={}
+            this.which=id;
         },
         loadRel(id){
             this.$request.get('/articlescore/selectAllArticle/',
@@ -237,7 +235,10 @@ export default {
         delMyRel(){
             this.$request.get('/articlescore/delArticle/'+this.relate.id).then(res=>{
                 if(res.code==='200'){
-                    this.$message.success('删除成功')
+                    this.$message.success('删除成功');
+                    this.loadRel(this.which);
+                    this.which=null;
+                    this.relate={}
                 }
                 else{
                     this.$message.error(res.msg)
@@ -341,7 +342,7 @@ export default {
             this.form.img = res.data
         },
         handleVideoSuccess(res) {
-            this.form.video = res.data
+            this.form.file = res.data
         },
         down(url) {
             location.href = url
