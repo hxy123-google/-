@@ -122,8 +122,11 @@
             <if test="keywords!= null and keywords!=''">
                 keywords = #{keywords},
             </if>
-            <if test="authorId!= null and authorId!=''">
+            <if test="authorId!= null ">
                 author_id = #{authorId},
+            </if>
+            <if test="author!= null and author!=''">
+                author = #{author},
             </if>
         </set>
         where id = #{id}

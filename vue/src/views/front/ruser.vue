@@ -56,7 +56,7 @@
                             <span style="color: dodgerblue" v-else-if="item.index === 3">{{ item.index }}</span>
                             <span style="color: #666" v-else>{{ item.index }}</span>
                         </span>
-                        <span style="color: #666;"> <a :href="'/front/ArticleDetail?id=' + item.id">{{ item.name
+                        <span style="color: #666;"> <a :href="'/front/ScoreDetail?id=' + item.id">{{ item.name
                                 }}</a></span>
                     </div>
                 </div>

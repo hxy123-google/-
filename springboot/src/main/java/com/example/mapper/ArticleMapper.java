@@ -31,7 +31,7 @@ public interface ArticleMapper {
         /**
          * 修改
          */
-        int updateById(Article Article);
+        int updateById(Article article);
 
         /**
          * 根据ID查询

@@ -245,7 +245,7 @@ export default {
     save() {   // 保存按钮触发的逻辑  它会触发新增或者更新
       this.$refs.formRef.validate((valid) => {
         if (valid) {
-          console.log(this.form.id);
+          console.log(this.form.authorId);
           this.$request({
             url: this.form.id ? '/article/update' : '/article/add',
             method: this.form.id ? 'PUT' : 'POST',
