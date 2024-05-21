@@ -78,7 +78,7 @@ public class ArticleController {
         //ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         //valueOperations.set("user:"+id, new User(2000300123L, "张三", 20));
         Article article = articleService.selectById(id);
-        //valueOperations.set("article:"+id, article);
+       // valueOperations.set("article:"+id, article);
         System.out.println(article);
         return Result.success(article);
     }

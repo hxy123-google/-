@@ -193,8 +193,9 @@ export default {
       this.rechargeVisible = true
     },
     initIntroduce(){
+     
       this.editVisible=true;
-      this.initWangEditor('');
+      this.initWangEditor(this.user.introduce||'');
     },
     
     save() {

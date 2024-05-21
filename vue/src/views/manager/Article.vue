@@ -103,11 +103,8 @@
         <el-form-item prop="name" label="文献名称">
           <el-input v-model="form.name" autocomplete="off" placeholder="请输入文献名称"></el-input>
         </el-form-item>
-        <el-form-item prop="reference" label="引用数">
-          <el-input v-model="form.reference" autocomplete="off" placeholder="请输入文献名称"></el-input>
-        </el-form-item>
         <el-form-item prop="author" label="文献作者">
-          <el-input v-model="form.author" autocomplete="off" placeholder="请被引用数"></el-input>
+          <el-input v-model="form.author" autocomplete="off" placeholder="请输入作者"></el-input>
         </el-form-item>
         <el-form-item prop="type" label="文献类别">
           <el-select v-model="form.type" placeholder="请选择类型" style="width: 100%">
@@ -133,14 +130,13 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="journal" label="文献期刊">
-          <el-select v-model="form.journal" placeholder="请选择" style="width: 100%">
-            <el-option label="Advanced Materials" value="Advanced Materials"></el-option>
-            <el-option label="Materials Science and Engineering: R: Reports"
-              value="Materials Science and Engineering: R: Reports"></el-option>
-            <el-option label="Nature Materials" value="Nature Materials"></el-option>
-            <el-option label="硅酸盐学报" value="硅酸盐学报"></el-option>
-            <el-option label="其他" value:null></el-option>
-          </el-select>
+          <el-input v-model="form.journal" autocomplete="off" placeholder="文献期刊"></el-input>
+        </el-form-item>
+        <el-form-item prop="authorId" label="文献作者id">
+          <el-input v-model="form.authorId" autocomplete="off" placeholder="文献作者id"></el-input>
+        </el-form-item>
+        <el-form-item prop="keywords" label="关键词">
+          <el-input v-model="form.keywords" autocomplete="off" placeholder="关键词"></el-input>
         </el-form-item>
         <el-form-item label="文献链接">
           <el-upload class="avatar-uploader" :action="$baseUrl + '/files/upload'" :headers="{ token: user.token }"

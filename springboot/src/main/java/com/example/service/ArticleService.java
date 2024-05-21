@@ -92,7 +92,7 @@ public class ArticleService {
         orders.setUserId(currentUser.getId());
         orders.setArticleId(id);
         List<Orders> ordersList = ordersMapper.selectAll(orders);
-        if (ObjectUtil.isEmpty(ordersList)) {
+        if (ObjectUtil.isEmpty(ordersList)&&(course.getPrice()!=0)) {
             course.setFile("");
             course.setVideo("");
         }
@@ -105,7 +105,7 @@ public class ArticleService {
      */
     public List<Article> selectAll(Article article) {
         return articleMapper.selectAll(null, null, article.getId(), article.getName(), article.getType(),
-                article.getRecommend(),article.getCategory(),article.getAuthor(), article.getJournal());
+                article.getRecommend(),article.getCategory(),article.getAuthor(), article.getJournal(),article.getKeywords());
     }
     public  PageInfo<Article> selectArticle(Article article,Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
@@ -120,7 +120,8 @@ public class ArticleService {
         System.out.println(article);
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAll(startdate, enddate, article.getId(), article.getName(),
-                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getJournal());
+                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getJournal()
+                 ,article.getKeywords());
 
         return PageInfo.of(list);
     }
@@ -129,7 +130,8 @@ public class ArticleService {
         System.out.println(article);
         System.out.println(startdate);
         List<Article> list = articleMapper.selectAllr(startdate, enddate, article.getId(), article.getName(),
-                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getAuthorId(),article.getJournal());
+                article.getType(),article.getRecommend(),article.getCategory(),article.getAuthor(),article.getAuthorId(),article.getJournal()
+                 ,article.getKeywords());
 
         return PageInfo.of(list);
     }

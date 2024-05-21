@@ -10,16 +10,10 @@
             </div>
             <div style="flex:1" class="card">
                 <div class="search">
-                    <el-select v-model="journal" placeholder="请选择期刊" style="width: 100px">
-                        <el-option label="Advanced Materials" value="Advanced Materials"></el-option>
-                        <el-option label="Materials Science and Engineering: R: Reports"
-                            value="Materials Science and Engineering: R: Reports"></el-option>
-                        <el-option label="Nature Materials" value="Nature Materials"></el-option>
-                        <el-option label="硅酸盐学报" value="硅酸盐学报"></el-option>
-                        <el-option label="全部" value:null></el-option>
-                    </el-select>
-                    <el-input placeholder="请输入文献名称" style="width: 100px" v-model="name"></el-input>
-                    <el-input placeholder="请输入作者名称" style="width: 100px" v-model="author"></el-input>
+                    <el-input placeholder="期刊名" style="width: 100px" v-model="journal"></el-input>
+                    <el-input placeholder="文献名" style="width: 100px" v-model="name"></el-input>
+                    <el-input placeholder="作者名" style="width: 100px" v-model="author"></el-input>
+                    <el-input placeholder="关键词" style="width: 100px" v-model="keywords"></el-input>
                     <el-select v-model="type" placeholder="请选择类型" style="width: 100px">
                         <el-option label="中文" value="CHINESE"></el-option>
                         <el-option label="英文" value="ENGLISH"></el-option>
@@ -52,7 +46,8 @@
                                 <a :href="'/front/articleDetail?id=' + scope.row.id">{{ scope.row.name }}</a>
                             </template>
                         </el-table-column>
-
+                        <el-table-column prop="journal" label="文献期刊" show-overflow-tooltip></el-table-column>
+                        <el-table-column prop="keywords" label="关键词" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="author" label="文献作者" show-overflow-tooltip></el-table-column>
                         <el-table-column prop="type" label="文献类别">
                             <template v-slot="scope">
@@ -60,20 +55,20 @@
                                 <span v-else style="color: #448231">英文</span>
                             </template>
                         </el-table-column>
-                        <el-table-column prop="price" label="所属积分">
+                        <!-- <el-table-column prop="price" label="所属积分">
                             <template v-slot="scope">
                                 <span style="color: #12b127; font-size: 15px" v-if="scope.row.price > 0">{{
                                     scope.row.price }} 积分</span>
                                 <span v-else style="color: green">公开资料</span>
                             </template>
-                        </el-table-column>
-                        <el-table-column prop="discount" label="文献折扣">
+                        </el-table-column> -->
+                        <!-- <el-table-column prop="discount" label="文献折扣">
                             <template v-slot="scope">
                                 <span style="color: #448231" v-if="scope.row.discount < 1">{{ scope.row.discount * 10 }}
                                     折</span>
                                 <span style="color: #448231" v-else>——</span>
                             </template>
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column prop="reference" label="文献引用量">
                             <template v-slot="scope">
                                 <a :href="'/front/refarticle?id=' + scope.row.id">{{ scope.row.reference }}</a>
@@ -148,7 +143,7 @@ export default {
             menuVisible: false,
             tableData: [],  // 所有的数据
             pageNum: 1,   // 当前的页码
-            pageSize: 10,  // 每页显示的个数
+            pageSize: 5,  // 每页显示的个数
             total: 0,
             name: null,
             journal: null,
@@ -161,6 +156,7 @@ export default {
             categoryList: [],
             sr: null,
             form: {},
+            keywords:null,
             menu: {  // 用于收藏的表单对象
             name: null,
         },
@@ -239,7 +235,8 @@ export default {
                         recommend: this.recommend,
                         category: this.current === '全部文献' ? null : this.current,
                         author: this.author,
-                        journal: this.journal
+                        journal: this.journal,
+                        keywords:this.keywords
                     }
                 }).then(res => {
                     console.log(res);
@@ -268,7 +265,8 @@ export default {
                         recommend: this.recommend,
                         category: this.current === '全部文献' ? null : this.current,
                         journal: this.journal,
-                        author: this.author
+                        author: this.author,
+                        keywords:this.keywords
                     }
                 }).then(res => {
                     console.log(res);
@@ -289,8 +287,14 @@ export default {
         },
         reset() {
             this.author = null,
-                this.name = null
+            this.name = null,
+            this.current=null,
+            this.journal=null,
+            this.author=null,
+            this.type=null,
+            this.keywords=null,
             this.load(1)
+            this.loadleft();
         },
         handleRef(id) {
             this.form.byId = id;

@@ -43,7 +43,7 @@
                 <el-table-column prop="price" label="所需积分"></el-table-column>
                 <el-table-column prop="file" label="资料链接" show-overflow-tooltip>
                     <template v-slot="scope">
-                        <el-button type="warning" size="mini" @click="down(scope.row.video)">点击下载</el-button>
+                        <el-button type="warning" size="mini" @click="down(scope.row.file)">点击下载</el-button>
                     </template>
                 </el-table-column>
                 <!-- <el-table-column prop="file" label="课程资料" show-overflow-tooltip></el-table-column> -->
@@ -77,6 +77,7 @@
                         <el-button type="primary">上传图片</el-button>
                     </el-upload>
                 </el-form-item>
+                
                 <el-form-item prop="name" label="资料名称">
                     <el-input v-model="form.name" autocomplete="off" placeholder="请输入资料名称"></el-input>
                 </el-form-item>
@@ -173,7 +174,10 @@ export default {
             fromVisible: false,
             editorVisible: false,
             RelVisible:false,
-            form: {},
+            form: {
+                author:null,
+                aId:null
+            },
             formScore: {},
             options: [],
             user: JSON.parse(localStorage.getItem('xm-user') || '{}'),
@@ -251,7 +255,11 @@ export default {
             this.editorVisible = true
         },
         handleAdd() {   // 新增数据
-            this.form = {}  // 新增数据的时候清空数据
+            this.form = {
+                author:this.user.username,
+                aId:this.user.aId
+            }  // 新增数据的时候清空数据
+            this.form.author=this.user.username;
             this.fromVisible = true   // 打开弹窗
             this.initWangEditor('')
         },

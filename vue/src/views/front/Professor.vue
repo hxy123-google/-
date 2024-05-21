@@ -176,8 +176,10 @@ export default {
     methods: {
         addMyMenu(){
             console.log(this.menu.name);
-             this.$request.get('/Userarticle/add/', {
-                params: {
+             this.$request('/Userarticle/add/', {
+                url:'Userarticle/add',
+                method:'POST',
+                data: {
                     articleId: this.articleId,
                     cId: this.user.id,
                     name:this.menu.name,

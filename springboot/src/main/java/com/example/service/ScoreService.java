@@ -90,7 +90,7 @@ public class ScoreService {
         scoreorder.setScoreId(score.getId());
         scoreorder.setUserId(currentUser.getId());
         List<Scoreorder> scoreorders=scoreorderMapper.selectAll(scoreorder);
-        if(ObjectUtil.isEmpty(scoreorders)&&!(currentUser.getId()==score.getaId())){
+        if(ObjectUtil.isEmpty(scoreorders)&&!(currentUser.getId()==score.getaId())&&score.getPrice()!=0){
             score.setFile("");
         }
         return score;
